@@ -1,10 +1,10 @@
 import flask
 
-from truthseeker import api
+from truthseeker import routes_api
 
 app = flask.Flask("truthseeker")
 
-app.register_blueprint(api.api_routes, url_prefix="/api/v1")
+app.register_blueprint(routes_api.api_routes, url_prefix="/api/v1")
 
 @app.route("/")
 def hello():
