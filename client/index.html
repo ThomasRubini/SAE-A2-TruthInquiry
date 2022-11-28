@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Truth Inquiry</title>
+        <link rel="stylesheet" href="res/ui/game_ui.css">
+        <link rel="stylesheet" href="res/ui/start/game_ui_start.css">
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+    </head>
+    <body class="game_app">
+        <div class="game_start">
+            <div class="header_actions">
+                <button class="top_button theme_switcher" alt="Changer de thème">
+                    <svg class="theme_switcher_btn" xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill="white">
+                        <path d="M24 34q-4.15 0-7.075-2.925T14 24q0-4.15 2.925-7.075T24 14q4.15 0 7.075 2.925T34 24q0 4.15-2.925 7.075T24 34ZM2 25.5v-3h8v3Zm36 0v-3h8v3ZM22.5 10V2h3v8Zm0 36v-8h3v8Zm-9.45-30.85L8.1 10.2l2.1-2.1 4.95 4.95ZM37.8 39.9l-4.95-4.95 2.1-2.1 4.95 4.95Zm-2.85-24.75-2.1-2.1L37.8 8.1l2.1 2.1ZM10.2 39.9l-2.1-2.1 4.95-4.95 2.1 2.1Z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="game_begin">
+                <h1 class="game_title">Thruth Inquiry</h1>
+                <button class="action_button">Jouer</button>
+            </div>
+        </div>
+        <div class="unsupported_browser">
+            <h1>Navigateur non supporté</h1>
+            <p class="unsupported_browser_msg"></p>
+        </div>
+        <noscript>
+            <div class="js_requirement">
+                <img class="js_requirement_image" src="res/assets/errors/js_requirement_image.jpg">
+                <p>Désolé, mais JavaScript est nécessaire pour faire fonctionner Truth Inquiry.</p>
+                <p>Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir jouer au jeu.</p>
+            </div>
+        </noscript>
+        <footer>
+            <div class="footer_links">
+                <a href="/privacy.html" class="footer_link" target="_blank">Politique de confidentialité</a>
+                <a href="/licenses.html" class="footer_link" target="_blank">Licenses</a>
+                <a href="/legal.html" class="footer_link" target="_blank">Mentions légales</a>
+            </div>
+        </footer>
+        <script src="res/core/game_app.js"></script>
+    </body>
+</html>
