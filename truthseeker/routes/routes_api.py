@@ -81,7 +81,7 @@ def get_game_info(): # DEPRECATED, SHOULD BE REMOVED
     
 @routes_api.route("/startGame")
 @jwt_required
-def start_game(claims): # DEPRECATED, SHOULD BE REMOVED
+def start_game(claims):
     if not claims["owner"]:
         return {"status": "Error, you are not the owner of this game"}
     
