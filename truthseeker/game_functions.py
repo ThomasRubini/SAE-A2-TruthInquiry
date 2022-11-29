@@ -1,6 +1,8 @@
 import string
 import random
-
+import jwt
+from datetime import datetime, timedelta
+import truthseeker
 
 # Map of all actively running games
 # game_lists["game.id"]-> game info linked to that id
@@ -21,12 +23,24 @@ def random_string(length: int) ->str:
 class GameInfo:
     """
     The game info class stores all information linked to a active game
-
-    Game.start_token : str, 
-    Game.id : str, the game identifier of the game
+ 
+    GameInfo.id : str, the game identifier of the game
     """
     def __init__(self):
-        self.start_token = None
+        self.game_id = None
+
+    def gen_jwt(self, username, owner):
+        return jwt.encode(
+            payload={
+                "game_id": self.game_id,
+                "username": username,
+                "owner": owner,
+                "exp": datetime.utcnow() + timedelta(hours = 1) # handled automatically on jwt.decode
+            },
+            key=truthseeker.app.config["SECRET_KEY"],
+            algorithm="HS256"
+        )
+
 
 def create_game():
     """
@@ -50,7 +64,7 @@ def get_game_info(game_id):
 
     : param game_id : the lenght of the random string
     : type game_id  : str
-    : return        : The GameInfo Object linked to the gameId
+    : return        : The GameInfo Object linked to the game_id
     : return type   : GameInfo
     """
     if game_id in game_lists:
