@@ -38,7 +38,7 @@ def join_game():
     return response
 
 @api_routes.route("/getGameInfo")
-def get_game_info():
+def get_game_info(): # DEPRECATED, SHOULD BE REMOVED
     response = {}
     game_id = flask.request.args.get("game_id")
     if game_id == None:
