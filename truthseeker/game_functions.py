@@ -20,16 +20,32 @@ def random_string(length: int) ->str:
     """
     return "".join(random.choice(string.ascii_letters) for _ in range(length))
 
+class Member:
+    """
+    stores information related to the member of a given game
+
+    Member.username : The username of this member
+    Member.socker : The reference to the socket to talk to this member
+
+    """
+    def __init__(self, username):
+        self.username = username
+        self.socket = None
+
 class GameInfo:
     """
     The game info class stores all information linked to a active game
  
     GameInfo.id : str, the game identifier of the game
+    GameInfo.owner : Member, the game identifier of the game
+    GameInfo.members : Member[], the members of the game
     """
     def __init__(self):
         self.game_id = None
+        self.owner = None
+        self.members = []
 
-    def gen_jwt(self, username, owner):
+    def _gen_jwt(self, username, owner):
         return jwt.encode(
             payload={
                 "game_id": self.game_id,
@@ -41,6 +57,15 @@ class GameInfo:
             algorithm="HS256"
         )
 
+    def set_owner(self, username):
+        self.owner = Member(username)
+        self.members.append(self.owner)
+        return self.owner, self._gen_jwt(username, owner=True)
+
+    def add_member(self, username):
+        member = Member(username)
+        self.members.append(member)
+        return member, self._gen_jwt(username, owner=False)
 
 def create_game():
     """
@@ -56,6 +81,12 @@ def create_game():
     game_lists[game.id] = game
     #TODO ADD A WEBSOCKET IF THE GAME IS KNOWN TO BE MULTIPLAYER
     return game
+
+def get_game(game_id):
+    if game_id in game_lists:
+        return game_lists[game_id]
+    else:
+        return None
 
 def get_game_info(game_id):
     """
