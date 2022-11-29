@@ -38,13 +38,13 @@ class Member:
     def __repr__(self) -> str:
         return self.__str__()
 
-class GameInfo:
+class Game:
     """
     The game info class stores all information linked to a active game
  
-    GameInfo.id : str, the game identifier of the game
-    GameInfo.owner : Member, the game identifier of the game
-    GameInfo.members : Member[], the members of the game
+    Game.id : str, the game identifier of the game
+    Game.owner : Member, the game identifier of the game
+    Game.members : Member[], the members of the game
     """
     def __init__(self):
         self.game_id = None
@@ -74,20 +74,20 @@ class GameInfo:
         return member, self._gen_jwt(username, owner=False)
 
     def __str__(self) -> str:
-        return "GameInfo[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
+        return "Game[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
 
     def __repr__(self) -> str:
         return self.__str__()
 
 def create_game():
     """
-    This function creates a new game by creating a GameInfo object and stores 
+    This function creates a new game by creating a Game object and stores 
     it into the games_list dictionnary
 
-    : return      : a new GameInfo
-    : return type : GameInfo
+    : return      : a new Game
+    : return type : Game
     """
-    game = GameInfo()
+    game = Game()
     game.id = random_string(6)
     game.start_token = random_string(64)
     games_list[game.id] = game
@@ -102,13 +102,13 @@ def get_game(game_id):
 
 def get_game_info(game_id):
     """
-    This function retrieve a the GameInfo object linked to the game_id
+    This function retrieve a the Game object linked to the game_id
     passed as parametter
 
     : param game_id : the lenght of the random string
     : type game_id  : str
-    : return        : The GameInfo Object linked to the game_id
-    : return type   : GameInfo
+    : return        : The Game Object linked to the game_id
+    : return type   : Game
     """
     if game_id in games_list:
         return games_list[game_id]
