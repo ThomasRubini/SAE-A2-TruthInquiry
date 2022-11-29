@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import truthseeker
 
 # Map of all actively running games
-# games_list["game.id"]-> game info linked to that id
+# games_list["game.game_id"]-> game info linked to that id
 games_list = {}
 
 def random_string(length: int) ->str:
@@ -42,7 +42,7 @@ class Game:
     """
     The game info class stores all information linked to a active game
  
-    Game.id : str, the game identifier of the game
+    Game.game_id : str, the game identifier of the game
     Game.owner : Member, the game identifier of the game
     Game.members : Member[], the members of the game
     """
@@ -88,9 +88,9 @@ def create_game():
     : return type : Game
     """
     game = Game()
-    game.id = random_string(6)
+    game.game_id = random_string(6)
     game.start_token = random_string(64)
-    games_list[game.id] = game
+    games_list[game.game_id] = game
     #TODO ADD A WEBSOCKET IF THE GAME IS KNOWN TO BE MULTIPLAYER
     return game
 

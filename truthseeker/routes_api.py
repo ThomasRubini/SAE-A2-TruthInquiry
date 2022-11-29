@@ -14,7 +14,7 @@ def create_game():
     response = {}
     response["status"] = "ok"
     game = game_functions.create_game()
-    response["game_id"] = game.id
+    response["game_id"] = game.game_id
     owner, owner_jwt = game.set_owner(username=username)
     response["jwt"] = owner_jwt
     return response
