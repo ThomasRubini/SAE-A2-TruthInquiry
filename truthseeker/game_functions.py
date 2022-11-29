@@ -32,6 +32,12 @@ class Member:
         self.username = username
         self.socket = None
 
+    def __str__(self) -> str:
+        return "Member[{}]".format(self.username)
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
 class GameInfo:
     """
     The game info class stores all information linked to a active game
@@ -66,6 +72,12 @@ class GameInfo:
         member = Member(username)
         self.members.append(member)
         return member, self._gen_jwt(username, owner=False)
+
+    def __str__(self) -> str:
+        return "GameInfo[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 def create_game():
     """
