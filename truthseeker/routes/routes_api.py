@@ -1,9 +1,33 @@
 import flask
+import jwt
 
+import truthseeker
 from truthseeker.logic import game_logic
+from functools import wraps
 
 
 routes_api = flask.Blueprint("api", __name__)
+
+# Auth decorator
+def jwt_required(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):
+        jwt_str = flask.request.args.get("jwt")
+        if not jwt_str:
+            return {"status": "Error, JWT token missing"}, 401
+
+        try:
+            claims = jwt.decode(jwt_str, truthseeker.app.config['SECRET_KEY'], algorithms=['HS256'])
+        except jwt.exceptions.InvalidTokenError as e:
+            print("Caught exception while decoding JWT token :", e)
+            return {"status": "Error, invalid JWT"}, 401
+
+        return f(claims, *args, **kwargs)
+    return decorator
+        
+            
+
+
 
 @routes_api.route("/createGame")
 def create_game():
@@ -55,5 +79,13 @@ def get_game_info(): # DEPRECATED, SHOULD BE REMOVED
         response["token"] = game.start_token
         return response
     
-@routes_api.route("/needJwt")
-def get_game_info(): # DEPRECATED, SHOULD BE REMOVED
+@routes_api.route("/startGame")
+@jwt_required
+def start_game(claims): # DEPRECATED, SHOULD BE REMOVED
+    if not claims["owner"]:
+        return {"status": "Error, you are not the owner of this game"}
+    
+    if game_logic.get_game(claims["game_id"]) == None:
+        return {"status": "Error, this game doesn't exist"}
+    
+    return {"status": "ok"}
