@@ -4,6 +4,7 @@ import jwt
 from datetime import datetime, timedelta
 import truthseeker
 
+
 # Map of all actively running games
 # games_list["game.game_id"]-> game info linked to that id
 games_list = {}

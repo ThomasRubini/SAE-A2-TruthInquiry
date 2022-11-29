@@ -1,7 +1,8 @@
 import flask
 import os
 
-from truthseeker import routes_api
+from truthseeker.routes import routes_api, routes_ui
+
 
 app = flask.Flask("truthseeker")
 
@@ -22,8 +23,5 @@ def set_secret(app):
 set_secret(app)
 
 
-app.register_blueprint(routes_api.api_routes, url_prefix="/api/v1")
-
-@app.route("/")
-def hello():
-    return "Hello World!"
+app.register_blueprint(routes_api.routes_api, url_prefix="/api/v1")
+app.register_blueprint(routes_ui.routes_ui, url_prefix="/")
