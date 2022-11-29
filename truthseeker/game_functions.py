@@ -33,7 +33,7 @@ class Member:
         self.socket = None
 
     def __str__(self) -> str:
-        return "Member[{}]".format(self.username)
+        return "Member[username={}]".format(self.username)
 
     def __repr__(self) -> str:
         return self.__str__()
