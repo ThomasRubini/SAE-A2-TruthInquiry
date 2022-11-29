@@ -54,6 +54,7 @@ class Game:
     def _gen_jwt(self, username, owner):
         return jwt.encode(
             payload={
+                "game_type": "multi",
                 "game_id": self.game_id,
                 "username": username,
                 "owner": owner,
