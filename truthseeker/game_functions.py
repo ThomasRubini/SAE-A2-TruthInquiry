@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 import truthseeker
 
 # Map of all actively running games
-# game_lists["game.id"]-> game info linked to that id
-game_lists = {}
+# games_list["game.id"]-> game info linked to that id
+games_list = {}
 
 def random_string(length: int) ->str:
     """
@@ -70,7 +70,7 @@ class GameInfo:
 def create_game():
     """
     This function creates a new game by creating a GameInfo object and stores 
-    it into the game_lists dictionnary
+    it into the games_list dictionnary
 
     : return      : a new GameInfo
     : return type : GameInfo
@@ -78,13 +78,13 @@ def create_game():
     game = GameInfo()
     game.id = random_string(6)
     game.start_token = random_string(64)
-    game_lists[game.id] = game
+    games_list[game.id] = game
     #TODO ADD A WEBSOCKET IF THE GAME IS KNOWN TO BE MULTIPLAYER
     return game
 
 def get_game(game_id):
-    if game_id in game_lists:
-        return game_lists[game_id]
+    if game_id in games_list:
+        return games_list[game_id]
     else:
         return None
 
@@ -98,7 +98,7 @@ def get_game_info(game_id):
     : return        : The GameInfo Object linked to the game_id
     : return type   : GameInfo
     """
-    if game_id in game_lists:
-        return game_lists[game_id]
+    if game_id in games_list:
+        return games_list[game_id]
     else:
         return None
