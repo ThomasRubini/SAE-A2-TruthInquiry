@@ -9,6 +9,7 @@
         <meta charset="UTF-8">
     </head>
     <body class="game_app">
+        <div class="alert_dialog_background"></div>
         <div class="game_start">
             <div class="header_actions">
                 <button class="top_button theme_switcher" alt="Changer de thème">
@@ -19,18 +20,22 @@
             </div>
             <div class="game_begin">
                 <h1 class="game_title">Thruth Inquiry</h1>
-                <button class="action_button">Jouer</button>
+                <button class="action_button" id="play_button">Jouer</button>
             </div>
         </div>
         <div class="unsupported_browser">
-            <h1>Navigateur non supporté</h1>
-            <p class="unsupported_browser_msg"></p>
+            <div id="unsupported_browser_dialog" class="alert_dialog">
+                <h3 class="alert_dialog_title">Navigateur non supporté</h3>
+                <p class="alert_dialog_msg unsupported_browser_msg"></p>
+            </div>
         </div>
         <noscript>
+            <div class="alert_dialog_background" style="display: block;"></div>
             <div class="js_requirement">
-                <img class="js_requirement_image" src="res/assets/errors/js_requirement_image.jpg">
-                <p>Désolé, mais JavaScript est nécessaire pour faire fonctionner Truth Inquiry.</p>
-                <p>Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir jouer au jeu.</p>
+                <div id="js_requirement_dialog" class="alert_dialog" style="display: block;">
+                    <h3 class="alert_dialog_title" style="display: block;">JavaScript nécessaire</h3>
+                    <p class="alert_dialog_msg unsupported_browser_msg" style="display: block;">Désolé, mais JavaScript est nécessaire pour faire fonctionner Truth Inquiry. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir jouer au jeu.</p>
+                </div>
             </div>
         </noscript>
         <footer>
@@ -40,6 +45,6 @@
                 <a href="/legal.html" class="footer_link" target="_blank">Mentions légales</a>
             </div>
         </footer>
-        <script src="res/core/game_app.js"></script>
+        <script src="res/core/game_common.js"></script>
     </body>
 </html>

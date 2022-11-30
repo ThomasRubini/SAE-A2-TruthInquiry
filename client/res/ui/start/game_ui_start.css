@@ -58,7 +58,7 @@
     border-style: solid;
     border-width: 0.125em;
     background-color: #BD1E1E;
-    border-radius: 1em;
+    border-radius: var(--button-and-dialog-border-radius);
     cursor: pointer;
     font-family: "Titan One", sans-serif;
     font-size: 3em;

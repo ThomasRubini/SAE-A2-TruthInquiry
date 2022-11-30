@@ -20,6 +20,7 @@
 :root {
     color-scheme: dark;
     --footer-links-height: 2em;
+    --button-and-dialog-border-radius: 1em;
 }
   
 html {
@@ -69,11 +70,55 @@ body {
     justify-content: flex-end;
 }
 
-/* Unsupported browser message */
-.unsupported_browser {
+/* JavaScript browser message */
+.unsupported_browser_msg {
     display: none;
 }
 
 .unsupported_show {
     display: block;
+}
+
+/* Alert dialogs */
+.alert_dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    align-content: center;
+    align-items: center;
+    font-family: "Spicy Rice", serif;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    border-radius: var(--button-and-dialog-border-radius);
+    padding: 2em;
+    z-index: 2;
+}
+
+.alert_dialog_show {
+    display: flex;
+}
+
+.alert_dialog_title {
+    font-size: 2em;
+    font-weight: normal;
+    text-align: center;
+}
+
+.alert_dialog_msg {
+    font-size: 1.5em;
+    text-align: justify;
+}
+
+.alert_dialog_background {
+    background-color: rgba(0, 0, 0, 0.875);
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1;
 }
