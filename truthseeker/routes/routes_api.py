@@ -12,7 +12,7 @@ routes_api = flask.Blueprint("api", __name__)
 def jwt_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
-        jwt_str = flask.request.args.get("jwt")
+        jwt_str = flask.request.values.get("jwt")
         if not jwt_str:
             return {"status": "Error, JWT token missing"}, 401
 
@@ -29,9 +29,9 @@ def jwt_required(f):
 
 
 
-@routes_api.route("/createGame")
+@routes_api.route("/createGame", methods=["GET", "POST"])
 def create_game():
-    username = flask.request.args.get("username")
+    username = flask.request.values.get("username")
     if username==None:
         return {"status": "error, username not set"}
 
@@ -44,10 +44,10 @@ def create_game():
     response["jwt"] = owner_jwt
     return response
     
-@routes_api.route("/joinGame")
+@routes_api.route("/joinGame", methods=["GET", "POST"])
 def join_game():
-    game_id = flask.request.args.get("game_id")
-    username = flask.request.args.get("username")
+    game_id = flask.request.values.get("game_id")
+    username = flask.request.values.get("username")
     if game_id==None or username==None:
         return {"status": "error, username or game id not set"}
 
@@ -62,10 +62,10 @@ def join_game():
     response["jwt"] = member_jwt
     return response
 
-@routes_api.route("/getGameInfo")
+@routes_api.route("/getGameInfo", methods=["GET", "POST"])
 def get_game_info(): # DEPRECATED, SHOULD BE REMOVED
     response = {}
-    game_id = flask.request.args.get("game_id")
+    game_id = flask.request.values.get("game_id")
     if game_id == None:
         response["status"] = "No 'game_id' argument"
         return response 
@@ -79,7 +79,7 @@ def get_game_info(): # DEPRECATED, SHOULD BE REMOVED
         response["token"] = game.start_token
         return response
     
-@routes_api.route("/startGame")
+@routes_api.route("/startGame", methods=["GET", "POST"])
 @jwt_required
 def start_game(claims):
     if not claims["owner"]:
