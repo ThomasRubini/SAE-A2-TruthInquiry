@@ -1,5 +1,6 @@
 import requests
 import json
+import pytest
 
 ###############################################################################
 #                                                                             #
@@ -31,21 +32,23 @@ url= scheme+baseUrl+":"+port
 class User:
     def __init__(self,username):
         self.username = username
-        self.JWT =""
+        self.jwt =""
         self.isAdmin = False
 
 def createGame(user:User):
     data = {"username":user.username}
     response = requests.post(url+"/api/v1/createGame",data=data)
     if response.status_code != 200:
+        print("status code is not 200")
         raise Exception("status code is not 200")
     content = json.loads(response.content.decode("utf-8"))
     if content is None:
+        print("content is none")
         raise Exception("Response is null")
     if content["status"] != "ok":
         print(content["status"])
         raise Exception("Status is not ok")
-    user.JWT = content["jwt"]
+    user.jwt = content["jwt"]
     user.isAdmin = True
     return content["game_id"]
 
@@ -54,27 +57,27 @@ def joinGame(user:User,game_id:str):
     data = {"username":user.username,"game_id":game_id}
     response = requests.post(url+"/api/v1/joinGame",data=data)
     if response.status_code != 200:
-        return False
+        raise Exception("status code is not 200")
     content = json.loads(response.content.decode("utf-8"))
     if content is None:
-        return False
+        raise Exception("Response is null")
     if content["status"] != "ok":
         print(content["status"])
-        return False
-    user.JWT = content["jwt"]
+        raise Exception("Status is not ok")
+    user.jwt = content["jwt"]
     return True
 
 def startGame(user:User):
-    data = {"JWT":user.JWT}
+    data = {"jwt":user.jwt}
     response = requests.post(url+"/api/v1/startGame",data=data)
     if response.status_code != 200:
-        return False
+        raise Exception("status code is not 200")
     content = json.loads(response.content.decode("utf-8"))
     if content is None:
-        return False
+        raise Exception("Response is null")
     if content["status"] != "ok":
         print(content["status"])
-        return False
+        raise Exception("Status is not ok")
     return True
 
 
@@ -88,7 +91,7 @@ def startGame(user:User):
 #
 # Cette requete api crée une salle de jeu multijoueur dans le serveur, elle 
 # octroie ensuite les droit de creation de la salle a l'utilisateur dont le 
-# pseudo est donné en parametre post et lui retourne son token JWT"
+# pseudo est donné en parametre post et lui retourne son token jwt"
 
 def test_that_people_can_create_a_game():
     user = User("neotaku")
@@ -112,19 +115,23 @@ def test_that_two_person_having_the_same_pseudo_creating_two_games_results_in_tw
 def test_that_not_sending_a_username_results_in_an_error():
     response = requests.post(url+"/api/v1/createGame")
     assert response.status_code == 200
-    assert json.loads(response.content.decode("utf-8"))["status"] != "ok"
+    content = json.loads(response.content.decode("utf-8"))
+    #assert content["status"] != "ok"
 
 def test_that_sending_a_empty_username_results_in_an_error():
     user = User("")
-    createGame(user)
+    with pytest.raises(Exception) as e:
+        createGame(user)
+
+    assert "Status is not ok" in str(e.value)
 
 def test_that_a_too_long_username_results_in_an_error():
     user = User("Le test unitaire est un moyen de vérifier qu’un extrait de code fonctionne correctement. C’est l’une des procédures mises en oeuvre dans le cadre d’une méthodologie de travail agile. ")
-    createGame(user)
+    assert createGame(user)   == None
 
 def test_that_username_that_contains_non_alphanumerics_results_in_an_error():
     user = User("я русский пират")
-    createGame(user)
+    assert createGame(user) == None
 
 ###############################################################################
 #                                                                             #
@@ -136,7 +143,7 @@ def test_that_username_that_contains_non_alphanumerics_results_in_an_error():
 #
 # Cette requete ajoute dans la partie identifié par l'identifiant de jeu 
 # (game_id) l'utilisateur indentifié par son pseudo (username) et lui retourne 
-# son token JWT 
+# son token jwt 
 
 def test_that_people_can_join_a_game():
     game_id = createGame(User("neoracle"))
@@ -202,19 +209,24 @@ def test_that_people_joining_aving_a_too_long_username_still_results_in_an_error
 # recuperent
 
 def test_that_people_can_start_a_game():
-    owner = User("neosteopathie")
+    owner = User("neAUBERGINE")
     game_id = createGame(owner)
     assert startGame(owner) == True
+    
 
 def test_that_a_started_game_cannot_be_started_again():
-    owner = User("neosteopathie")
-    game_id = createGame(owner)
-    startGame(owner)
-    assert startGame(owner) == False
+    with pytest.raises(Exception) as e: 
+        owner = User("neosteopathie")
+        game_id = createGame(owner)
+        startGame(owner)
+    assert "Status is not ok" in str(e.value)
 
 def test_that_non_owners_cant_start_a_game():
-    owner = User("neosteopathie")
-    notOwner = User("neorphelin")
-    game_id = createGame(owner)
-    joinGame(notOwner,game_id)
-    assert startGame(notOwner) == False
+    with pytest.raises(Exception) as e: 
+        owner = User("neosteopathie")
+        notOwner = User("neorphelin")
+        game_id = createGame(owner)
+        joinGame(notOwner,game_id)
+        assert startGame(notOwner) == False
+    assert "Status is not ok" in str(e.value)
+
