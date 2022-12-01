@@ -12,9 +12,9 @@ import json
 # "scheme" : le protocol a utiliser pour les requette
 scheme = "http://"
 
-port = "80"
+port = "5000"
 # "baseUrl" : url racine du serveur web
-baseUrl = "truthseeker.simailadjalim.fr"
+baseUrl = "localhost"
 
 # 
 url= scheme+baseUrl+":"+port
@@ -38,14 +38,14 @@ def createGame(user:User):
     data = {"username":user.username}
     response = requests.post(url+"/api/v1/createGame",data=data)
     if response.status_code != 200:
-        return False
+        raise Exception("status code is not 200")
     content = json.loads(response.content.decode("utf-8"))
     if content is None:
-        return False
+        raise Exception("Response is null")
     if content["status"] != "ok":
         print(content["status"])
-        return False
-    user.JWT = content["JWT"]
+        raise Exception("Status is not ok")
+    user.JWT = content["jwt"]
     user.isAdmin = True
     return content["game_id"]
 
@@ -61,7 +61,7 @@ def joinGame(user:User,game_id:str):
     if content["status"] != "ok":
         print(content["status"])
         return False
-    user.JWT = content["JWT"]
+    user.JWT = content["jwt"]
     return True
 
 def startGame(user:User):
@@ -92,7 +92,7 @@ def startGame(user:User):
 
 def test_that_people_can_create_a_game():
     user = User("neotaku")
-    assert createGame(user) == True
+    assert createGame(user) != False
 
 def test_that_two_person_creating_two_games_results_in_two_distincts_game():
     userOne = User("neorage")
@@ -113,19 +113,18 @@ def test_that_not_sending_a_username_results_in_an_error():
     response = requests.post(url+"/api/v1/createGame")
     assert response.status_code == 200
     assert json.loads(response.content.decode("utf-8"))["status"] != "ok"
-    
 
 def test_that_sending_a_empty_username_results_in_an_error():
     user = User("")
-    assert createGame(user) == False
+    createGame(user)
 
 def test_that_a_too_long_username_results_in_an_error():
     user = User("Le test unitaire est un moyen de vérifier qu’un extrait de code fonctionne correctement. C’est l’une des procédures mises en oeuvre dans le cadre d’une méthodologie de travail agile. ")
-    assert createGame(user) == False
+    createGame(user)
 
 def test_that_username_that_contains_non_alphanumerics_results_in_an_error():
     user = User("я русский пират")
-    assert createGame(user) == False
+    createGame(user)
 
 ###############################################################################
 #                                                                             #
