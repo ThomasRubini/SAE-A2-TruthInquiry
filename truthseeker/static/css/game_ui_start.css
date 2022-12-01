@@ -1,0 +1,72 @@
+:root {
+    --game-begin-margin: 2em;
+    --header-actions-height: 3em;
+}
+
+.game_begin {
+    align-items: center;
+    border-radius: 1.5em;
+    background-image: url("../images/start_background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: var(--game-begin-margin);
+    /*
+    Viewport height - body margin (x2: top + bottom) - header actions height
+    - footer links height - game begin margin
+    */
+    height: calc(100vh - var(--body-margin) * 2
+        - var(--game-begin-margin) * 2
+        - var(--header-actions-height)
+        - var(--footer-links-height));
+}
+
+.game_title {
+    color: #BD1E1E;
+    font-family: "Spicy Rice", serif;
+    font-weight: bold;
+    font-size: 5em;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    text-align: center;
+    -webkit-text-stroke: 1px black;
+    text-shadow: 1px 0 0 red, 0 1px 0 red, -1px 0 0 red, 0 -1px 0 red;
+}
+
+.top_button {
+    background-color: transparent;
+    border: none;
+    fill: white;
+    cursor: pointer;
+    padding: 0;
+}
+
+.header_actions {
+    display: flex;
+    justify-content: flex-end;
+    height: var(--header-actions-height);
+}
+
+.action_button {
+    border-color: black;
+    border-style: solid;
+    border-width: 0.125em;
+    background-color: #BD1E1E;
+    border-radius: var(--button-and-dialog-border-radius);
+    cursor: pointer;
+    font-family: "Titan One", sans-serif;
+    font-size: 3em;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    text-transform: uppercase;
+}
