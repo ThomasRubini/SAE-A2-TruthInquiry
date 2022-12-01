@@ -14,13 +14,13 @@ def jwt_required(f):
     def decorator(*args, **kwargs):
         jwt_str = flask.request.values.get("jwt")
         if not jwt_str:
-            return {"status": "Error, JWT token missing"}, 401
+            return {"status": "Error, JWT token missing"}
 
         try:
             claims = jwt.decode(jwt_str, truthseeker.app.config['SECRET_KEY'], algorithms=['HS256'])
         except jwt.exceptions.InvalidTokenError as e:
             print("Caught exception while decoding JWT token :", e)
-            return {"status": "Error, invalid JWT"}, 401
+            return {"status": "Error, invalid JWT"}
 
         return f(claims, *args, **kwargs)
     return decorator
