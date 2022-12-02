@@ -15,6 +15,7 @@ def set_secret(app):
     else:
         import secrets
         app.config["SECRET_KEY"] = secrets.token_hex()
+        os.makedirs("instance", exist_ok=True)
         f = open("instance/secret.txt", "w")
         f.write(app.config["SECRET_KEY"])
         f.close()
