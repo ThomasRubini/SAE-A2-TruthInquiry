@@ -1,25 +1,8 @@
-import requests
 import json
 import pytest
+from truthseeker import app
 
-###############################################################################
-#                                                                             #
-#                                                                             #
-#                                Constantes                                   #
-#                                                                             #
-#                                                                             #
-###############################################################################
-
-# "scheme" : le protocol a utiliser pour les requette
-scheme = "http://"
-
-port = "5000"
-# "baseUrl" : url racine du serveur web
-baseUrl = "localhost"
-
-# 
-url= scheme+baseUrl+":"+port
-
+test_app = app.test_client()
 
 ###############################################################################
 #                                                                             #
@@ -32,16 +15,16 @@ url= scheme+baseUrl+":"+port
 class User:
     def __init__(self,username):
         self.username = username
-        self.jwt =""
+        self.jwt = ""
         self.isAdmin = False
 
 def createGame(user:User):
     data = {"username":user.username}
-    response = requests.post(url+"/api/v1/createGame",data=data)
-    if response.status_code != 200:
+    responseObject = test_app.post("/api/v1/createGame",data=data)
+    if responseObject.status_code != 200:
         print("status code is not 200")
         raise Exception("status code is not 200")
-    content = json.loads(response.content.decode("utf-8"))
+    content = responseObject.json
     if content is None:
         print("content is none")
         raise Exception("Response is null")
@@ -55,10 +38,11 @@ def createGame(user:User):
 
 def joinGame(user:User,game_id:str):
     data = {"username":user.username,"game_id":game_id}
-    response = requests.post(url+"/api/v1/joinGame",data=data)
-    if response.status_code != 200:
+    responseObject = test_app.post("/api/v1/joinGame",data=data)
+    if responseObject.status_code != 200:
+        print("status code is not 200")
         raise Exception("status code is not 200")
-    content = json.loads(response.content.decode("utf-8"))
+    content = responseObject.json
     if content is None:
         raise Exception("Response is null")
     if content["status"] != "ok":
@@ -69,10 +53,11 @@ def joinGame(user:User,game_id:str):
 
 def startGame(user:User):
     data = {"jwt":user.jwt}
-    response = requests.post(url+"/api/v1/startGame",data=data)
-    if response.status_code != 200:
+    responseObject = test_app.post("/api/v1/startGame",data=data)
+    if responseObject.status_code != 200:
+        print("status code is not 200")
         raise Exception("status code is not 200")
-    content = json.loads(response.content.decode("utf-8"))
+    content = responseObject.json
     if content is None:
         raise Exception("Response is null")
     if content["status"] != "ok":
@@ -113,10 +98,10 @@ def test_that_two_person_having_the_same_pseudo_creating_two_games_results_in_tw
     
 
 def test_that_not_sending_a_username_results_in_an_error():
-    response = requests.post(url+"/api/v1/createGame")
-    assert response.status_code == 200
-    content = json.loads(response.content.decode("utf-8"))
-    #assert content["status"] != "ok"
+    responseObject = test_app.post("/api/v1/createGame")
+    assert responseObject.status_code == 200
+    assert responseObject.json["status"] != "ok"
+
 
 def test_that_sending_a_empty_username_results_in_an_error():
     user = User("")
@@ -162,22 +147,22 @@ def test_that_people_cant_join_if_the_username_is_already_used():
 
 def test_that_people_joining_without_sending_any_data_results_in_an_error():
     game_id = createGame(User("neoxyde"))
-    response = requests.post(url+"/api/v1/joinGame")
-    assert response.status_code == 200
-    assert json.loads(response.content.decode("utf-8"))["status"] != "ok"
+    responseObject = test_app.post("/api/v1/joinGame")
+    assert responseObject.status_code == 200
+    assert responseObject.json["status"] != "ok"
 
 def test_that_people_joining_without_sending_a_game_id_results_in_an_error():
     data={"username":"neomblic"}
-    response = requests.post(url+"/api/v1/joinGame",data=data)
-    assert response.status_code == 200
-    assert json.loads(response.content.decode("utf-8"))["status"] != "ok"
+    responseObject = test_app.post("/api/v1/joinGame",data=data)
+    assert responseObject.status_code == 200
+    assert responseObject.json["status"] != "ok"
 
 def test_that_people_joining_without_sending_an_username_still_results_in_an_error():
     game_id = createGame(User("neonyx"))
     data={"game_id":game_id}
-    response = requests.post(url+"/api/v1/joinGame",data=data)
-    assert response.status_code == 200
-    assert json.loads(response.content.decode("utf-8"))["status"] != "ok"
+    responseObject = test_app.post("/api/v1/joinGame",data=data)
+    assert responseObject.status_code == 200
+    assert responseObject.json["status"] != "ok"
 
 def test_that_people_joining_with_an_empty_username_still_results_in_an_error():
     game_id = createGame(User("neodeur"))
@@ -229,4 +214,3 @@ def test_that_non_owners_cant_start_a_game():
         joinGame(notOwner,game_id)
         assert startGame(notOwner) == False
     assert "Status is not ok" in str(e.value)
-
