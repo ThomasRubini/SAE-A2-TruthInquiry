@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base, relationship
+from sqlalchemy.orm import declarative_base, relationship
+
 Base = declarative_base()
 
 
@@ -86,8 +87,8 @@ class Reaction(Base):
     __tablename__ = "T_REACTION"
     REACTION_ID = Column(Integer, primary_key=True)
     DESC_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"))
-    NPC_ID = Column(Integer, ForeignKey("T_LOCALE.NPC_ID"))
-    TRAIT_ID = Column(Integer, ForeignKey("T_LOCALE.TRAIT_ID"))
+    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"))
+    TRAIT_ID = Column(Integer, ForeignKey("T_TRAIT.TRAIT_ID"))
 
     def __init__(self, REACTION_ID, DESC_LID, NPC_ID, TRAIT_ID):
         self.REACTION_ID = REACTION_ID
