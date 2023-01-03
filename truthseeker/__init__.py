@@ -1,8 +1,6 @@
 import flask
-import os
-
-from truthseeker.routes import routes_api, routes_ui
 from flask_socketio import SocketIO
+import os
 
 class TruthSeekerApp(flask.Flask):
 
@@ -34,7 +32,7 @@ class TruthSeekerApp(flask.Flask):
 
 APP = TruthSeekerApp()
 
-from truthseeker.routes import routes_api, routes_ui
+from truthseeker.routes import routes_api, routes_ui, routes_socketio
 
 APP.register_blueprint(routes_api.routes_api, url_prefix="/api/v1")
 APP.register_blueprint(routes_ui.routes_ui, url_prefix="/")
