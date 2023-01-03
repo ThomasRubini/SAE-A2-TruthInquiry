@@ -29,7 +29,9 @@ class TruthSeekerApp(flask.Flask):
             f.close()
             print("Generated secret and wrote to secret.txt !")
 
-app = TruthSeekerApp()
+APP = TruthSeekerApp()
 
-app.register_blueprint(routes_api.routes_api, url_prefix="/api/v1")
-app.register_blueprint(routes_ui.routes_ui, url_prefix="/")
+from truthseeker.routes import routes_api, routes_ui
+
+APP.register_blueprint(routes_api.routes_api, url_prefix="/api/v1")
+APP.register_blueprint(routes_ui.routes_ui, url_prefix="/")
