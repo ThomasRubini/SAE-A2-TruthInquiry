@@ -8,6 +8,9 @@ class TruthSeekerApp(flask.Flask):
 
     def __init__(self):
         super().__init__("truthseeker")
+
+        self.games_list = {}
+        
         self.set_app_secret()
         self.socketio_app = SocketIO(self)
 
