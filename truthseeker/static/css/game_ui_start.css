@@ -3,6 +3,32 @@
     --header-actions-height: 3em;
 }
 
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+input {
+    background-color: white;
+    border: none;
+    border-radius: 1em;
+    font-family: "Titan One", sans-serif;
+    font-size: 1em;
+    padding: 0.5em;
+    color: black;
+}
+
+input::placeholder {
+    color: black;
+    opacity: 0.5;
+}
+
+.back_btn {
+    fill: #BD1E1E;
+}
+
 .game_begin {
     align-items: center;
     border-radius: 1.5em;
@@ -30,19 +56,12 @@
     font-family: "Spicy Rice", serif;
     font-weight: bold;
     font-size: 5em;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin: 0.25em;
     text-align: center;
 }
 
-.top_button {
-    background-color: transparent;
-    border: none;
-    fill: white;
-    cursor: pointer;
-    padding: 0;
+.ingame {
+    margin: 0;
 }
 
 .header_actions {
@@ -59,7 +78,6 @@
     border-radius: var(--button-and-dialog-border-radius);
     cursor: pointer;
     font-family: "Titan One", sans-serif;
-    font-size: 3em;
     margin-left: auto;
     margin-right: auto;
     padding-top: 0.5em;
@@ -74,4 +92,81 @@
 .action_button:hover {
     transform: translate(0.1em, 0.1em);
     box-shadow: 10px -10px 25px 0px black, -10px 10px 25px 0px black;
+}
+
+.game_mode_selection {
+    align-items: center;
+    background-image: url("../images/start_background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100vh;
+    justify-content: center;
+}
+
+.game_mode_item {
+    margin: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.game_mode_item_title {
+    font-family: "Titan One", sans-serif;
+    font-size: 2em;
+    margin: 0.25em;
+}
+
+.game_mode_item_input_text_single_line {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.game_mode_items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.game_mode_choice_selector {
+    background-color: black;
+    border-color: white;
+    border-style: solid;
+    border-radius: 1.5em;
+    padding: 1em;
+}
+
+.theme_switcher {
+    fill: white;
+}
+
+#back_button {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#create_room_button, #join_room_button, #start_solo_game_button {
+    font-size: 1.5em;
+}
+
+#game_username {
+    margin: 0.5em;
+    width: calc(100% - 1.5em);
+}
+
+#play_button {
+    font-size: 3em;
 }
