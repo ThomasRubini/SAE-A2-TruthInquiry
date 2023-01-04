@@ -12,7 +12,7 @@
         <div class="alert_dialog_background"></div>
         <div class="game_start">
             <div class="header_actions">
-                <button class="top_button theme_switcher" aria-label="Changer de thème">
+                <button class="theme_switcher" aria-label="Changer de thème">
                     <svg class="theme_switcher_btn" xmlns="http://www.w3.org/2000/svg" height="48" width="48">
                         <path d="M24 34q-4.15 0-7.075-2.925T14 24q0-4.15 2.925-7.075T24 14q4.15 0 7.075 2.925T34 24q0 4.15-2.925 7.075T24 34ZM2 25.5v-3h8v3Zm36 0v-3h8v3ZM22.5 10V2h3v8Zm0 36v-8h3v8Zm-9.45-30.85L8.1 10.2l2.1-2.1 4.95 4.95ZM37.8 39.9l-4.95-4.95 2.1-2.1 4.95 4.95Zm-2.85-24.75-2.1-2.1L37.8 8.1l2.1 2.1ZM10.2 39.9l-2.1-2.1 4.95-4.95 2.1 2.1Z"/>
                     </svg>
@@ -21,6 +21,33 @@
             <div class="game_begin">
                 <h1 class="game_title">Truth Inquiry</h1>
                 <button class="action_button" id="play_button">Jouer</button>
+            </div>
+        </div>
+        <div class="game_mode_selection hidden">
+            <button id="back_button" aria-label="Retourner à la page précédente">
+                <svg class="back_btn" xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+                    <path d="m23.15 36.95-17.3-11.1Q4.7 25.25 4.7 24t1.15-1.9L23.15 11q1.15-.7 2.35-.075 1.2.625 1.2 2.025v8.75h15.8q.95 0 1.625.675T44.8 24q0 .95-.675 1.6-.675.65-1.625.65H26.7V35q0 1.45-1.2 2.075-1.2.625-2.35-.125Z"/>
+                </svg>
+            </button>
+            <h1 class="game_title">Thruth Inquiry</h1>
+            <div class="game_mode_choice_selector">
+                <p class="game_start_failed hidden">Une erreur s'est produite. Réessayez ultérieurement.</p>
+                <input type="text" id="game_username" placeholder="Entrez un pseudo" value="" required="required" maxlength="20">
+                <div class="game_mode_items">
+                    <div class="game_mode_item">
+                        <h2 class="game_mode_item_title">Mode Solo</h2>
+                        <button class="action_button" id="start_solo_game_button">Jouer</button>
+                    </div>
+                    <div class="game_mode_item">
+                        <h2 class="game_mode_item_title">Mode Multi</h2>
+                        <button class="action_button" id="create_room_button">Créer un salon</button>
+                        <div class="game_mode_item_input_text_single_line">
+                            <h3 class="game_mode_item_title">Code&nbsp;:</h3>
+                            <input type="text" id="game_room_code" placeholder="" value="" required="required" maxlength="20">
+                        </div>
+                        <button class="action_button" id="join_room_button">Rejoindre</button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="unsupported_browser">
@@ -46,5 +73,6 @@
             </div>
         </footer>
         <script src="/static/js/game_common.js"></script>
+        <script src="/static/js/game_start_page.js"></script>
     </body>
 </html>
