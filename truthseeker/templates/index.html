@@ -31,6 +31,7 @@
             </button>
             <h1 class="game_title">Thruth Inquiry</h1>
             <div class="game_mode_choice_selector">
+                <p class="game_start_failed hidden">Une erreur s'est produite. Réessayez ultérieurement.</p>
                 <input type="text" id="game_username" placeholder="Entrez un pseudo" value="" required="required" maxlength="20">
                 <div class="game_mode_items">
                     <div class="game_mode_item">
@@ -42,7 +43,7 @@
                         <button class="action_button" id="create_room_button">Créer un salon</button>
                         <div class="game_mode_item_input_text_single_line">
                             <h3 class="game_mode_item_title">Code&nbsp;:</h3>
-                            <input type="text" id="game_room_code" placeholder="" value="" required="required">
+                            <input type="text" id="game_room_code" placeholder="" value="" required="required" maxlength="20">
                         </div>
                         <button class="action_button" id="join_room_button">Rejoindre</button>
                     </div>
