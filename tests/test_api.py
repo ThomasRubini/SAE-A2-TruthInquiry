@@ -4,6 +4,14 @@ from truthseeker import app
 
 test_app = app.test_client()
 
+class TestException(Exception):
+   
+    def __init__(self, message):
+        self.message = message
+    
+    def __str__(self):
+        return self.message
+
 ###############################################################################
 #                                                                             #
 #                                                                             #
@@ -21,12 +29,12 @@ def createGame(user:User):
     data = {"username":user.username}
     responseObject = test_app.post("/api/v1/createGame",data=data)
     if responseObject.status_code != 200:
-        raise Exception("status code is not 200")
+        raise TestException("status code is not 200")
     content = responseObject.json
     if content is None:
-        raise Exception("Response is null")
+        raise TestException("Response is null")
     if content["error"] != 0:
-        raise Exception("backend returned an error: "+content["msg"])
+        raise TestException("backend returned an error: "+content["msg"])
     user.isAdmin = True
     return content["game_id"]
 
@@ -35,23 +43,23 @@ def joinGame(user:User,game_id:str):
     data = {"username":user.username,"game_id":game_id}
     responseObject = test_app.post("/api/v1/joinGame",data=data)
     if responseObject.status_code != 200:
-        raise Exception("status code is not 200")
+        raise TestException("status code is not 200")
     content = responseObject.json
     if content is None:
-        raise Exception("Response is null")
+        raise TestException("Response is null")
     if content["error"] != 0:
-        raise Exception("backend returned an error: "+content["msg"])
+        raise TestException("backend returned an error: "+content["msg"])
     return True
 
 def startGame(user:User):
     responseObject = test_app.post("/api/v1/startGame")
     if responseObject.status_code != 200:
-        raise Exception("status code is not 200")
+        raise TestException("status code is not 200")
     content = responseObject.json
     if content is None:
-        raise Exception("Response is null")
+        raise TestException("Response is null")
     if content["error"] != 0:
-        raise Exception("backend returned an error: "+content["msg"])
+        raise TestException("backend returned an error: "+content["msg"])
     return True
 
 
@@ -94,17 +102,17 @@ def test_that_not_sending_a_username_results_in_an_error():
 
 def test_that_sending_a_empty_username_results_in_an_error():
     user = User("")
-    with pytest.raises(Exception) as e:
+    with pytest.raises(TestException) as e:
         createGame(user)
 
 def test_that_a_too_long_username_results_in_an_error():
     user = User("Le test unitaire est un moyen de vérifier qu’un extrait de code fonctionne correctement. C’est l’une des procédures mises en oeuvre dans le cadre d’une méthodologie de travail agile. ")
-    with pytest.raises(Exception) as e:
+    with pytest.raises(TestException) as e:
         createGame(user)
 
 def test_that_username_that_contains_non_alphanumerics_results_in_an_error():
     user = User("я русский пират")
-    with pytest.raises(Exception) as e:
+    with pytest.raises(TestException) as e:
         createGame(user)
 
 ###############################################################################
@@ -188,14 +196,14 @@ def test_that_people_can_start_a_game():
     
 
 def test_that_a_started_game_cannot_be_started_again():
-    with pytest.raises(Exception) as e: 
+    with pytest.raises(TestException) as e: 
         owner = User("neosteopathie")
         game_id = createGame(owner)
         startGame(owner)
     assert "Status is not ok" in str(e.value)
 
 def test_that_non_owners_cant_start_a_game():
-    with pytest.raises(Exception) as e: 
+    with pytest.raises(TestException) as e: 
         owner = User("neosteopathie")
         notOwner = User("neorphelin")
         game_id = createGame(owner)
