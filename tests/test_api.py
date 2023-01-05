@@ -205,6 +205,7 @@ def test_that_people_can_start_a_game():
 def test_that_a_started_game_cannot_be_started_again():
     owner = User("neosteopathie")
     game_id = createGame(owner)
+    startGame(owner)
     with pytest.raises(TestException) as e: 
         startGame(owner)
 
