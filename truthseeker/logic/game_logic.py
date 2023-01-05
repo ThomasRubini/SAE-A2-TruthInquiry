@@ -50,13 +50,21 @@ class Game:
         self.game_id = None
         self.owner = None
         self.members = []
+        self.has_started = False
 
     def set_owner(self, username):
         self.owner = Member(username)
         self.members.append(self.owner)
         return self.owner
 
+    def get_member(self, username):
+        for member in self.members:
+            if member.username == username:
+                return member
+
     def add_member(self, username):
+        if self.get_member(username):
+            return None
         member = Member(username)
         self.members.append(member)
         return member

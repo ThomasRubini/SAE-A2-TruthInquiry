@@ -2,6 +2,7 @@ import flask
 
 import truthseeker
 from truthseeker.logic import game_logic
+from truthseeker.utils import check_username
 
 
 routes_api = flask.Blueprint("api", __name__)
@@ -10,11 +11,12 @@ routes_api = flask.Blueprint("api", __name__)
 def create_game():
     username = flask.request.values.get("username")
     if username==None:
-        return {"status": "error, username not set"}
-
+        return {"error": 1, "msg": "username not set"}
+    if not check_username(username):
+        return {"error": 1, "msg": "invalid username"}
 
     response = {}
-    response["status"] = "ok"
+    response["error"] = 0
     game = game_logic.create_game(owner=username)
     response["game_id"] = game.game_id
 
@@ -29,30 +31,40 @@ def join_game():
     game_id = flask.request.values.get("game_id")
     username = flask.request.values.get("username")
     if game_id==None or username==None:
-        return {"status": "error, username or game id not set"}
+        return {"error": 1, "msg": "username or game id not set"}
+    if not check_username(username):
+        return {"error": 1, "msg": "invalid username"}
 
     game = game_logic.get_game(game_id)
     if game == None:
-        return {"status": "error, game does not exist"}
+        return {"error": 1, "msg": "game does not exist"}
     
-
-    game.add_member(username)
+    if not game.add_member(username):
+        return {"error": 1, "msg": f"Username '{username}' already used in game {game.game_id}"}
 
     flask.session["game_id"] = game.game_id
     flask.session["is_owner"] = False
     flask.session["username"] = username
 
-    response = {}
-    response["status"] = "ok"
-    return response
+    return {"error": 0}
     
 @routes_api.route("/startGame", methods=["GET", "POST"])
 def start_game():
     if not flask.session:
-        return {"status": "No session"}
+        return {"error": 1, "msg": "No session"}
     if not flask.session["is_owner"]:
-        return {"status": "Error, you are not the owner of this game"}
-    if game_logic.get_game(flask.session["game_id"]) == None:
-        return {"status": "Error, this game doesn't exist"}
+        return {"error": 1, "msg": "you are not the owner of this game"}
     
-    return {"status": "ok"}
+    game = game_logic.get_game(flask.session["game_id"])
+
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+    print(game.has_started)
+    if game.has_started:
+        return {"error": 1, "msg": "this game is already started"}
+
+    game.has_started = True
+
+    
+    
+    return {"error": 0}
