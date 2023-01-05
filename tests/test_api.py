@@ -15,7 +15,6 @@ test_app = app.test_client()
 class User:
     def __init__(self,username):
         self.username = username
-        self.jwt = ""
         self.isAdmin = False
 
 def createGame(user:User):
@@ -31,7 +30,6 @@ def createGame(user:User):
     if content["status"] != "ok":
         print(content["status"])
         raise Exception("Status is not ok")
-    user.jwt = content["jwt"]
     user.isAdmin = True
     return content["game_id"]
 
@@ -48,12 +46,10 @@ def joinGame(user:User,game_id:str):
     if content["status"] != "ok":
         print(content["status"])
         raise Exception("Status is not ok")
-    user.jwt = content["jwt"]
     return True
 
 def startGame(user:User):
-    data = {"jwt":user.jwt}
-    responseObject = test_app.post("/api/v1/startGame",data=data)
+    responseObject = test_app.post("/api/v1/startGame")
     if responseObject.status_code != 200:
         print("status code is not 200")
         raise Exception("status code is not 200")
@@ -76,7 +72,7 @@ def startGame(user:User):
 #
 # Cette requete api crée une salle de jeu multijoueur dans le serveur, elle 
 # octroie ensuite les droit de creation de la salle a l'utilisateur dont le 
-# pseudo est donné en parametre post et lui retourne son token jwt"
+# pseudo est donné en parametre post
 
 def test_that_people_can_create_a_game():
     user = User("neotaku")
@@ -127,8 +123,7 @@ def test_that_username_that_contains_non_alphanumerics_results_in_an_error():
 ###############################################################################
 #
 # Cette requete ajoute dans la partie identifié par l'identifiant de jeu 
-# (game_id) l'utilisateur indentifié par son pseudo (username) et lui retourne 
-# son token jwt 
+# (game_id) l'utilisateur indentifié par son pseudo (username) 
 
 def test_that_people_can_join_a_game():
     game_id = createGame(User("neoracle"))

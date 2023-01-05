@@ -1,33 +1,10 @@
 import flask
-import jwt
 
 import truthseeker
 from truthseeker.logic import game_logic
-from functools import wraps
 
 
 routes_api = flask.Blueprint("api", __name__)
-
-# Auth decorator
-def jwt_required(f):
-    @wraps(f)
-    def decorator(*args, **kwargs):
-        jwt_str = flask.request.values.get("jwt")
-        if not jwt_str:
-            return {"status": "Error, JWT token missing"}
-
-        try:
-            claims = jwt.decode(jwt_str, truthseeker.app.config['SECRET_KEY'], algorithms=['HS256'])
-        except jwt.exceptions.InvalidTokenError as e:
-            print("Caught exception while decoding JWT token :", e)
-            return {"status": "Error, invalid JWT"}
-
-        return f(claims, *args, **kwargs)
-    return decorator
-        
-            
-
-
 
 @routes_api.route("/createGame", methods=["GET", "POST"])
 def create_game():
@@ -38,10 +15,13 @@ def create_game():
 
     response = {}
     response["status"] = "ok"
-    game = game_logic.create_game()
+    game = game_logic.create_game(owner=username)
     response["game_id"] = game.game_id
-    owner, owner_jwt = game.set_owner(username=username)
-    response["jwt"] = owner_jwt
+
+    flask.session["game_id"] = game.game_id
+    flask.session["is_owner"] = True
+    flask.session["username"] = username
+
     return response
     
 @routes_api.route("/joinGame", methods=["GET", "POST"])
@@ -55,11 +35,15 @@ def join_game():
     if game == None:
         return {"status": "error, game does not exist"}
     
-    member, member_jwt = game.add_member(username)
+
+    game.add_member(username)
+
+    flask.session["game_id"] = game.game_id
+    flask.session["is_owner"] = False
+    flask.session["username"] = username
 
     response = {}
     response["status"] = "ok"
-    response["jwt"] = member_jwt
     return response
 
 @routes_api.route("/getGameInfo", methods=["GET", "POST"])
@@ -80,12 +64,12 @@ def get_game_info(): # DEPRECATED, SHOULD BE REMOVED
         return response
     
 @routes_api.route("/startGame", methods=["GET", "POST"])
-@jwt_required
-def start_game(claims):
-    if not claims["owner"]:
+def start_game():
+    if not flask.session:
+        return {"status": "No session"}
+    if not flask.session["is_owner"]:
         return {"status": "Error, you are not the owner of this game"}
-    
-    if game_logic.get_game(claims["game_id"]) == None:
+    if game_logic.get_game(flask.session["game_id"]) == None:
         return {"status": "Error, this game doesn't exist"}
     
     return {"status": "ok"}
