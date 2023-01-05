@@ -39,8 +39,8 @@ def join_game():
     if game == None:
         return {"error": 1, "msg": "game does not exist"}
     
-
-    game.add_member(username)
+    if not game.add_member(username):
+        return {"error": 1, "msg": f"Username '{username}' already used in game {game.game_id}"}
 
     flask.session["game_id"] = game.game_id
     flask.session["is_owner"] = False
