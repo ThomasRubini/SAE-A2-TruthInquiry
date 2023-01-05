@@ -21,15 +21,12 @@ def createGame(user:User):
     data = {"username":user.username}
     responseObject = test_app.post("/api/v1/createGame",data=data)
     if responseObject.status_code != 200:
-        print("status code is not 200")
         raise Exception("status code is not 200")
     content = responseObject.json
     if content is None:
-        print("content is none")
         raise Exception("Response is null")
     if content["error"] != 0:
-        print(content["msg"])
-        raise Exception("Status is not ok")
+        raise Exception("backend returned an error: "+content["msg"])
     user.isAdmin = True
     return content["game_id"]
 
@@ -38,27 +35,23 @@ def joinGame(user:User,game_id:str):
     data = {"username":user.username,"game_id":game_id}
     responseObject = test_app.post("/api/v1/joinGame",data=data)
     if responseObject.status_code != 200:
-        print("status code is not 200")
         raise Exception("status code is not 200")
     content = responseObject.json
     if content is None:
         raise Exception("Response is null")
     if content["error"] != 0:
-        print(content["msg"])
-        raise Exception("Status is not ok")
+        raise Exception("backend returned an error: "+content["msg"])
     return True
 
 def startGame(user:User):
     responseObject = test_app.post("/api/v1/startGame")
     if responseObject.status_code != 200:
-        print("status code is not 200")
         raise Exception("status code is not 200")
     content = responseObject.json
     if content is None:
         raise Exception("Response is null")
     if content["error"] != 0:
-        print(content["msg"])
-        raise Exception("Status is not ok")
+        raise Exception("backend returned an error: "+content["msg"])
     return True
 
 
