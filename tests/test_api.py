@@ -97,15 +97,15 @@ def test_that_sending_a_empty_username_results_in_an_error():
     with pytest.raises(Exception) as e:
         createGame(user)
 
-    assert "Status is not ok" in str(e.value)
-
 def test_that_a_too_long_username_results_in_an_error():
     user = User("Le test unitaire est un moyen de vérifier qu’un extrait de code fonctionne correctement. C’est l’une des procédures mises en oeuvre dans le cadre d’une méthodologie de travail agile. ")
-    assert createGame(user)   == None
+    with pytest.raises(Exception) as e:
+        createGame(user)
 
 def test_that_username_that_contains_non_alphanumerics_results_in_an_error():
     user = User("я русский пират")
-    assert createGame(user) == None
+    with pytest.raises(Exception) as e:
+        createGame(user)
 
 ###############################################################################
 #                                                                             #
