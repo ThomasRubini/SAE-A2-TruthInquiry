@@ -56,7 +56,14 @@ class Game:
         self.members.append(self.owner)
         return self.owner
 
+    def get_member(self, username):
+        for member in self.members:
+            if member.username == username:
+                return member
+
     def add_member(self, username):
+        if self.get_member(username):
+            return None
         member = Member(username)
         self.members.append(member)
         return member
