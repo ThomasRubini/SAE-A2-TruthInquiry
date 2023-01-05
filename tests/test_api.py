@@ -5,6 +5,7 @@ from truthseeker import app
 test_app = app.test_client()
 
 class TestException(Exception):
+    __test__ = False
    
     def __init__(self, message):
         self.message = message
