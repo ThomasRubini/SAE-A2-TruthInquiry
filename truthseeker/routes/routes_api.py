@@ -59,10 +59,11 @@ def start_game():
 
     if game == None:
         return {"error": 1, "msg": "this game doesn't exist"}
+    print(game.has_started)
     if game.has_started:
         return {"error": 1, "msg": "this game is already started"}
 
-    game.has_started = None
+    game.has_started = True
 
     
     
