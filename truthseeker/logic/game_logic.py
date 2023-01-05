@@ -1,6 +1,5 @@
 import string
 import random
-import jwt
 from datetime import datetime, timedelta
 import truthseeker
 
@@ -52,28 +51,15 @@ class Game:
         self.owner = None
         self.members = []
 
-    def _gen_jwt(self, username, owner):
-        return jwt.encode(
-            payload={
-                "game_type": "multi",
-                "game_id": self.game_id,
-                "username": username,
-                "owner": owner,
-                "exp": datetime.utcnow() + timedelta(hours = 1) # handled automatically on jwt.decode
-            },
-            key=truthseeker.app.config["SECRET_KEY"],
-            algorithm="HS256"
-        )
-
     def set_owner(self, username):
         self.owner = Member(username)
         self.members.append(self.owner)
-        return self.owner, self._gen_jwt(username, owner=True)
+        return self.owner
 
     def add_member(self, username):
         member = Member(username)
         self.members.append(member)
-        return member, self._gen_jwt(username, owner=False)
+        return member
 
     def __str__(self) -> str:
         return "Game[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
@@ -81,7 +67,7 @@ class Game:
     def __repr__(self) -> str:
         return self.__str__()
 
-def create_game():
+def create_game(owner):
     """
     This function creates a new game by creating a Game object and stores 
     it into the games_list dictionnary
@@ -90,8 +76,9 @@ def create_game():
     : return type : Game
     """
     game = Game()
+    game.owner = owner
+    game.members.append(Member(owner))
     game.game_id = random_string(6)
-    game.start_token = random_string(64)
     games_list[game.game_id] = game
     #TODO ADD A WEBSOCKET IF THE GAME IS KNOWN TO BE MULTIPLAYER
     return game
