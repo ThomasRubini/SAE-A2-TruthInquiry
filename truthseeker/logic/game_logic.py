@@ -50,6 +50,7 @@ class Game:
         self.game_id = None
         self.owner = None
         self.members = []
+        self.has_started = True
 
     def set_owner(self, username):
         self.owner = Member(username)
