@@ -139,7 +139,8 @@ def test_that_two_person_can_join_a_game():
 def test_that_people_cant_join_if_the_username_is_already_used():
     game_id = createGame(User("neoreille"))
     joinGame(User("neosomse"),game_id)
-    assert joinGame(User("neosomse"),game_id) == False
+    with pytest.raises(TestException) as e:
+        joinGame(User("neosomse"),game_id)
 
 def test_that_people_joining_without_sending_any_data_results_in_an_error():
     game_id = createGame(User("neoxyde"))
@@ -163,17 +164,23 @@ def test_that_people_joining_without_sending_an_username_still_results_in_an_err
 def test_that_people_joining_with_an_empty_username_still_results_in_an_error():
     game_id = createGame(User("neodeur"))
     user = User("")
-    assert joinGame(user,game_id) == False
+    
+    with pytest.raises(TestException) as e:
+        joinGame(user,game_id)
 
 def test_that_people_joining_aving_an_username_that_contains_non_alphanumerics_still_results_in_an_error():
     game_id = createGame(User("neobservateur"))
     user = User("Я брат русского пирата")
-    assert joinGame(user,game_id) == False
+    
+    with pytest.raises(TestException) as e:
+        joinGame(user,game_id)
 
 def test_that_people_joining_aving_a_too_long_username_still_results_in_an_error():
     game_id = createGame(User("neordre"))
     user = User("Les tests unitaires sont généralement effectués pendant la phase de développement des applications mobiles ou logicielles. Ces tests sont normalement effectués par les développeurs, bien qu’à toutes fins pratiques, ils puissent également être effectués par les responsables en assurance QA.")
-    assert joinGame(user,game_id) == False
+    
+    with pytest.raises(TestException) as e:
+        joinGame(user,game_id)
 
 
 ###############################################################################
@@ -192,21 +199,18 @@ def test_that_people_joining_aving_a_too_long_username_still_results_in_an_error
 def test_that_people_can_start_a_game():
     owner = User("neAUBERGINE")
     game_id = createGame(owner)
-    assert startGame(owner) == True
-    
+    startGame(owner)
 
 def test_that_a_started_game_cannot_be_started_again():
+    owner = User("neosteopathie")
+    game_id = createGame(owner)
     with pytest.raises(TestException) as e: 
-        owner = User("neosteopathie")
-        game_id = createGame(owner)
         startGame(owner)
-    assert "Status is not ok" in str(e.value)
 
 def test_that_non_owners_cant_start_a_game():
-    with pytest.raises(TestException) as e: 
-        owner = User("neosteopathie")
-        notOwner = User("neorphelin")
-        game_id = createGame(owner)
-        joinGame(notOwner,game_id)
-        assert startGame(notOwner) == False
-    assert "Status is not ok" in str(e.value)
+    owner = User("neosteopathie")
+    notOwner = User("neorphelin")
+    game_id = createGame(owner)
+    joinGame(notOwner,game_id)
+    with pytest.raises(TestException) as e:
+        startGame(notOwner)
