@@ -45,23 +45,6 @@ def join_game():
     response = {}
     response["status"] = "ok"
     return response
-
-@routes_api.route("/getGameInfo", methods=["GET", "POST"])
-def get_game_info(): # DEPRECATED, SHOULD BE REMOVED
-    response = {}
-    game_id = flask.request.values.get("game_id")
-    if game_id == None:
-        response["status"] = "No 'game_id' argument"
-        return response 
-    game = game_logic.get_game_info(game_id)
-    if game == None:
-        response["status"] = "Game {} does not exist".format(game_id)
-        return response 
-    else:
-        response["status"] = "ok"
-        response["game_id"] = game_id
-        response["token"] = game.start_token
-        return response
     
 @routes_api.route("/startGame", methods=["GET", "POST"])
 def start_game():
