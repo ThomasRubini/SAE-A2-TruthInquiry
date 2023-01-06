@@ -4,13 +4,13 @@ from sqlalchemy import engine as eg
 
 from tables import *
 
-from answer import ANSWER
-from locales import LOCALES
-from npc import NPCS
-from places import PLACES
-from questions import QUESTIONS
-from reactions import REACTIONS
-from traits import TRAITS
+from data.answer import ANSWER
+from data.locales import LOCALES
+from data.npc import NPCS
+from data.places import PLACES
+from data.questions import QUESTIONS
+from data.reactions import REACTIONS
+from data.traits import TRAITS
 
 from secret import HOST, USER, PASS
 
