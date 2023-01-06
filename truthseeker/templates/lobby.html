@@ -9,7 +9,10 @@
     </head>
     <body class="game_app">
         <div class="join_room_view hidden">
-            <!-- TODO -->
+            <h1 class="room_title">Salon</h1>
+            <input type="text" id="game_username" placeholder="Entrez un pseudo" value="" required="required" maxlength="20">
+            <button class="action_button" id="join_game_button">Rejoindre</button>
+            <p class="game_start_failed hidden">Une erreur s'est produite. Réessayez ultérieurement.</p>
         </div>
         <div class="room_view hidden">
             <div class="room_view_container">
