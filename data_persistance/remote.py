@@ -4,7 +4,7 @@ from sqlalchemy import engine as eg
 
 from tables import *
 
-from data.answer import ANSWER
+from data.answer import ANSWERS
 from data.locales import LOCALES
 from data.npc import NPCS
 from data.places import PLACES
@@ -22,24 +22,55 @@ url_object = eg.URL.create(
     port=6776,
     database="truthInquiry",
 )
-
-# Create Engine and tables
 engine = create_engine(url_object)
-Base.metadata.create_all(engine)
 
+
+# Reset data tables
 with Session(engine) as session:
+
+
+    session.execute("SELECT CONCAT('DROP TABLE IF EXISTS `', TABLE_SCHEMA, '`.`', TABLE_NAME, '`;') FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mydb'")
+    Base.metadata.create_all(engine)
+
     print("adding locales")
+    for locale in LOCALES:
+        print(locale)
     session.add_all(LOCALES)
+    
+    
     print("adding places")
+    for place in PLACES:
+        print(place)
     session.add_all(PLACES)
+
+    
     print("adding NPCS")
+    for npc in NPCS:
+        print(npc)
     session.add_all(NPCS)
+    
+    
     print("adding trait")
+    for trait in TRAITS:
+        print(trait)
     session.add_all(TRAITS)
+    
+    
     print("adding questions")
+    for question in QUESTIONS:
+        print(question)
     session.add_all(QUESTIONS)
+    
+    
     print("adding answers")
-    session.add_all(ANSWER)
-    print("adding reaction")
+    for answer in ANSWERS:
+        print(answer)
+    session.add_all(ANSWERS)
+    
+    
+    print("adding reactions")
+    for reactions in REACTIONS:
+        print(reactions)
     session.add_all(REACTIONS)
+    
     session.commit()
