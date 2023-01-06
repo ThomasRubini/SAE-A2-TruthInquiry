@@ -16,7 +16,7 @@ class Locale(Base):
         self.TEXT = TEXT
 
     def __str__(self):
-        return self.PLACE_ID + " " + self.LANG + " " + self.TEXT
+        return f"{self.PLACE_ID}  {self.LANG} {self.TEXT}"
 
 
 class Place(Base):
@@ -30,7 +30,7 @@ class Place(Base):
         self.NAME_LID = NAME_LID
 
     def __str__(self):
-        return self.PLACE_ID + " " + self.NAME_LID
+        return f"{self.PLACE_ID} {self.NAME_LID}"
 
 
 class Question(Base):
@@ -46,7 +46,7 @@ class Question(Base):
         self.TEXT_LID = TEXT_LID
 
     def __str__(self):
-        return self.QUESTION_ID + " " + self.QUESTION_TYPE + " " + self.TEXT_LID
+        return f"{self.QUESTION_ID} {self.QUESTION_TYPE} {self.TEXT_LID}"
 
 
 class Answer(Base):
@@ -62,6 +62,8 @@ class Answer(Base):
         self.NPC_ID = NPC_ID
         self.TEXT_LID = TEXT_LID
 
+    def __str__(self):
+        return f"{self.ANSWER_ID} {self.QA_TYPE} {self.NPC_ID} {self.TEXT_LID}"
 
 class Npc(Base):
     __tablename__ = "T_NPC"
@@ -72,6 +74,8 @@ class Npc(Base):
         self.NPC_ID = NPC_ID
         self.NAME_LID = NAME_LID
 
+    def __str__(self) -> str:
+        return f"{self.NPC_ID} {self.NAME_LID}" 
 
 class Trait(Base):
     __tablename__ = "T_TRAIT"
@@ -82,6 +86,8 @@ class Trait(Base):
         self.TRAIT_ID = TRAIT_ID
         self.NAME_LID = NAME_LID
 
+    def __str__(self) -> str:
+        return f"{self.TRAIT_ID} {self.NAME_LID}"
 
 class Reaction(Base):
     __tablename__ = "T_REACTION"
@@ -95,3 +101,6 @@ class Reaction(Base):
         self.DESC_LID = DESC_LID
         self.NPC_ID = NPC_ID
         self.TRAIT_ID = TRAIT_ID
+
+    def __str__(self) -> str:
+        return f"{self.REACTION_ID} {self.DESC_LID} {self.NPC_ID} {self.TRAIT_ID}"
