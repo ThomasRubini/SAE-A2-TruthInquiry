@@ -27,50 +27,53 @@ engine = create_engine(url_object)
 
 # Reset data tables
 with Session(engine) as session:
-
-
-    session.execute("SELECT CONCAT('DROP TABLE IF EXISTS `', TABLE_SCHEMA, '`.`', TABLE_NAME, '`;') FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mydb'")
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
     print("adding locales")
     for locale in LOCALES:
         print(locale)
-    session.add_all(LOCALES)
+        session.add(locale)
+        session.commit()
     
     
     print("adding places")
     for place in PLACES:
         print(place)
-    session.add_all(PLACES)
+        session.add(place)
+        session.commit()
 
     
     print("adding NPCS")
     for npc in NPCS:
         print(npc)
-    session.add_all(NPCS)
+        session.add(npc)
+        session.commit()
     
     
     print("adding trait")
     for trait in TRAITS:
         print(trait)
-    session.add_all(TRAITS)
+        session.add(trait)
+        session.commit()
     
     
     print("adding questions")
     for question in QUESTIONS:
         print(question)
-    session.add_all(QUESTIONS)
+        session.add(question)
+        session.commit()
     
     
     print("adding answers")
     for answer in ANSWERS:
         print(answer)
-    session.add_all(ANSWERS)
+        session.add(answer)
+        session.commit()
     
     
     print("adding reactions")
-    for reactions in REACTIONS:
-        print(reactions)
-    session.add_all(REACTIONS)
-    
-    session.commit()
+    for reaction in REACTIONS:
+        print(reaction)
+        session.add(reaction)
+        session.commit()

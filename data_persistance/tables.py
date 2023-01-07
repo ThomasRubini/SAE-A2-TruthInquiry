@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, ForeignKey
+from sqlalchemy import Column, Integer, Text, ForeignKey, VARCHAR
 from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
@@ -7,17 +7,16 @@ Base = declarative_base()
 class Locale(Base):
     __tablename__ = 'T_LOCALE'
     TEXT_ID = Column(Integer, primary_key=True)
-    LANG = Column(Text)
+    LANG = Column(VARCHAR(2), primary_key=True)
     TEXT = Column(Text)
 
     def __init__(self, TEXT_ID, LANG, TEXT):
-        self.PLACE_ID = TEXT_ID
+        self.TEXT_ID = TEXT_ID
         self.LANG = LANG
         self.TEXT = TEXT
 
     def __str__(self):
-        return f"{self.PLACE_ID}  {self.LANG} {self.TEXT}"
-
+        return f"{self.TEXT_ID}  {self.LANG} {self.TEXT}"
 
 class Place(Base):
     __tablename__ = 'T_PLACE'
@@ -31,7 +30,6 @@ class Place(Base):
 
     def __str__(self):
         return f"{self.PLACE_ID} {self.NAME_LID}"
-
 
 class Question(Base):
     __tablename__ = "T_QUESTION"
@@ -48,16 +46,17 @@ class Question(Base):
     def __str__(self):
         return f"{self.QUESTION_ID} {self.QUESTION_TYPE} {self.TEXT_LID}"
 
-
 class Answer(Base):
     __tablename__ = "T_ANSWER"
     ANSWER_ID = Column(Integer, primary_key=True)
     QA_TYPE = Column(Integer)
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"))
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"))
+    LOCALE = relationship("Locale")
+    NPC = relationship("Npc")
 
-    def __init__(self, ANSWSER_ID, QA_TYPE, NPC_ID, TEXT_LID):
-        self.ANSWSER_ID = ANSWSER_ID
+    def __init__(self, ANSWER_ID, QA_TYPE, NPC_ID, TEXT_LID):
+        self.ANSWER_ID = ANSWER_ID
         self.QA_TYPE = QA_TYPE
         self.NPC_ID = NPC_ID
         self.TEXT_LID = TEXT_LID
@@ -75,7 +74,7 @@ class Npc(Base):
         self.NAME_LID = NAME_LID
 
     def __str__(self) -> str:
-        return f"{self.NPC_ID} {self.NAME_LID}" 
+        return f"{self.NPC_ID} {self.NAME_LID}"
 
 class Trait(Base):
     __tablename__ = "T_TRAIT"
@@ -92,9 +91,12 @@ class Trait(Base):
 class Reaction(Base):
     __tablename__ = "T_REACTION"
     REACTION_ID = Column(Integer, primary_key=True)
+    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"),primary_key=True)
+    TRAIT_ID = Column(Integer, ForeignKey("T_TRAIT.TRAIT_ID"),primary_key=True)
     DESC_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"))
-    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"))
-    TRAIT_ID = Column(Integer, ForeignKey("T_TRAIT.TRAIT_ID"))
+    LOCALE = relationship("Locale")
+    NPC = relationship("Npc")
+    TRAIT = relationship("Trait")
 
     def __init__(self, REACTION_ID, DESC_LID, NPC_ID, TRAIT_ID):
         self.REACTION_ID = REACTION_ID
