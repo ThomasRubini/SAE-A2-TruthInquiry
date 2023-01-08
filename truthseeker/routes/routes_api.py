@@ -54,17 +54,25 @@ def start_game():
         return {"error": 1, "msg": "No session"}
     if not flask.session["is_owner"]:
         return {"error": 1, "msg": "you are not the owner of this game"}
-    
     game = game_logic.get_game(flask.session["game_id"])
-
     if game == None:
         return {"error": 1, "msg": "this game doesn't exist"}
-    print(game.has_started)
     if game.has_started:
         return {"error": 1, "msg": "this game is already started"}
-
+    game.generate_data()
     game.has_started = True
 
-    
-    
     return {"error": 0}
+
+@routes_api.route("/getGameData", methods=["GET", "POST"])
+def get_data():
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+    
+    response = {}
+    response["error"] = 0
+    response["gamedata"] = game.gamedata
+    return response
