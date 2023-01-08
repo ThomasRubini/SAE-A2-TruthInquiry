@@ -1,6 +1,6 @@
 import flask
 
-import truthseeker
+from truthseeker import APP
 from truthseeker.logic import game_logic
 from truthseeker.utils import check_username
 
@@ -46,6 +46,8 @@ def join_game():
     flask.session["is_owner"] = False
     flask.session["username"] = username
 
+    APP.socketio_app.emit("playersjoin", [flask.session["username"]], room="game."+game.game_id)
+
     return {"error": 0}
     
 @routes_api.route("/startGame", methods=["GET", "POST"])
@@ -61,7 +63,7 @@ def start_game():
         return {"error": 1, "msg": "this game is already started"}
     game.generate_data()
     game.has_started = True
-
+    APP.socketio_app.emit("gamestart", {}, room="game."+game.game_id)
     return {"error": 0}
 
 @routes_api.route("/getGameData", methods=["GET", "POST"])

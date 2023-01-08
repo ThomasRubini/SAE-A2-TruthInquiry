@@ -1,8 +1,8 @@
 import json
 import pytest
-from truthseeker import app
+from truthseeker import APP
 
-test_app = app.test_client()
+test_app = APP.test_client()
 
 class TestException(Exception):
     __test__ = False

@@ -2,12 +2,11 @@ import string
 import random
 from truthseeker.logic.data_persistance.data_access import *
 from datetime import datetime, timedelta
-
+from truthseeker import APP
 
 
 # Map of all actively running games
 # games_list["game.game_id"]-> game info linked to that id
-games_list = {}
 
 def random_string(length: int) ->str:
     """
@@ -92,12 +91,12 @@ def create_game(owner):
     game.owner = owner
     game.members.append(Member(owner))
     game.game_id = random_string(6)
-    games_list[game.game_id] = game
+    APP.games_list[game.game_id] = game
     return game
 
 def get_game(game_id):
-    if game_id in games_list:
-        return games_list[game_id]
+    if game_id in APP.games_list:
+        return APP.games_list[game_id]
     else:
         return None
 
@@ -111,8 +110,8 @@ def get_game_info(game_id):
     : return        : The Game Object linked to the game_id
     : return type   : Game
     """
-    if game_id in games_list:
-        return games_list[game_id]
+    if game_id in APP.games_list:
+        return APP.games_list[game_id]
     else:
         return None
 
