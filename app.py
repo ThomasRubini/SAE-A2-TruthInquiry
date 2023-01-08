@@ -1,4 +1,4 @@
-from truthseeker import app # the variable 'app' is detected by `flask run`
+from truthseeker import APP as app # the variable 'app' is detected by `flask run`
 
 if __name__ == "__main__":
     app.run()
