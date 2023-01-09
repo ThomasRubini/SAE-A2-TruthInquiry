@@ -69,6 +69,7 @@ html {
 /* Room code */
 .room_code {
     color: var(--button-background-color);
+    text-decoration: none;
 }
 
 .room_code_text {
