@@ -32,6 +32,7 @@ class Member:
         self.username = username
         self.socket = None
         self.progress = 0
+        self.has_submitted = False
 
     def __str__(self) -> str:
         return "Member[username={}]".format(self.username)
@@ -82,6 +83,16 @@ class Game:
         reaction_id = self.reaction_table[npc_id][int(reaction)]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
     
+    def getPlayerResults(self,responses: dict):
+        results = {}
+        try:
+            for npc_id in responses:
+                results[npc_id] = responses[npc_id] == str(self.reaction_table[npc_id])
+            return results
+        except:
+            return False
+        
+
 
     def has_finished(self):
         for member in self.members:
@@ -142,10 +153,7 @@ def generateNpcText(npc: tables.Npc, lang: str) -> dict:
     return data
 
 def generateNpcReactions(npc : tables.Npc) ->list:
-    data = []
-    data.append(getNpcRandomTraitId(npc))
-    data.append(getNpcRandomTraitId(npc))
-    return data
+    return getNpcRandomTraitId(npc)
 
 def generatePlaceData(npcs :list, places: list, lang : str) -> dict:
     data = {}

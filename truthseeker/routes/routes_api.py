@@ -1,5 +1,5 @@
 import flask
-
+import json
 from truthseeker import APP
 from truthseeker.logic import game_logic
 from truthseeker.utils import check_username
@@ -128,3 +128,30 @@ def gameProgress():
     if game.has_finished() : APP.socketio_app.emit("gamefinshed",room="game."+game.game_id)
     
     return {"error": 0}
+
+@routes_api.route("/submitAnswers", methods=["GET", "POST"])
+def checkAnwser():
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+
+    member = game.get_member(flask.session["username"])
+
+    if member.has_submitted == True:
+        return {"error": 1, "msg": "answers already submitted for this member"}
+
+    playerResponses = flask.request.values.get("responses")
+
+    if playerResponses == None:
+        return {"error": 1, "msg": "no responses were sent"}
+    results = game.getPlayerResults(json.loads(playerResponses))
+    if results == False:
+        return {"error": 1, "msg": "invalid npc sent"}
+        
+    response = {"error": 0}
+    member.has_submitted = True
+    response["results"] = results
+    return response
