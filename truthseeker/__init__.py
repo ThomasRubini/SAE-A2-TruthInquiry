@@ -2,6 +2,8 @@ import flask
 from flask_socketio import SocketIO
 import os
 
+from truthseeker import discord_bot
+
 class TruthSeekerApp(flask.Flask):
 
     def __init__(self):
@@ -10,7 +12,14 @@ class TruthSeekerApp(flask.Flask):
         self.games_list = {}
         
         self.set_app_secret()
+
         self.socketio_app = SocketIO(self)
+
+        token = self.get_discord_bot_token()
+        if token:
+            self.discord_bot = discord_bot.init_bot(token)
+        else:
+            print("No token set. Not starting discord bot")
 
     def run_app(self):
         self.socketio_app.run(self)
@@ -29,6 +38,14 @@ class TruthSeekerApp(flask.Flask):
             f.write(self.config["SECRET_KEY"])
             f.close()
             print("Generated secret and wrote to secret.txt !")
+
+    def get_discord_bot_token(self):
+        if os.path.isfile("instance/discord_bot_token.txt"):
+            f = open("instance/discord_bot_token.txt", "r")
+            token = f.read()
+            f.close()
+            return token
+        return None
 
 APP = TruthSeekerApp()
 

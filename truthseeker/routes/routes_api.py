@@ -24,6 +24,8 @@ def create_game():
     flask.session["is_owner"] = True
     flask.session["username"] = username
 
+    asyncio.run(APP.discord_bot.update_games_presence())
+
     return response
     
 @routes_api.route("/joinGame", methods=["GET", "POST"])
