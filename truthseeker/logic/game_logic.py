@@ -32,7 +32,7 @@ class Member:
         self.username = username
         self.socket = None
         self.progress = 0
-        self.has_submitted = False
+        self.results = None
 
     def __str__(self) -> str:
         return "Member[username={}]".format(self.username)
@@ -60,6 +60,20 @@ class Game:
         self.owner = Member(username)
         self.members.append(self.owner)
         return self.owner
+    
+    def generateGameResults(self):
+        data = {}
+        npcs = data["npcs"] = {}
+        for npc_id in self.gamedata["npcs"]:
+            npcs[npc_id] = {}
+            npcs[npc_id]["name"] = self.gamedata["npcs"][npc_id]["name"]
+            traitId = self.reaction_table[npc_id]
+            trait = getTraitFromTraitId(traitId)
+            npcs[npc_id]["reaction"] = getTextFromLid("FR",trait.NAME_LID)
+        player_results = data["player"] = {}
+        for member in self.members:
+            player_results[member.username] = member.results
+        return data
 
     def generate_data(self):
         #TODO Get language from player
@@ -91,12 +105,11 @@ class Game:
             return results
         except:
             return False
-        
 
 
     def has_finished(self):
         for member in self.members:
-            if member.progress != 5 : return False
+            if member.results == None : return False
         return True
 
     def __str__(self) -> str:

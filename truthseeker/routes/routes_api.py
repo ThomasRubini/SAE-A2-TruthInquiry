@@ -125,7 +125,6 @@ def gameProgress():
     game.get_member(username).progress += 1
     
     APP.socketio_app.emit("gameprogress", [flask.session["username"]], room="game."+game.game_id)
-    if game.has_finished() : APP.socketio_app.emit("gamefinshed",room="game."+game.game_id)
     
     return {"error": 0}
 
@@ -140,18 +139,23 @@ def checkAnwser():
 
     member = game.get_member(flask.session["username"])
 
-    if member.has_submitted == True:
+    if member.results != None:
         return {"error": 1, "msg": "answers already submitted for this member"}
 
     playerResponses = flask.request.values.get("responses")
 
     if playerResponses == None:
         return {"error": 1, "msg": "no responses were sent"}
+        
     results = game.getPlayerResults(json.loads(playerResponses))
     if results == False:
         return {"error": 1, "msg": "invalid npc sent"}
         
-    response = {"error": 0}
     member.has_submitted = True
-    response["results"] = results
+    member.results = results
+    if game.has_finished(): 
+        jsonGameResults = game.generateGameResults()
+        APP.socketio_app.emit("gamefinshed",jsonGameResults,room="game."+game.game_id)
+    response = {"error": 0}
     return response
+
