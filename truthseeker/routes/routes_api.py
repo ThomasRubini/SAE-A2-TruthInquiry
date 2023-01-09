@@ -1,5 +1,5 @@
 import flask
-
+import json
 from truthseeker import APP
 from truthseeker.logic import game_logic
 from truthseeker.utils import check_username
@@ -81,6 +81,17 @@ def get_data():
 
 @routes_api.route("/getNpcImage", methods=["GET", "POST"])
 def getNpcImage():
+    npc_id = flask.request.values.get("npcid")
+    image = game_logic.get_npc_image(npc_id)
+    
+    response = flask.make_response(image)
+    response.headers.set('Content-Type', 'image/png')
+    response.headers.set(
+        'Content-Disposition', 'attachment', filename=f'0.png')
+    return response
+
+@routes_api.route("/getNpcReaction", methods=["GET", "POST"])
+def getNpcReaction():
 
     if not flask.session:
         return {"error": 1, "msg": "No session"}
@@ -100,3 +111,51 @@ def getNpcImage():
     response.headers.set(
         'Content-Disposition', 'attachment', filename=f'{reactionid}.png')
     return response
+
+@routes_api.route("/gameProgress", methods=["GET", "POST"])
+def gameProgress():
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+    
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+    
+    username = flask.session["username"]
+    game.get_member(username).progress += 1
+    
+    APP.socketio_app.emit("gameprogress", [flask.session["username"]], room="game."+game.game_id)
+    
+    return {"error": 0}
+
+@routes_api.route("/submitAnswers", methods=["GET", "POST"])
+def checkAnwser():
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+
+    member = game.get_member(flask.session["username"])
+
+    if member.results != None:
+        return {"error": 1, "msg": "answers already submitted for this member"}
+
+    playerResponses = flask.request.values.get("responses")
+
+    if playerResponses == None:
+        return {"error": 1, "msg": "no responses were sent"}
+        
+    results = game.getPlayerResults(json.loads(playerResponses))
+    if results == False:
+        return {"error": 1, "msg": "invalid npc sent"}
+        
+    member.has_submitted = True
+    member.results = results
+    if game.has_finished(): 
+        jsonGameResults = game.generateGameResults()
+        APP.socketio_app.emit("gamefinshed",jsonGameResults,room="game."+game.game_id)
+    response = {"error": 0}
+    return response
+

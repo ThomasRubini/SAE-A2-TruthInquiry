@@ -37,3 +37,17 @@ def getNpcRandomAnswer(npc, QA_TYPE) -> tables.Answer :
 def getRandomQuestion(QA_TYPE) -> tables.Answer :
     answers = session.query(tables.Question).filter_by(QUESTION_TYPE=QA_TYPE).all()
     return random.choice(answers)
+
+def getTraitFromText(text):
+    trait_lid = session.query(tables.Locale).filter_by(TEXT=text).one().TEXT_ID
+    return session.query(tables.Trait).filter_by(NAME_LID=trait_lid).one().TRAIT_ID
+
+def getTraitFromTraitId(trait_id):
+    trait = session.query(tables.Trait).filter_by(TRAIT_ID=trait_id).one()
+    return trait
+
+def getTraits(lang):
+    traits = []
+    for trait in session.query(tables.Trait).all():
+        traits.append(getTextFromLid(lang,trait.NAME_LID))
+    return traits

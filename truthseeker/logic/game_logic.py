@@ -31,6 +31,8 @@ class Member:
     def __init__(self, username):
         self.username = username
         self.socket = None
+        self.progress = 0
+        self.results = None
 
     def __str__(self) -> str:
         return "Member[username={}]".format(self.username)
@@ -58,6 +60,20 @@ class Game:
         self.owner = Member(username)
         self.members.append(self.owner)
         return self.owner
+    
+    def generateGameResults(self):
+        data = {}
+        npcs = data["npcs"] = {}
+        for npc_id in self.gamedata["npcs"]:
+            npcs[npc_id] = {}
+            npcs[npc_id]["name"] = self.gamedata["npcs"][npc_id]["name"]
+            traitId = self.reaction_table[npc_id]
+            trait = getTraitFromTraitId(traitId)
+            npcs[npc_id]["reaction"] = getTextFromLid("FR",trait.NAME_LID)
+        player_results = data["player"] = {}
+        for member in self.members:
+            player_results[member.username] = member.results
+        return data
 
     def generate_data(self):
         #TODO Get language from player
@@ -80,6 +96,21 @@ class Game:
             return 0
         reaction_id = self.reaction_table[npc_id][int(reaction)]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
+    
+    def getPlayerResults(self,responses: dict):
+        results = {}
+        try:
+            for npc_id in responses:
+                results[npc_id] = responses[npc_id] == str(self.reaction_table[npc_id])
+            return results
+        except:
+            return False
+
+
+    def has_finished(self):
+        for member in self.members:
+            if member.results == None : return False
+        return True
 
     def __str__(self) -> str:
         return "Game[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
@@ -109,7 +140,11 @@ def get_game(game_id):
         return None
 
 def get_game_info(game_id):
-    """
+    """    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
     This function retrieve a the Game object linked to the game_id
     passed as parametter
 
@@ -131,10 +166,7 @@ def generateNpcText(npc: tables.Npc, lang: str) -> dict:
     return data
 
 def generateNpcReactions(npc : tables.Npc) ->list:
-    data = []
-    data.append(getNpcRandomTraitId(npc))
-    data.append(getNpcRandomTraitId(npc))
-    return data
+    return getNpcRandomTraitId(npc)
 
 def generatePlaceData(npcs :list, places: list, lang : str) -> dict:
     data = {}
@@ -172,11 +204,17 @@ def generateGameData(LANG):
     data["questions"] = {}
     data["questions"]["QA_0"] = getTextFromLid("FR",getRandomQuestion(0).TEXT_LID)
     data["questions"]["QA_1"] = getTextFromLid("FR",getRandomQuestion(1).TEXT_LID)
+    data["traits"] = getTraits(LANG)
     return data, reactions_table
-
 
 def read_image(path:str):
     try:
         return open(path, "rb").read()
     except:
         return 1
+
+def getTraitIdFromString(trait):
+    return getTraitFromText(trait)
+
+def get_npc_image(npc_id):
+    return read_image(f"./truthseeker/static/images/npc/{npc_id}/0.png")
