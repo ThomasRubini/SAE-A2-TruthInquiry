@@ -102,6 +102,7 @@ function startChallengeGame() {
 }
 
 // Join room functions
+
 function joinRoom() {
     unsetListenerToJoinRoomButton();
     if (isNickNameInvalid()) {
@@ -112,6 +113,27 @@ function joinRoom() {
 
     hideInvalidNickNameErrorMessage();
     //TODO: join the game room and handle server errors + connection errors
+}
+
+// Room code functions
+
+/**
+ * Copy the room code to the clipboard.
+ *
+ * <p>
+ * In order to not make an additional API call to get the room code, we use the value from the
+ * room code HTML element and generate a HTTP link from this value, copied to the clipboard using
+ * {@link copyTextToClipboard}.
+ * </p>
+ */
+function copyCode() {
+    // Get the room code from the displayed text to avoid an extra API call
+    let roomCode = document.getElementsByClassName("room_code")[0].textContent;
+    if (roomCode == "") {
+        alert("Veuillez patientez, le code d'équipe est en cours de génération.");
+    }
+    copyTextToClipboard(window.location.protocol + "//" + window.location.hostname + ":"
+        + window.location.port + "/lobby/"  + roomCode);
 }
 
 // Listeners functions
@@ -140,6 +162,17 @@ function setListenerToJoinRoomButton() {
 }
 
 /**
+ * Set listeners to the copy room code button.
+ *
+ * <p>
+ * This function adds a click event listener on the copy room code button.
+ * </p>
+ */
+function setListenerToCopyCodeButton() {
+    document.getElementById("invite_friends_button").addEventListener("click", copyCode);
+}
+
+/**
  * Unset listeners to game buttons.
  *
  * <p>
@@ -153,7 +186,7 @@ function unsetListenersToButtons() {
 }
 
 /**
- * Set listeners to the join room button.
+ * Unset listeners to the join room button.
  *
  * <p>
  * This function removes the click event listener set with {@link setListenerToJoinRoomButton} on
@@ -162,6 +195,18 @@ function unsetListenersToButtons() {
  */
 function unsetListenerToJoinRoomButton() {
     document.getElementById("join_game_button").removeEventListener("click", joinRoom);
+}
+
+/**
+ * Unset listeners to the copy room code button.
+ *
+ * <p>
+ * This function removes the click event listener set with {@link setListenerToCopyCodeButton} on
+ * the copy room code button.
+ * </p>
+ */
+function unsetListenerToCopyCodeButton() {
+    document.getElementById("invite_friends_button").removeEventListener("click", copyCode);
 }
 
 // Utility functions
@@ -174,6 +219,30 @@ function isRoomOwner() {
 function hasJoinedRoom() {
     //FIXME: check if player has joined the room
     return true;
+}
+
+/**
+ * Copy the given text in the clipboard, if the browser allows it.
+ *
+ * <p>
+ * A JavaScript alert is created witn an appropriate message, regardless of whether the copy succeeded.
+ * </p>
+ *
+ * <p>
+ * This function uses the Clipboard API. In the case it is not supported by the browser used, a JavaScript alert is shown..
+ * </p>
+ *
+ * @param {string}} textToCopy the text to copy to the clipboard
+ */
+function copyTextToClipboard(textToCopy) {
+    if (!navigator.clipboard) {
+        alert("Votre navigateur ne supporte pas l'API Clipboard. Veuillez copier le texte en ouvrant le menu contextuel de votre navigateur sur le lien et sélectionner l'option pour copier le lien.");
+    }
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        alert("Code copié avec succès dans le presse-papiers.");
+    }, () => {
+        alert("Impossible de copier le texte. Vérifiez si vous avez donné la permission d'accès au presse-papiers pour le site de Thruth Inquiry dans les paramètres de votre navigateur.");
+    });
 }
 
 /**
@@ -254,6 +323,7 @@ function initLobby() {
             displayRoomCode();
             displayMultiPlayerModeChoices();
             setListenersToGameButtons();
+            setListenerToCopyCodeButton();
         }
 
         displayPlayerList();
