@@ -81,6 +81,17 @@ def get_data():
 
 @routes_api.route("/getNpcImage", methods=["GET", "POST"])
 def getNpcImage():
+    npc_id = flask.request.values.get("npcid")
+    image = game_logic.get_npc_image(npc_id)
+    
+    response = flask.make_response(image)
+    response.headers.set('Content-Type', 'image/png')
+    response.headers.set(
+        'Content-Disposition', 'attachment', filename=f'0.png')
+    return response
+
+@routes_api.route("/getNpcReaction", methods=["GET", "POST"])
+def getNpcReaction():
 
     if not flask.session:
         return {"error": 1, "msg": "No session"}
@@ -100,3 +111,20 @@ def getNpcImage():
     response.headers.set(
         'Content-Disposition', 'attachment', filename=f'{reactionid}.png')
     return response
+
+@routes_api.route("/gameProgress", methods=["GET", "POST"])
+def gameProgress():
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+    
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+    
+    username = flask.session["username"]
+    game.get_member(username).progress += 1
+    
+    APP.socketio_app.emit("gameprogress", [flask.session["username"]], room="game."+game.game_id)
+    if game.has_finished() : APP.socketio_app.emit("gamefinshed",room="game."+game.game_id)
+    
+    return {"error": 0}

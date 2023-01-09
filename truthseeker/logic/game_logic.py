@@ -31,6 +31,7 @@ class Member:
     def __init__(self, username):
         self.username = username
         self.socket = None
+        self.progress = 0
 
     def __str__(self) -> str:
         return "Member[username={}]".format(self.username)
@@ -80,6 +81,12 @@ class Game:
             return 0
         reaction_id = self.reaction_table[npc_id][int(reaction)]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
+    
+
+    def has_finished(self):
+        for member in self.members:
+            if member.progress != 5 : return False
+        return True
 
     def __str__(self) -> str:
         return "Game[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
@@ -109,7 +116,11 @@ def get_game(game_id):
         return None
 
 def get_game_info(game_id):
-    """
+    """    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
     This function retrieve a the Game object linked to the game_id
     passed as parametter
 
@@ -172,11 +183,17 @@ def generateGameData(LANG):
     data["questions"] = {}
     data["questions"]["QA_0"] = getTextFromLid("FR",getRandomQuestion(0).TEXT_LID)
     data["questions"]["QA_1"] = getTextFromLid("FR",getRandomQuestion(1).TEXT_LID)
+    data["traits"] = getTraits(LANG)
     return data, reactions_table
-
 
 def read_image(path:str):
     try:
         return open(path, "rb").read()
     except:
         return 1
+
+def getTraitIdFromString(trait):
+    return getTraitFromText(trait)
+
+def get_npc_image(npc_id):
+    return read_image(f"./truthseeker/static/images/npc/{npc_id}/0.png")
