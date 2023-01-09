@@ -52,6 +52,7 @@ class Game:
         self.members = []
         self.has_started = False
         self.gamedata = {}
+        self.reaction_table = {}
 
     def set_owner(self, username):
         self.owner = Member(username)
@@ -59,7 +60,8 @@ class Game:
         return self.owner
 
     def generate_data(self):
-        self.gamedata = generateGameData("FR")
+        #TODO Get language from player
+        self.gamedata, self.reaction_table = generateGameData("FR")
 
     def get_member(self, username):
         for member in self.members:
@@ -72,6 +74,12 @@ class Game:
         member = Member(username)
         self.members.append(member)
         return member
+
+    def get_npc_reaction(self,npc_id,reaction):
+        if npc_id not in self.reaction_table.keys():
+            return 0
+        reaction_id = self.reaction_table[npc_id][int(reaction)]
+        return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
 
     def __str__(self) -> str:
         return "Game[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
@@ -115,13 +123,17 @@ def get_game_info(game_id):
     else:
         return None
 
-def generateNpcData(npc: tables.Npc, lang: str) -> dict:
+def generateNpcText(npc: tables.Npc, lang: str) -> dict:
     data = {}
     data["name"] = getTextFromLid(lang, npc.NAME_LID)
     data["QA_0"] = getTextFromLid(lang, getNpcRandomAnswer(npc,0).TEXT_LID)
     data["QA_1"] = getTextFromLid(lang, getNpcRandomAnswer(npc,1).TEXT_LID)
-    data["R_0"]  = getNpcRandomTraitId(npc)
-    data["R_1"]  = getNpcRandomTraitId(npc)
+    return data
+
+def generateNpcReactions(npc : tables.Npc) ->list:
+    data = []
+    data.append(getNpcRandomTraitId(npc))
+    data.append(getNpcRandomTraitId(npc))
     return data
 
 def generatePlaceData(npcs :list, places: list, lang : str) -> dict:
@@ -140,13 +152,15 @@ def generatePlaceData(npcs :list, places: list, lang : str) -> dict:
 def generateGameData(LANG):
     data = {}
     data["npcs"] = {}
+    reactions_table = {}
     npcs = []
     while len(npcs) != 5:
         npc = getRandomNpc()
         if npc not in npcs :
             npcs.append(npc)
     for npc in npcs:
-        data["npcs"][str(npc.NPC_ID)] = generateNpcData(npc,LANG)
+        data["npcs"][str(npc.NPC_ID)] = generateNpcText(npc,LANG)
+        reactions_table[str(npc.NPC_ID)] = generateNpcReactions(npc)
 
     places = []
     while len(places) != 3:
@@ -158,4 +172,11 @@ def generateGameData(LANG):
     data["questions"] = {}
     data["questions"]["QA_0"] = getTextFromLid("FR",getRandomQuestion(0).TEXT_LID)
     data["questions"]["QA_1"] = getTextFromLid("FR",getRandomQuestion(1).TEXT_LID)
-    return data
+    return data, reactions_table
+
+
+def read_image(path:str):
+    try:
+        return open(path, "rb").read()
+    except:
+        return 1

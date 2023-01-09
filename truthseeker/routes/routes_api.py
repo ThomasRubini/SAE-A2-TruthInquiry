@@ -78,3 +78,25 @@ def get_data():
     response["error"] = 0
     response["gamedata"] = game.gamedata
     return response
+
+@routes_api.route("/getNpcImage", methods=["GET", "POST"])
+def getNpcImage():
+
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+    npc_id = flask.request.values.get("npcid")
+    reactionid = flask.request.values.get("reactionid")
+    image = game.get_npc_reaction(npc_id,reactionid)
+
+    errors = ["npc not in game","error reading file"]
+    if image in [0,1]:
+        return {"error" :1, "msg": errors[image]} , 500
+    
+    response = flask.make_response(image)
+    response.headers.set('Content-Type', 'image/png')
+    response.headers.set(
+        'Content-Disposition', 'attachment', filename=f'{reactionid}.png')
+    return response
