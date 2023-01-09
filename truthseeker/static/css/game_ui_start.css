@@ -175,8 +175,7 @@ input::placeholder {
 }
 
 #game_username {
-    margin: 0.5em;
-    width: calc(100% - 1.5em);
+    width: calc(100% - 1.25em);
 }
 
 #play_button {

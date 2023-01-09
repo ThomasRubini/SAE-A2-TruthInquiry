@@ -138,8 +138,84 @@ function joinMultiPlayerRoom() {
     //TODO: code to join multi player game
 }
 
+/**
+ * Set the current theme for the game.
+ *
+ * <p>
+ * The theme preference is read from the local storage.
+ * </p>
+ *
+ * <p>
+ * If accessing to the local storage is not allow, an error message which prevents playing the game
+ * and requesting user to enable localStorage is shown, and the error is logged in the console.
+ * </p>
+ */
+function setCurrentTheme() {
+    const htmlElement = document.getElementsByTagName("html")[0];
+
+    try {
+        const currentTheme = localStorage.getItem("pref_theme");
+
+        if (currentTheme == "light") {
+            htmlElement.classList.remove("dark");
+            htmlElement.classList.add("light");
+        } else {
+            // Use dark theme by default
+            htmlElement.classList.remove("light");
+            htmlElement.classList.add("dark");
+        }
+
+        const btn = document.getElementsByClassName("theme_switcher")[0];
+        btn.addEventListener("pointerup", changeTheme);
+    } catch (e) {
+        console.error("Unable to set theme from localStorage", e);
+        htmlElement.classList.add("dark");
+        showUnsupportedBrowserMessage("Votre navigateur ne semble pas supporter le localStorage. Certains navigateurs nécessitant l'autorisation d'utiliser des cookies pour utiliser le localStorage, vérifiez que les cookies sont autorisés pour le site du jeu dans le vôtre.");
+    }
+}
+
+/**
+ * Change the theme from the current theme to its opposite.
+ *
+ * <p>
+ * If the current theme is "dark", it will become "light" and vice versa.
+ * </p>
+ *
+ * <p>
+ * The new theme is saved in the localStorage, if the browser allows this action; otherwise, an
+ * error message is shown in the console.
+ * </p>
+ */
+function changeTheme() {
+    const currentTheme = localStorage.getItem("pref_theme");
+
+    const htmlElement = document.getElementsByTagName("html")[0];
+    let newTheme;
+    if (currentTheme == "light") {
+        htmlElement.classList.remove("light");
+        htmlElement.classList.add("dark");
+        newTheme = "dark";
+    } else {
+        htmlElement.classList.remove("dark");
+        htmlElement.classList.add("light");
+        newTheme = "light";
+    }
+
+    try {
+        localStorage.setItem("pref_theme", newTheme);
+    } catch (e) {
+        console.error("Unable to save theme change to localStorage", e);
+    }
+}
+
+// Set event listeners
+
 document.getElementById("play_button").addEventListener("click", showGameModeSelection);
 document.getElementById("back_button").addEventListener("click", hideGameModeSelection);
 document.getElementById("start_solo_game_button").addEventListener("click", startSoloGame);
 document.getElementById("create_room_button").addEventListener("click", createMultiPlayerRoom);
 document.getElementById("join_room_button").addEventListener("click", joinMultiPlayerRoom);
+
+// Execution of functions
+
+setCurrentTheme();

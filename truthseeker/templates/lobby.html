@@ -1,3 +1,67 @@
-lobby.html template
-<br>
-<a href="/multi">Go to the multi game</a>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Truth Inquiry - Salon</title>
+        <link rel="stylesheet" href="/static/css/game_ui.css">
+        <link rel="stylesheet" href="/static/css/game_ui_lobby.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+    </head>
+    <body class="game_app">
+        <div class="join_room_view hidden">
+            <h1 class="room_title">Salon</h1>
+            <input type="text" id="game_username" placeholder="Entrez un pseudo" value="" required="required" maxlength="20">
+            <button id="join_game_button" class="action_button">Rejoindre</button>
+            <p class="game_start_failed hidden">Une erreur s'est produite. Réessayez ultérieurement.</p>
+        </div>
+        <div class="room_view hidden">
+            <div class="room_view_container">
+                <h1 class="room_title">Salon</h1>
+                <div class="room_code_text hidden">
+                    <h3 class="room_code_text_title">Code&nbsp;: <a href="" target="_blank" class="room_code"></a></h3>
+                    <button id="invite_friends_button" class="action_button">Copier le lien d'invitation</button>
+                </div>
+            </div>
+            <div class="room_view_container">
+                <div class="players_list hidden">
+                    <h2 class="players_title">Joueurs</h2>
+                    <div class="player_names"></div>
+                </div>
+                <div class="multi_player_mode_choices hidden">
+                    <div class="multi_player_mode_choice">
+                        <h3 class="multi_player_mode_choice_title">Jouer au mode Histoire</h3>
+                        <button id="multi_player_history_start_button" class="action_button">Lancer</button>
+                    </div>
+                    <div class="multi_player_mode_choice">
+                        <h3 class="multi_player_mode_choice_title">Jouer au mode Challenge</h3>
+                        <button id="multi_player_challenge_start_button" class="action_button">Lancer</button>
+                        <div class="multi_player_mode_choice_number">
+                            <h3 class="rounds_count_title">Nombre de tours&nbsp;:</h3>
+                            <input id="rounds_count" type="number" min="5" max="15" value="5">
+                        </div>
+                        <p class="multi_player_challenge_mode_invalid_input hidden">Nombre de tours invalide. Veuillez entrer un nombre valide entre 5 inclus et 15 inclus.</p>
+                    </div>
+                </div>
+                <h3 class="multi_player_mode_waiting_for_host hidden">En attente du démarrage de la partie par l'hôte&nbsp;…</h3>
+            </div>
+        </div>
+        <div class="alert_dialog_background"></div>
+        <div class="unsupported_browser">
+            <div id="unsupported_browser_dialog" class="alert_dialog">
+                <h3 class="alert_dialog_title">Navigateur non supporté</h3>
+                <p class="alert_dialog_msg unsupported_browser_msg"></p>
+            </div>
+        </div>
+        <noscript>
+            <div class="alert_dialog_background" style="display: block;"></div>
+            <div class="js_requirement">
+                <div id="js_requirement_dialog" class="alert_dialog" style="display: block;">
+                    <h3 class="alert_dialog_title" style="display: block;">JavaScript nécessaire</h3>
+                    <p class="alert_dialog_msg unsupported_browser_msg" style="display: block;">Désolé, mais JavaScript est nécessaire pour faire fonctionner Truth Inquiry. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir jouer au jeu.</p>
+                </div>
+            </div>
+        </noscript>
+        <script src="/static/js/game_common.js"></script>
+        <script src="/static/js/game_lobby.js"></script>
+    </body>
+</html>
