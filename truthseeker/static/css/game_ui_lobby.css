@@ -129,6 +129,14 @@ html {
     margin: 0.75em;
 }
 
+.multi_player_challenge_mode_invalid_input {
+    color: var(--button-background-color);
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0.5em;
+}
+
 /* Rounds count */
 #rounds_count {
     background-color: white;
