@@ -98,7 +98,7 @@ function startChallengeGame() {
         return;
     }
 
-    //TODO: start the challenge game and handle server errors + connection errors
+    alert("Ce mode de jeu n'est malheureusement pas disponible.");
 }
 
 // Join room functions
