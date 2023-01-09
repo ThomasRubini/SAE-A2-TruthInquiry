@@ -51,6 +51,33 @@ function displayJoinRoomView() {
 }
 
 /**
+ * Show an error message on the first game_start_failed CSS element.
+ *
+ * <p>
+ * The current error message text will be replaced by the given message and the element will be
+ * shown, by removing the hidden CSS class on the element.
+ * </p>
+ *
+ * @param {boolean} errorMessage the error message to show
+ */
+function displayInvalidNickNameErrorMessage(errorMessage) {
+    let gameStartFailedElement = document.getElementsByClassName("game_start_failed")[0];
+    gameStartFailedElement.textContent = errorMessage;
+    gameStartFailedElement.classList.remove("hidden");
+}
+
+/**
+ * Hide an error message on the first game_start_failed CSS element.
+ *
+ * <p>
+ * The element will be hidden by removing the hidden CSS class on the element.
+ * </p>
+ */
+function hideInvalidNickNameErrorMessage() {
+    document.getElementsByClassName("game_start_failed")[0].classList.add("hidden");
+}
+
+/**
  * Hide the invalid rounds count message element, by adding the hidden CSS class.
  *
  * @param {Element} invalidRoundsCountMessageElement the invalid rounds counts message
@@ -62,7 +89,7 @@ function hideInvalidRoundsCountErrorMessage(invalidRoundsCountMessageElement) {
 // Start game functions
 
 function startHistoryGame() {
-    //TODO: start the history game
+    //TODO: start the history game and handle server errors + connection errors
 }
 
 function startChallengeGame() {
@@ -71,7 +98,20 @@ function startChallengeGame() {
         return;
     }
 
-    //TODO: start the challenge game
+    //TODO: start the challenge game and handle server errors + connection errors
+}
+
+// Join room functions
+function joinRoom() {
+    unsetListenerToJoinRoomButton();
+    if (isNickNameInvalid()) {
+        displayInvalidNickNameErrorMessage("Le nom saisi n'est pas valide.");
+        setListenerToJoinRoomButton();
+        return;
+    }
+
+    hideInvalidNickNameErrorMessage();
+    //TODO: join the game room and handle server errors + connection errors
 }
 
 // Listeners functions
@@ -80,7 +120,7 @@ function startChallengeGame() {
  * Set listeners to game buttons.
  *
  * <p>
- * This function adds a click event listener on start buttons
+ * This function adds a click event listener on start game buttons.
  * </p>
  */
 function setListenersToGameButtons() {
@@ -88,9 +128,40 @@ function setListenersToGameButtons() {
     document.getElementById("multi_player_challenge_start_button").addEventListener("click", startChallengeGame);
 }
 
+/**
+ * Set listeners to the join room button.
+ *
+ * <p>
+ * This function adds a click event listener on the join room button.
+ * </p>
+ */
+function setListenerToJoinRoomButton() {
+    document.getElementById("join_game_button").addEventListener("click", joinRoom);
+}
+
+/**
+ * Unset listeners to game buttons.
+ *
+ * <p>
+ * This function removes the click event listener set with {@link setListenersToGameButtons} on
+ * start game buttons.
+ * </p>
+ */
 function unsetListenersToButtons() {
     document.getElementById("multi_player_history_start_button").removeEventListener("click", startHistoryGame);
     document.getElementById("multi_player_challenge_start_button").removeEventListener("click", startChallengeGame);
+}
+
+/**
+ * Set listeners to the join room button.
+ *
+ * <p>
+ * This function removes the click event listener set with {@link setListenerToJoinRoomButton} on
+ * the join room button.
+ * </p>
+ */
+function unsetListenerToJoinRoomButton() {
+    document.getElementById("join_game_button").removeEventListener("click", joinRoom);
 }
 
 // Utility functions
@@ -103,6 +174,19 @@ function isRoomOwner() {
 function hasJoinedRoom() {
     //FIXME: check if player has joined the room
     return true;
+}
+
+/**
+ * Determine whether a nickname is invalid.
+ *
+ * <p>
+ * A nickname is invalid when it only contains spaces characters or is empty.
+ * </p>
+ *
+ * @returns whether a nickname is invalid
+ */
+function isNickNameInvalid() {
+    return document.getElementById("game_username").value.trim() == "";
 }
 
 /**
@@ -143,7 +227,7 @@ function getChallengeModeRoundsCount() {
  * @returns the code of the room
  */
 function getRoomCode() {
-    //FIXME
+    //FIXME get the real room code
     return "ABCDEF";
 }
 
@@ -175,10 +259,7 @@ function initLobby() {
         displayPlayerList();
     } else {
         displayJoinRoomView();
-        //TODO
-        /**
-         * setListenerToJoinRoomButton();
-         */
+        setListenerToJoinRoomButton();
     }
 }
 
