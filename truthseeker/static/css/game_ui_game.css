@@ -74,6 +74,13 @@ html {
     font-family: "Spicy Rice", serif;
     font-size: 5em;
     font-weight: bold;
+}
+
+.introduction_title {
+    color: #BD1E1E;
+    font-family: "Spicy Rice", serif;
+    font-weight: bold;
+    font-size: 5em;
     margin: 0;
     text-align: left;
 }
@@ -98,6 +105,7 @@ html {
     color: var(--button-color);
     font-family: "Spicy Rice", sans-serif;
     font-size: 3em;
+    font-weight: bold;
     margin: 1em;
     text-transform: uppercase;
 }
@@ -186,4 +194,53 @@ html {
     text-align: center;
     font-family: "Spicy Rice", sans-serif;
     color: var(--button-color);
+}
+
+.question_button {
+    text-transform: none;
+    border-radius: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    background-color: rgb(90, 86, 86);
+}
+
+.questions_list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 2em;
+    margin-top: 3em;
+}
+
+.questions_answer {
+    position: absolute;
+    bottom: 10%;
+    right: 60%;
+    /* Aligner le texte pour la version mobile */
+    transform: translateX(-50%);
+}
+
+#next_button {
+    background-color: transparent;
+    border: transparent;
+    bottom: 0;
+    position: absolute;
+    right: 50;
+}
+
+.results_title {
+    color: #BD1E1E;
+    font-family: "Spicy Rice", serif;
+    font-weight: bold;
+    font-size: 4.5em;
+    margin: 0;
+    text-align: left;
+}
+
+.reveal_killer_title {
+    color: white;
+    font-family: "Spicy Rice", serif;
+    font-weight: bold;
+    font-size: 3em;
 }
