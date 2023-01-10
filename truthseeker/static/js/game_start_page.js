@@ -125,7 +125,7 @@ function createMultiPlayerRoom() {
 
     hideInvalidInputErrorMessage();
 
-    //TODO: code to create multi player game
+    startGame()
 }
 
 function joinMultiPlayerRoom() {
@@ -208,6 +208,16 @@ function changeTheme() {
     }
 }
 
+async function startGame(){
+    username = document.getElementById("game_username").value;
+    let data = {}
+    data["username"] = username
+    await makeAPIRequest("createGame",data);
+}
+async function joinGame(){
+    username = document.getElementById("game_username").value();
+    gameid = document.getElementById("game_room_code").value();
+}
 // Set event listeners
 
 document.getElementById("play_button").addEventListener("click", showGameModeSelection);
