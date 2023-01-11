@@ -125,7 +125,7 @@ function createMultiPlayerRoom() {
 
     hideInvalidInputErrorMessage();
 
-    startGame()
+    startGame();
 }
 
 function joinMultiPlayerRoom() {
@@ -135,7 +135,7 @@ function joinMultiPlayerRoom() {
 
     hideInvalidInputErrorMessage();
 
-    //TODO: code to join multi player game
+    joinGame();
 }
 
 /**
@@ -211,12 +211,36 @@ function changeTheme() {
 async function startGame(){
     username = document.getElementById("game_username").value;
     let data = {}
-    data["username"] = username
-    await makeAPIRequest("createGame",data);
+    data["username"] = username;
+    response = makeAPIRequest("createGame",data);
+    response.then((value) => {
+        if (value["error"] != 0){
+            alert(value["msg"]);
+        }
+        else{
+            gameid = value["game_id"]
+            window.location.href = "/lobby/" + gameid;
+        }
+      });
+
 }
 async function joinGame(){
-    username = document.getElementById("game_username").value();
-    gameid = document.getElementById("game_room_code").value();
+    username = document.getElementById("game_username").value;
+    gameid = document.getElementById("game_room_code").value;
+    console.log(username);
+    data = {}
+    data["username"] = username;
+    data["game_id"] = gameid;
+    response = makeAPIRequest("joinGame",data);
+    response.then((value)=>{
+        console.log(value);
+        if (value["error"] != 0){
+            //alert(value["msg"]);
+        }
+        else{
+            //window.location.href = "/lobby/" + gameid;
+        }
+    })
 }
 // Set event listeners
 

@@ -1,5 +1,4 @@
 // Display functions
-
 /**
  * Display the invalid rounds count message element, by removing the hidden CSS class.
  *
@@ -296,8 +295,8 @@ function getChallengeModeRoundsCount() {
  * @returns the code of the room
  */
 function getRoomCode() {
-    //FIXME get the real room code
-    return "ABCDEF";
+    gameid = document.getElementById("gameid")
+    return gameid;
 }
 
 // Lobby initialization
@@ -317,6 +316,21 @@ function getRoomCode() {
  * </p>
  */
 function initLobby() {
+    
+    gameid = getRoomCode(); 
+    socket = io({
+        auth:{
+            game_id: gameid
+        }
+    });
+
+    socket.on("connect", () => {
+        console.log("Connected !")
+    })
+
+    socket.on("playersjoin", (err) => {
+        console.log(`Failed to connect to socket: ${err.message}`);
+    });
     if (hasJoinedRoom()) {
         displayRoomView();
         if (isRoomOwner()) {
