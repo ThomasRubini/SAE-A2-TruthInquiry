@@ -58,7 +58,7 @@ function displayJoinRoomView() {
 }
 
 
-function addJoinRoomView() {
+function hideJoinRoomView() {
     document.getElementsByClassName("join_room_view")[0].classList.add("hidden");
 }
 /**
@@ -115,10 +115,8 @@ function startChallengeGame() {
 // Join room functions
 
 function joinRoom() {
-    unsetListenerToJoinRoomButton();
     if (isNickNameInvalid()) {
         displayInvalidNickNameErrorMessage("Le nom saisi n'est pas valide.");
-        setListenerToJoinRoomButton();
         return;
     }
 
@@ -130,7 +128,8 @@ function joinRoom() {
     response.then((value)=>{
         displayRoomView();
         displayPlayerList();
-        displayJoinRoomView();
+        initSock();
+        hideJoinRoomView();
     })
 }
 // Room code functions
@@ -230,9 +229,9 @@ function unsetListenerToCopyCodeButton() {
 
 // Utility functions
 
-function isRoomOwner() {
-    //FIXME: check if player is room owner
-    return true;
+async function isRoomOwner() {
+    response = await makeAPIRequest("isOwner");
+    return response["owner"];
 }
 
 async function hasJoinedRoom() {
@@ -319,6 +318,24 @@ function getRoomCode() {
     return gameid;
 }
 
+function initSock(){
+    socket = io({
+        auth:{
+            game_id: gameid
+        }
+    });
+
+    socket.on("connect", () => {
+        console.log("Connected !")
+    })
+
+    socket.on("playersjoin", (username) => {
+        console.log(`${username} joined`);
+        player_list = document.getElementsByClassName("player_names")[0];
+        player_list.appendChild(document.createTextNode(username)+"\n");
+    });
+}
+
 // Lobby initialization
 
 /**
@@ -338,25 +355,11 @@ function getRoomCode() {
 async function initLobby() {
     
     gameid = getRoomCode(); 
-    socket = io({
-        auth:{
-            game_id: gameid
-        }
-    });
-
-    socket.on("connect", () => {
-        console.log("Connected !")
-    })
-
-    socket.on("playersjoin", (username) => {
-        console.log(`${username} joined`);
-        player_list = document.getElementsByClassName("player_names")[0];
-        player_list.appendChild(document.createTextNode(username));
-    });
 
     if (await hasJoinedRoom()) {
+        initSock();
         displayRoomView();
-        if (isRoomOwner()) {
+        if (await isRoomOwner()) {
             displayRoomCode();
             displayMultiPlayerModeChoices();
             setListenersToGameButtons();

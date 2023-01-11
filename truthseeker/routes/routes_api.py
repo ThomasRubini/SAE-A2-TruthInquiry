@@ -63,6 +63,19 @@ def join_game():
 
     return {"error": 0}
 
+@routes_api.route("/isOwner", methods=["GET", "POST"])
+def is_owner():
+    if not flask.session:
+        return {"error": 0, "owner": False}
+    game = game_logic.get_game(flask.session["game_id"])
+    if game == None:
+        return {"error": 0, "owner": False}
+
+    if not flask.session["is_owner"]:   
+        return {"error": 0, "owner": False}
+
+    return {"error": 0, "owner": True}
+
 @routes_api.route("/hasJoined", methods=["GET", "POST"])
 def has_joined():
     if not flask.session:
