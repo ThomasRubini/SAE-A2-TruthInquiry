@@ -24,7 +24,7 @@ def create_game():
     flask.session["is_owner"] = True
     flask.session["username"] = username
 
-    asyncio.run(APP.discord_bot.update_games_presence())
+    APP.discord_bot.update_games_presence()
 
     return response
     
