@@ -25,6 +25,19 @@ def create_game():
     flask.session["username"] = username
 
     return response
+
+@routes_api.route("/getGameMembers", methods=["GET", "POST"])
+def getMembers():
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game = game_logic.get_game(flask.session["game_id"])
+    if game == None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+    
+    response = {"error" : 0}
+    player_list = [member.username for member in game.members]
+    response["members"] = player_list
+    return response
     
 @routes_api.route("/joinGame", methods=["GET", "POST"])
 def join_game():
@@ -49,7 +62,16 @@ def join_game():
     APP.socketio_app.emit("playersjoin", [flask.session["username"]], room="game."+game.game_id)
 
     return {"error": 0}
-    
+
+@routes_api.route("/hasJoined", methods=["GET", "POST"])
+def has_joined():
+    if not flask.session:
+        return {"error": 0, "joined": False}
+    game = game_logic.get_game(flask.session["game_id"])
+    if game == None:
+        return {"error": 0, "joined": False}
+    return {"error": 0, "joined": True}
+
 @routes_api.route("/startGame", methods=["GET", "POST"])
 def start_game():
     if not flask.session:

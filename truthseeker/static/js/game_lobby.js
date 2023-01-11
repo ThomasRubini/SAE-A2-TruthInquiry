@@ -23,6 +23,14 @@ function displayRoomCode() {
  * Display the players list element.
  */
 function displayPlayerList() {
+    response = makeAPIRequest("getGameMembers");
+    response.then((value) =>{
+        player_list = document.getElementsByClassName("player_names")[0];
+        value["members"].forEach(username => {
+            player_list.appendChild(document.createTextNode(username+"\n"));
+        });
+
+    });
     document.getElementsByClassName("players_list")[0].classList.remove("hidden");
 }
 
@@ -49,6 +57,10 @@ function displayJoinRoomView() {
     document.getElementsByClassName("join_room_view")[0].classList.remove("hidden");
 }
 
+
+function addJoinRoomView() {
+    document.getElementsByClassName("join_room_view")[0].classList.add("hidden");
+}
 /**
  * Show an error message on the first game_start_failed CSS element.
  *
@@ -111,9 +123,16 @@ function joinRoom() {
     }
 
     hideInvalidNickNameErrorMessage();
-    //TODO: join the game room and handle server errors + connection errors
+    data = {}
+    data["username"] = document.getElementById("game_username").value;
+    data["game_id"] = getRoomCode();
+    response = makeAPIRequest("joinGame",data);
+    response.then((value)=>{
+        displayRoomView();
+        displayPlayerList();
+        displayJoinRoomView();
+    })
 }
-
 // Room code functions
 
 /**
@@ -216,9 +235,9 @@ function isRoomOwner() {
     return true;
 }
 
-function hasJoinedRoom() {
-    //FIXME: check if player has joined the room
-    return true;
+async function hasJoinedRoom() {
+    response = await makeAPIRequest("hasJoined");
+    return response["joined"];
 }
 
 /**
@@ -297,7 +316,6 @@ function getChallengeModeRoundsCount() {
  */
 function getRoomCode() {
     gameid = document.getElementById("game_id").value;
-    console.log(gameid);
     return gameid;
 }
 
@@ -317,7 +335,7 @@ function getRoomCode() {
  * join room button will be set.
  * </p>
  */
-function initLobby() {
+async function initLobby() {
     
     gameid = getRoomCode(); 
     socket = io({
@@ -330,12 +348,13 @@ function initLobby() {
         console.log("Connected !")
     })
 
-    socket.on("playersjoin", (err) => {
-        console.log(`Failed to connect to socket: ${err.message}`);
+    socket.on("playersjoin", (username) => {
+        console.log(`${username} joined`);
+        player_list = document.getElementsByClassName("player_names")[0];
+        player_list.appendChild(document.createTextNode(username));
     });
 
-
-    if (hasJoinedRoom()) {
+    if (await hasJoinedRoom()) {
         displayRoomView();
         if (isRoomOwner()) {
             displayRoomCode();
