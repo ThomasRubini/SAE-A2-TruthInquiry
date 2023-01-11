@@ -229,18 +229,109 @@ html {
     right: 50;
 }
 
+.results_game {
+    grid-template-columns: 1fr;
+}
+
 .results_title {
     color: #BD1E1E;
     font-family: "Spicy Rice", serif;
     font-weight: bold;
     font-size: 4.5em;
     margin: 0;
+    margin-left: 0.6em;
     text-align: left;
+    margin-bottom:0;
 }
 
-.reveal_killer_title {
+.reveal {
+    justify-content: left;
+}
+
+.scores {
+    font-family: "Titan One", sans-serif;
+}
+
+.summary {
+    font-family: "Titan One", sans-serif;
+    text-align: center;
+}
+
+.reveal_and_scores {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+@media (max-width: 500px) {
+    .reveal_and_scores {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.reveal_culprit_title {
     color: white;
     font-family: "Spicy Rice", serif;
     font-weight: bold;
-    font-size: 3em;
+    font-size: 2em;
+    margin-left: 1.3em;
+}
+
+.score_title {
+    text-align: center;
+}
+
+.reveal_score {
+    width: 15em;
+    height: 3em;
+    border-radius: 10%;
+    background-color: var(--button-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 2.3em;
+}
+
+.players_list {
+    margin-left: 5em;
+    margin-top: 1em;
+}
+
+.player_names, .player_scores {
+    display: inline-block;
+}
+
+.summary_title {
+    font-family: "Spicy Rice", sans-serif;
+}
+
+.suspects_list {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.suspect_title {
+    display: flex;
+    flex-direction: row;
+    display: inline-block;
+}
+
+
+@media (max-width: 650px) {
+    .suspects_list{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.rtrn_lob_btn {
+   fill: #BD1E1E;
+}
+
+#return_lobby_button {
+    background-color: transparent;
+    border: transparent;
 }
