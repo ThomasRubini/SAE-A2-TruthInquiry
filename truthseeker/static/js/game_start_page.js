@@ -208,6 +208,17 @@ function changeTheme() {
     }
 }
 
+async function startSoloGame(){
+    username = document.getElementById("game_username").value;
+    let data = {}
+    data["username"] = username;
+    await makeAPIRequest("createGame",data);
+    start = makeAPIRequest("startGame");
+    start.then(()=>{
+        window.location.href = "/solo";
+    })
+}
+
 async function startGame(){
     username = document.getElementById("game_username").value;
     let data = {}

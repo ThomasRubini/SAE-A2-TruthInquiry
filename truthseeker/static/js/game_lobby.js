@@ -100,7 +100,7 @@ function hideInvalidRoundsCountErrorMessage(invalidRoundsCountMessageElement) {
 // Start game functions
 
 function startHistoryGame() {
-    //TODO: start the history game and handle server errors + connection errors
+    makeAPIRequest("startGame");
 }
 
 function startChallengeGame() {
@@ -329,6 +329,9 @@ function initSock(){
         console.log("Connected !")
     })
 
+    socket.on("gamestart",()=>{
+        window.location.href = "/multi";
+    })
     socket.on("playersjoin", (username) => {
         console.log(`${username} joined`);
         player_list = document.getElementsByClassName("player_names")[0];
@@ -341,7 +344,7 @@ function initSock(){
 /**
  * Initialize the lobby page.
  *
- * <p>
+ * p>
  * If the player has joined the room, the room view will be shown. In the case the player is the
  * owner of the room, the room code and the multi player mode choice will be shown and the
  * listeners to the game buttons will be done.
