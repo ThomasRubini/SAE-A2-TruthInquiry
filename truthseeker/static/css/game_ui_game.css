@@ -1,0 +1,80 @@
+html {
+    background-color: black;
+    color: white;
+}
+
+:root {
+    --button-color : #FF0000;
+}
+
+.game_app {
+    margin: 0;
+}
+
+.current_background {
+    background-position: center;
+    background-size: cover;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    /* Place the background behind everything */
+    z-index: -9999;
+}
+
+/* Introduction */
+.introduction {
+    padding: 1em;
+    max-width: 50vw;
+}
+
+.introduction_title {
+    color: var(--button-color);
+    font-family: "Spicy Rice", serif;
+    font-size: 5em;
+    font-weight: bold;
+    margin: 0;
+    text-align: left;
+}
+
+.introduction_text {
+    font-family: "Spicy Rice", serif;
+    font-size: 2em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+/* Buttons */
+.action_button {
+    border-color: black;
+    border-style: solid;
+    border-width: 0.125em;
+    background-color: var(--button-color);
+    border-radius: var(--button-and-dialog-border-radius);
+    cursor: pointer;
+    font-family: "Titan One", sans-serif;
+    font-size: 1.5em;
+    min-width: 10em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    overflow: hidden;
+    text-transform: uppercase;
+    transition: box-shadow 0.5s, transform 0.5s;
+}
+
+.action_button:hover {
+    box-shadow: 10px 10px 0px 0px black;
+    transform: translate(0.1em, 0.1em);
+}
+
+.next_btn {
+    cursor: pointer;
+    fill: var(--button-color);
+    transform: rotate(180deg);
+}
+
+#introduction_next_btn {
+    height: 5em;
+    width: 5em;
+}
