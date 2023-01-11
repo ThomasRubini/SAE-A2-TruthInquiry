@@ -127,7 +127,8 @@ function joinRoom() {
  */
 function copyCode() {
     // Get the room code from the displayed text to avoid an extra API call
-    let roomCode = document.getElementsByClassName("room_code")[0].textContent;
+    let roomCode = getRoomCode();
+    console.log(roomCode);
     if (roomCode == "") {
         alert("Veuillez patientez, le code d'équipe est en cours de génération.");
     }
@@ -295,7 +296,8 @@ function getChallengeModeRoundsCount() {
  * @returns the code of the room
  */
 function getRoomCode() {
-    gameid = document.getElementById("gameid")
+    gameid = document.getElementById("game_id").value;
+    console.log(gameid);
     return gameid;
 }
 
@@ -331,6 +333,8 @@ function initLobby() {
     socket.on("playersjoin", (err) => {
         console.log(`Failed to connect to socket: ${err.message}`);
     });
+
+
     if (hasJoinedRoom()) {
         displayRoomView();
         if (isRoomOwner()) {

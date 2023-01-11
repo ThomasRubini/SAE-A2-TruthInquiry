@@ -238,7 +238,7 @@ async function joinGame(){
             //alert(value["msg"]);
         }
         else{
-            //window.location.href = "/lobby/" + gameid;
+            window.location.href = "/lobby/" + gameid;
         }
     })
 }
