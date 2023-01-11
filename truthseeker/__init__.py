@@ -15,9 +15,11 @@ class TruthSeekerApp(flask.Flask):
 
         self.socketio_app = SocketIO(self)
 
+        self.discord_bot = discord_bot.DiscordBot()
         token = self.get_discord_bot_token()
         if token:
-            self.discord_bot = discord_bot.init_bot(token)
+            pass
+            self.discord_bot.start(token)
         else:
             print("No token set. Not starting discord bot")
 

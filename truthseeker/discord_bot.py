@@ -6,14 +6,6 @@ import asyncio
 async def empty_coro():
     return
 
-def init_bot(token):
-    discord_bot = DiscordBot()
-
-    thr = threading.Thread(target=discord_bot.__run__, args=(token,))
-    thr.start()
-
-    return discord_bot
-
 class DiscordBot:
     def __init__(self):
         self.bot = discord.Client(intents=discord.Intents.default())
@@ -33,8 +25,10 @@ class DiscordBot:
         else:
             print("Could not find channel #bot")
 
-    def __run__(self, token):
-        self.bot.run(token)
+    def start(self, token):
+        thr = threading.Thread(target=self.bot.run, args=(token,))
+        thr.start()
+        return thr
 
     def API(func):
         def decorator(self, *args, **kwargs):
