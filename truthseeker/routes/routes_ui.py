@@ -24,7 +24,7 @@ def legal():
 @routes_ui.route("/lobby/<game_id>")
 def lobby(game_id):
     # rendered by the javascript client-side
-    return flask.render_template("lobby.html")
+    return flask.render_template("lobby.html",gameid=game_id)
 
 @routes_ui.route("/solo")
 def solo():

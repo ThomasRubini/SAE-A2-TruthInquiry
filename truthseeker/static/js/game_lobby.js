@@ -1,5 +1,4 @@
 // Display functions
-
 /**
  * Display the invalid rounds count message element, by removing the hidden CSS class.
  *
@@ -24,6 +23,14 @@ function displayRoomCode() {
  * Display the players list element.
  */
 function displayPlayerList() {
+    response = makeAPIRequest("getGameMembers");
+    response.then((value) =>{
+        player_list = document.getElementsByClassName("player_names")[0];
+        value["members"].forEach(username => {
+            player_list.appendChild(document.createTextNode(username+"\n"));
+        });
+
+    });
     document.getElementsByClassName("players_list")[0].classList.remove("hidden");
 }
 
@@ -50,6 +57,10 @@ function displayJoinRoomView() {
     document.getElementsByClassName("join_room_view")[0].classList.remove("hidden");
 }
 
+
+function hideJoinRoomView() {
+    document.getElementsByClassName("join_room_view")[0].classList.add("hidden");
+}
 /**
  * Show an error message on the first game_start_failed CSS element.
  *
@@ -89,7 +100,7 @@ function hideInvalidRoundsCountErrorMessage(invalidRoundsCountMessageElement) {
 // Start game functions
 
 function startHistoryGame() {
-    //TODO: start the history game and handle server errors + connection errors
+    makeAPIRequest("startGame");
 }
 
 function startChallengeGame() {
@@ -104,17 +115,23 @@ function startChallengeGame() {
 // Join room functions
 
 function joinRoom() {
-    unsetListenerToJoinRoomButton();
     if (isNickNameInvalid()) {
         displayInvalidNickNameErrorMessage("Le nom saisi n'est pas valide.");
-        setListenerToJoinRoomButton();
         return;
     }
 
     hideInvalidNickNameErrorMessage();
-    //TODO: join the game room and handle server errors + connection errors
+    data = {}
+    data["username"] = document.getElementById("game_username").value;
+    data["game_id"] = getRoomCode();
+    response = makeAPIRequest("joinGame",data);
+    response.then((value)=>{
+        displayRoomView();
+        displayPlayerList();
+        initSock();
+        hideJoinRoomView();
+    })
 }
-
 // Room code functions
 
 /**
@@ -128,7 +145,8 @@ function joinRoom() {
  */
 function copyCode() {
     // Get the room code from the displayed text to avoid an extra API call
-    let roomCode = document.getElementsByClassName("room_code")[0].textContent;
+    let roomCode = getRoomCode();
+    console.log(roomCode);
     if (roomCode == "") {
         alert("Veuillez patientez, le code d'équipe est en cours de génération.");
     }
@@ -211,14 +229,14 @@ function unsetListenerToCopyCodeButton() {
 
 // Utility functions
 
-function isRoomOwner() {
-    //FIXME: check if player is room owner
-    return true;
+async function isRoomOwner() {
+    response = await makeAPIRequest("isOwner");
+    return response["owner"];
 }
 
-function hasJoinedRoom() {
-    //FIXME: check if player has joined the room
-    return true;
+async function hasJoinedRoom() {
+    response = await makeAPIRequest("hasJoined");
+    return response["joined"];
 }
 
 /**
@@ -296,8 +314,29 @@ function getChallengeModeRoundsCount() {
  * @returns the code of the room
  */
 function getRoomCode() {
-    //FIXME get the real room code
-    return "ABCDEF";
+    gameid = document.getElementById("game_id").value;
+    return gameid;
+}
+
+function initSock(){
+    socket = io({
+        auth:{
+            game_id: gameid
+        }
+    });
+
+    socket.on("connect", () => {
+        console.log("Connected !")
+    })
+
+    socket.on("gamestart",()=>{
+        window.location.href = "/multi";
+    })
+    socket.on("playersjoin", (username) => {
+        console.log(`${username} joined`);
+        player_list = document.getElementsByClassName("player_names")[0];
+        player_list.appendChild(document.createTextNode(username)+"\n");
+    });
 }
 
 // Lobby initialization
@@ -305,7 +344,7 @@ function getRoomCode() {
 /**
  * Initialize the lobby page.
  *
- * <p>
+ * p>
  * If the player has joined the room, the room view will be shown. In the case the player is the
  * owner of the room, the room code and the multi player mode choice will be shown and the
  * listeners to the game buttons will be done.
@@ -316,10 +355,14 @@ function getRoomCode() {
  * join room button will be set.
  * </p>
  */
-function initLobby() {
-    if (hasJoinedRoom()) {
+async function initLobby() {
+    
+    gameid = getRoomCode(); 
+
+    if (await hasJoinedRoom()) {
+        initSock();
         displayRoomView();
-        if (isRoomOwner()) {
+        if (await isRoomOwner()) {
             displayRoomCode();
             displayMultiPlayerModeChoices();
             setListenersToGameButtons();
