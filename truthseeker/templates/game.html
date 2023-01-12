@@ -10,12 +10,29 @@
     </head>
     <body class="game_app">
         <div class="current_background"></div>
-        <div class="introduction">
+        <div class="introduction hidden">
             <h1 class="introduction_title">Truth Inquiry</h1>
             <p class="introduction_text">Bienvenue dans Truth Inquiry, vous allez intégrer la peau d’un enquêteur.<br><br>Vous avez été donné responsable de résoudre une enquête et devez trouver le coupable d’un vol.<br><br>Cliquez sur la flèche pour découvrir les suspects et les interroger.</p>
-            <svg id="introduction_next_btn" class="next_btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                <path d="m23.15 36.95-17.3-11.1Q4.7 25.25 4.7 24t1.15-1.9L23.15 11q1.15-.7 2.35-.075 1.2.625 1.2 2.025v8.75h15.8q.95 0 1.625.675T44.8 24q0 .95-.675 1.6-.675.65-1.625.65H26.7V35q0 1.45-1.2 2.075-1.2.625-2.35-.125Z"/>
-            </svg>
+            <button id="introduction_next_btn" aria-label="Commencer">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path d="m23.15 36.95-17.3-11.1Q4.7 25.25 4.7 24t1.15-1.9L23.15 11q1.15-.7 2.35-.075 1.2.625 1.2 2.025v8.75h15.8q.95 0 1.625.675T44.8 24q0 .95-.675 1.6-.675.65-1.625.65H26.7V35q0 1.45-1.2 2.075-1.2.625-2.35-.125Z">
+                </svg>
+            </button>
+        </div>
+        <div class="interrogation hidden">
+            <h1 class="interrogation_title">Suspects</h1>
+            <button id="interrogation_next_btn" class="next_btn" aria-label="Voir les résultats">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path d="m23.15 36.95-17.3-11.1Q4.7 25.25 4.7 24t1.15-1.9L23.15 11q1.15-.7 2.35-.075 1.2.625 1.2 2.025v8.75h15.8q.95 0 1.625.675T44.8 24q0 .95-.675 1.6-.675.65-1.625.65H26.7V35q0 1.45-1.2 2.075-1.2.625-2.35-.125Z">
+                </svg>
+            </button>
+            <div class="suspects">
+                <!-- TODO: suspect model, remove from HTML and add it dynamically with JavaScript for each suspect -->
+                <div class="suspect">
+                    <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
+                    <button class="ask_button action_button">Interroger</button>
+                </div>
+            </div>
         </div>
         <div class="alert_dialog_background"></div>
         <div class="unsupported_browser">
