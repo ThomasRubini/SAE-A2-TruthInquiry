@@ -21,28 +21,6 @@ html {
     z-index: -9999;
 }
 
-/* Introduction */
-.introduction {
-    padding: 1em;
-    max-width: 50vw;
-}
-
-.introduction_title {
-    color: var(--button-color);
-    font-family: "Spicy Rice", serif;
-    font-size: 5em;
-    font-weight: bold;
-    margin: 0;
-    text-align: left;
-}
-
-.introduction_text {
-    font-family: "Spicy Rice", serif;
-    font-size: 2em;
-    margin-bottom: 1em;
-    margin-top: 1em;
-}
-
 /* Buttons */
 .action_button {
     border-color: black;
@@ -69,12 +47,99 @@ html {
 }
 
 .next_btn {
+    background-color: transparent;
+    border: none;
     cursor: pointer;
     fill: var(--button-color);
+    height: 5em;
+    padding: 0;
     transform: rotate(180deg);
+    width: 5em;
 }
 
-#introduction_next_btn {
-    height: 5em;
-    width: 5em;
+/* Introduction */
+.introduction {
+    padding: 1em;
+    max-width: 50vw;
+}
+
+.introduction_title {
+    color: var(--button-color);
+    font-family: "Spicy Rice", serif;
+    font-size: 5em;
+    font-weight: bold;
+    margin: 0;
+    text-align: left;
+}
+
+.introduction_text {
+    font-family: "Spicy Rice", serif;
+    font-size: 2em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+/* Interrogation */
+.interrogation {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.interrogation_title {
+    color: var(--button-color);
+    font-family: "Spicy Rice", sans-serif;
+    font-size: 3em;
+    margin: 1em;
+    text-transform: uppercase;
+}
+
+#interrogation_next_btn {
+    position: fixed;
+    left: calc(100% - 6em);
+    top: 1em;
+}
+
+.suspects {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.suspect {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 1em;
+}
+
+.suspect_picture {
+    margin-bottom: 1em;
+    height: 15em;
+    width: 15em;
+}
+
+.suspect_picture[alt] {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 1em;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+}
+
+.ask_button {
+    background-color: white;
+    color: black;
+    text-transform: none;
 }
