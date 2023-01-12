@@ -333,9 +333,8 @@ function initSock(){
         window.location.href = "/multi";
     })
     socket.on("playersjoin", (username) => {
-        console.log(`${username} joined`);
         player_list = document.getElementsByClassName("player_names")[0];
-        player_list.appendChild(document.createTextNode(username)+"\n");
+        player_list.appendChild(document.createTextNode(username+"\n"));
     });
 }
 
