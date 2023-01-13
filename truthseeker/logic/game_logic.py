@@ -55,21 +55,21 @@ class Game:
         self.gamedata = {}
         self.reaction_table = {}
 
-    """
-    Set the owner of the game
-
-    :param username: the username of the owner.
-    :return: the Member object created by this method
-    """
     def set_owner(self, username: str) -> Member:
+        """
+        Set the owner of the game
+
+        :param username: the username of the owner.
+        :return: the Member object created by this method
+        """
         self.owner = Member(username)
         self.members.append(self.owner)
         return self.owner
     
-    """
-    TODO + TODO RET TYPE
-    """
     def generateGameResults(self) -> None:
+        """
+        TODO + TODO RET TYPE
+        """
         data = {}
         npcs = data["npcs"] = {}
         for npc_id in self.gamedata["npcs"]:
@@ -83,50 +83,50 @@ class Game:
             player_results[member.username] = member.results
         return data
 
-    """
-    TODO
-    """
     def generate_data(self) -> None:
+        """
+        TODO
+        """
         #TODO Get language from player
         self.gamedata, self.reaction_table = generateGameData("FR")
 
-    """
-    Get a Member object from a username
-
-    :param username: the username of the member to search for
-    :return the member corresponding to the username, or None if none if found:
-    """
     def get_member(self, username: str) -> Union[Member, None]:
+        """
+        Get a Member object from a username
+
+        :param username: the username of the member to search for
+        :return the member corresponding to the username, or None if none if found:
+        """
         for member in self.members:
             if member.username == username:
                 return member
         
-    """
-    Add a Member to the game
-
-    :param username: the username of the member to add
-    :return: the Member created, or None if a Member with this username already exists in the game
-    """
     def add_member(self, username: str) -> Union[Member, None]:
+        """
+        Add a Member to the game
+
+        :param username: the username of the member to add
+        :return: the Member created, or None if a Member with this username already exists in the game
+        """
         if self.get_member(username):
             return None
         member = Member(username)
         self.members.append(member)
         return member
 
-    """
-    TODO + TODO TYPES
-    """
     def get_npc_reaction(self, npc_id, reaction) -> None:
+        """
+        TODO + TODO TYPES
+        """
         if npc_id not in self.reaction_table.keys():
             return 0
         reaction_id = self.reaction_table[npc_id][int(reaction)]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
     
-    """
-    TODO + TODO RETTYPE
-    """
     def getPlayerResults(self, responses: dict) -> None:
+        """
+        TODO + TODO RETTYPE
+        """
         results = {}
         try:
             for npc_id in responses:
@@ -137,12 +137,12 @@ class Game:
             return False
 
 
-    """
-    Checks if the game has finished by checking if every Member has submitted answers
-    
-    :return: True if the game has finished, else False
-    """
     def has_finished(self) -> bool:
+        """
+        Checks if the game has finished by checking if every Member has submitted answers
+        
+        :return: True if the game has finished, else False
+        """
         for member in self.members:
             if member.results == None : return False
         return True
@@ -186,6 +186,7 @@ def check_username(username: str) -> bool:
     :param username: the username to check
     :return: True or False depending on if the rules are respected
     """
+    
     if not username:
         return False
     if not username.isalnum():
