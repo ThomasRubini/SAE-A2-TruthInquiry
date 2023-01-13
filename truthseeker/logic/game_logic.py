@@ -249,9 +249,10 @@ def generateGameData(LANG):
 
 def read_image(path:str):
     try:
-        return open(path, "rb").read()
-    except:
-        return 1
+        with open(path, "rb") as f:
+            return f.read()
+    except IOError:
+        return None
 
 def get_trait_id_from_string(trait):
     return get_trait_from_text(trait)
