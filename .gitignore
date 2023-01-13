@@ -2,3 +2,4 @@
 instance/
 data_persistance/secret.py
 **/.vscode
+.env
