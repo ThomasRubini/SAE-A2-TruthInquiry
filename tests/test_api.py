@@ -1,6 +1,10 @@
 import json
 
 import pytest
+from dotenv import load_dotenv
+
+# Load dotenv file
+load_dotenv()
 
 from truthseeker import APP
 test_app = APP.test_client()
