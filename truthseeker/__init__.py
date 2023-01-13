@@ -1,8 +1,10 @@
-import flask
-from flask_socketio import SocketIO
 import os
 
+import flask
+from flask_socketio import SocketIO
+
 from truthseeker import discord_bot
+
 
 class TruthSeekerApp(flask.Flask):
     """
@@ -26,13 +28,9 @@ class TruthSeekerApp(flask.Flask):
         self.discord_bot = discord_bot.DiscordBot()
         token = os.getenv("DISCORD_BOT_TOKEN")
         if token:
-            pass
             self.discord_bot.start(token)
         else:
             print("No token set. Not starting discord bot")
-
-    def run_app(self):
-        self.socketio_app.run(self)
 
 APP = TruthSeekerApp()
 

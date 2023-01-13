@@ -1,8 +1,10 @@
-from flask_socketio import join_room
 import socketio
+
+from flask_socketio import join_room
 
 from truthseeker import APP
 from truthseeker.logic import game_logic
+
 
 @APP.socketio_app.on('connect')
 def connect(auth):

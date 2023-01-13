@@ -1,5 +1,7 @@
-import flask
 import json
+
+import flask
+
 from truthseeker import APP
 from truthseeker.logic import game_logic
 

@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey, VARCHAR
 from sqlalchemy.orm import declarative_base, relationship
 
-Base = declarative_base()
 
+Base = declarative_base()
 
 class Locale(Base):
     __tablename__ = 'T_LOCALE'
