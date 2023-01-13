@@ -57,6 +57,12 @@ html {
     width: 5em;
 }
 
+#emotion_and_culprit_choices_next_btn, #interrogation_next_btn {
+    position: fixed;
+    left: calc(100% - 6em);
+    top: 1em;
+}
+
 /* Introduction */
 .introduction {
     padding: 1em;
@@ -94,12 +100,6 @@ html {
     font-size: 3em;
     margin: 1em;
     text-transform: uppercase;
-}
-
-#interrogation_next_btn {
-    position: fixed;
-    left: calc(100% - 6em);
-    top: 1em;
 }
 
 .suspects {
@@ -142,4 +142,48 @@ html {
     background-color: white;
     color: black;
     text-transform: none;
+}
+
+/* Emotion and culprit choices */
+.culprit_btn {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.culprit_icon {
+    fill: white;
+    height: 1em;
+    width: 1em;
+}
+
+.culprit_btn_text {
+    margin: 0;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+.culprit_btn_checked {
+    background-color: green;
+}
+
+.suspect_emotion_chooser {
+    background-color: #5A5656;
+    border: none;
+    border-radius: var(--button-and-dialog-border-radius);
+    color: white;
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 1em;
+    margin: 1em;
+    padding: 0.5em;
+}
+
+.emotion_and_culprit_choices_title {
+    font-size: 2em;
+    margin: 0.5em;
+    text-align: center;
+    font-family: "Spicy Rice", sans-serif;
+    color: var(--button-color);
 }
