@@ -66,7 +66,7 @@ class Game:
         self.members.append(self.owner)
         return self.owner
     
-    def generateGameResults(self) -> None:
+    def generate_game_results(self) -> None:
         """
         TODO + TODO RET TYPE
         """
@@ -88,7 +88,7 @@ class Game:
         TODO
         """
         #TODO Get language from player
-        self.gamedata, self.reaction_table = generateGameData("FR")
+        self.gamedata, self.reaction_table = generate_game_data("FR")
 
     def get_member(self, username: str) -> Union[Member, None]:
         """
@@ -123,7 +123,7 @@ class Game:
         reaction_id = self.reaction_table[npc_id][int(reaction)]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
     
-    def getPlayerResults(self, responses: dict) -> None:
+    def get_player_results(self, responses: dict) -> None:
         """
         TODO + TODO RETTYPE
         """
@@ -198,14 +198,14 @@ def check_username(username: str) -> bool:
     
     return True
 
-def generateNpcText(npc: tables.Npc, lang: str) -> dict:
+def generate_npc_text(npc: tables.Npc, lang: str) -> dict:
     data = {}
     data["name"] = get_text_from_lid(lang, npc.NAME_LID)
     data["QA_0"] = get_text_from_lid(lang, get_npc_random_answer(npc,0).TEXT_LID)
     data["QA_1"] = get_text_from_lid(lang, get_npc_random_answer(npc,1).TEXT_LID)
     return data
 
-def generateNpcReactions(npc: tables.Npc) ->list:
+def generate_npc_reactions(npc: tables.Npc) ->list:
     return get_npc_random_trait_id(npc)
 
 def generate_place_data(npcs: list, places: list, lang: str) -> dict:
@@ -221,7 +221,7 @@ def generate_place_data(npcs: list, places: list, lang: str) -> dict:
     return data
 
 
-def generateGameData(LANG):
+def generate_game_data(LANG):
     data = {}
     data["npcs"] = {}
     reactions_table = {}
@@ -231,8 +231,8 @@ def generateGameData(LANG):
         if npc not in npcs :
             npcs.append(npc)
     for npc in npcs:
-        data["npcs"][str(npc.NPC_ID)] = generateNpcText(npc,LANG)
-        reactions_table[str(npc.NPC_ID)] = generateNpcReactions(npc)
+        data["npcs"][str(npc.NPC_ID)] = generate_npc_text(npc,LANG)
+        reactions_table[str(npc.NPC_ID)] = generate_npc_reactions(npc)
 
     places = []
     while len(places) != 3:
