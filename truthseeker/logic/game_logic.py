@@ -120,7 +120,7 @@ class Game:
         """
         if npc_id not in self.reaction_table.keys():
             return 0
-        reaction_id = self.reaction_table[npc_id][int(reaction)]
+        reaction_id = self.reaction_table[npc_id]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
     
     def get_player_results(self, responses: dict) -> None:

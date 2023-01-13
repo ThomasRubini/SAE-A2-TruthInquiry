@@ -120,8 +120,11 @@ def get_data():
 @routes_api.route("/getNpcImage", methods=["GET", "POST"])
 def getNpcImage():
     npc_id = flask.request.values.get("npcid")
+    if npc_id is None:
+        return {"error": 1, "msg": "no npc was given"}
     image = game_logic.get_npc_image(npc_id)
-    
+    if image is None:
+         return {"error": 1, "msg": "npc not found"}
     response = flask.make_response(image)
     response.headers.set('Content-Type', 'image/png')
     response.headers.set(
@@ -194,6 +197,7 @@ def checkAnwser():
     if game.has_finished(): 
         jsonGameResults = game.generate_game_results()
         APP.socketio_app.emit("gamefinshed",jsonGameResults,room="game."+game.game_id)
+        #TODO desctruct game
     response = {"error": 0}
     return response
 
