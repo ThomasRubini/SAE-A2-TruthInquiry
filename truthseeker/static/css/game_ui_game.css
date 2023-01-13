@@ -1,0 +1,189 @@
+html {
+    background-color: black;
+    color: white;
+}
+
+:root {
+    --button-color : #FF0000;
+}
+
+.game_app {
+    margin: 0;
+}
+
+.current_background {
+    background-position: center;
+    background-size: cover;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    /* Place the background behind everything */
+    z-index: -9999;
+}
+
+/* Buttons */
+.action_button {
+    border-color: black;
+    border-style: solid;
+    border-width: 0.125em;
+    background-color: var(--button-color);
+    border-radius: var(--button-and-dialog-border-radius);
+    cursor: pointer;
+    font-family: "Titan One", sans-serif;
+    font-size: 1.5em;
+    min-width: 10em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    overflow: hidden;
+    text-transform: uppercase;
+    transition: box-shadow 0.5s, transform 0.5s;
+}
+
+.action_button:hover {
+    box-shadow: 10px 10px 0px 0px black;
+    transform: translate(0.1em, 0.1em);
+}
+
+.next_btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    fill: var(--button-color);
+    height: 5em;
+    padding: 0;
+    transform: rotate(180deg);
+    width: 5em;
+}
+
+#emotion_and_culprit_choices_next_btn, #interrogation_next_btn {
+    position: fixed;
+    left: calc(100% - 6em);
+    top: 1em;
+}
+
+/* Introduction */
+.introduction {
+    padding: 1em;
+    max-width: 50vw;
+}
+
+.introduction_title {
+    color: var(--button-color);
+    font-family: "Spicy Rice", serif;
+    font-size: 5em;
+    font-weight: bold;
+    margin: 0;
+    text-align: left;
+}
+
+.introduction_text {
+    font-family: "Spicy Rice", serif;
+    font-size: 2em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+/* Interrogation */
+.interrogation {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.interrogation_title {
+    color: var(--button-color);
+    font-family: "Spicy Rice", sans-serif;
+    font-size: 3em;
+    margin: 1em;
+    text-transform: uppercase;
+}
+
+.suspects {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.suspect {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 1em;
+}
+
+.suspect_picture {
+    margin-bottom: 1em;
+    height: 15em;
+    width: 15em;
+}
+
+.suspect_picture[alt] {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 1em;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+}
+
+.ask_button {
+    background-color: white;
+    color: black;
+    text-transform: none;
+}
+
+/* Emotion and culprit choices */
+.culprit_btn {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.culprit_icon {
+    fill: white;
+    height: 1em;
+    width: 1em;
+}
+
+.culprit_btn_text {
+    margin: 0;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+.culprit_btn_checked {
+    background-color: green;
+}
+
+.suspect_emotion_chooser {
+    background-color: #5A5656;
+    border: none;
+    border-radius: var(--button-and-dialog-border-radius);
+    color: white;
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 1em;
+    margin: 1em;
+    padding: 0.5em;
+}
+
+.emotion_and_culprit_choices_title {
+    font-size: 2em;
+    margin: 0.5em;
+    text-align: center;
+    font-family: "Spicy Rice", sans-serif;
+    color: var(--button-color);
+}
