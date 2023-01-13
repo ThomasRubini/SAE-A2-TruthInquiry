@@ -78,6 +78,7 @@ class Game:
             traitId = self.reaction_table[npc_id]
             trait = get_trait_from_trait_id(traitId)
             npcs[npc_id]["reaction"] = get_text_from_lid("FR",trait.NAME_LID)
+            npcs[npc_id]["description"] = get_reaction_description("FR",trait.TRAIT_ID)
         player_results = data["player"] = {}
         for member in self.members:
             player_results[member.username] = member.results

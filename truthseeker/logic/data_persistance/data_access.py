@@ -47,6 +47,10 @@ def get_trait_from_trait_id(trait_id):
     trait = session.query(tables.Trait).filter_by(TRAIT_ID=trait_id).one()
     return trait
 
+def get_reaction_description(lang,npc_id,trait_id):
+    desc_lid = session.query(tables.Reaction).filter_by(NPC_ID=npc_id,TRAIT_ID=trait_id).one().DESC_LID
+    return get_text_from_lid(lang,desc_lid)
+
 def get_traits(lang):
     traits = []
     for trait in session.query(tables.Trait).all():
