@@ -101,7 +101,8 @@ class Game:
         results = {}
         try:
             for npc_id in responses:
-                results[npc_id] = responses[npc_id] == str(self.reaction_table[npc_id])
+                trait_id = getTraitIdFromString(responses[npc_id])
+                results[npc_id] = trait_id == str(self.reaction_table[npc_id])
             return results
         except:
             return False
