@@ -2,7 +2,6 @@ import flask
 import json
 from truthseeker import APP
 from truthseeker.logic import game_logic
-from truthseeker.utils import check_username
 
 
 routes_api = flask.Blueprint("api", __name__)
@@ -12,7 +11,7 @@ def create_game():
     username = flask.request.values.get("username")
     if username==None:
         return {"error": 1, "msg": "username not set"}
-    if not check_username(username):
+    if not game_logic.check_username(username):
         return {"error": 1, "msg": "invalid username"}
 
     response = {}
@@ -47,7 +46,7 @@ def join_game():
     username = flask.request.values.get("username")
     if game_id==None or username==None:
         return {"error": 1, "msg": "username or game id not set"}
-    if not check_username(username):
+    if not game_logic.check_username(username):
         return {"error": 1, "msg": "invalid username"}
 
     game = game_logic.get_game(game_id)
