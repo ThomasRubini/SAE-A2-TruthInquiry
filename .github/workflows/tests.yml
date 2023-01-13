@@ -16,5 +16,12 @@ jobs:
         pip install -r dev-requirements.txt
         
     - name: Run tests
+      env:
+        FLASK_SECRET: ${{SECRETS.FLASK_SECRET}}
+        DB_HOST: ${{SECRETS.DB_HOST}}
+        DB_PORT: ${{SECRETS.DB_PORT}}
+        DB_USER: ${{SECRETS.DB_USER}}
+        DB_PASSWORD: ${{SECRETS.DB_PASSWORD}}
+        DB_DBNAME: ${{SECRETS.DB_DBNAME}}
       run: |
         python -m pytest --verbose
