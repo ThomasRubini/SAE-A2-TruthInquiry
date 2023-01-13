@@ -185,14 +185,14 @@ def checkAnwser():
     if playerResponses == None:
         return {"error": 1, "msg": "no responses were sent"}
         
-    results = game.getPlayerResults(json.loads(playerResponses))
+    results = game.get_player_results(json.loads(playerResponses))
     if results == False:
         return {"error": 1, "msg": "invalid npc sent"}
         
     member.has_submitted = True
     member.results = results
     if game.has_finished(): 
-        jsonGameResults = game.generateGameResults()
+        jsonGameResults = game.generate_game_results()
         APP.socketio_app.emit("gamefinshed",jsonGameResults,room="game."+game.game_id)
     response = {"error": 0}
     return response
