@@ -3,20 +3,15 @@ import random
 from truthseeker.logic.data_persistance.data_access import *
 from datetime import datetime, timedelta
 from truthseeker import APP
-
-
-# Map of all actively running games
-# games_list["game.game_id"]-> game info linked to that id
+from typing import Union, Optional
 
 def random_string(length: int) ->str:
     """
     This function create a random string as long as the lint passed as 
     parameter
     
-    : param length: the lenght of the random string
-    : type length : int
-    : return      : a random string
-    : return type : string
+    :param length: the length of the random string to create
+    :return: a random string
     """
     return "".join(random.choice(string.ascii_letters) for _ in range(length))
 
@@ -24,13 +19,13 @@ class Member:
     """
     stores information related to the member of a given game
 
-    Member.username : The username of this member
-    Member.socker : The reference to the socket to talk to this member
-
+    :attr str username: The username of this member
+    :attr TODO progress: TODO
+    :attr TODO results: TODO
     """
+    
     def __init__(self, username):
         self.username = username
-        self.socket = None
         self.progress = 0
         self.results = None
 
@@ -44,10 +39,14 @@ class Game:
     """
     The game info class stores all information linked to a active game
 
-    Game.game_id : str, the game identifier of the game
-    Game.owner : Member, the game identifier of the game
-    Game.members : Member[], the members of the game
+    :attr str game_id: str, the game identifier of the game
+    :attr owner  Member: the player start created the game. It is also stored in self.members
+    :attr Member[] members: the members of the game
+    :attr bool has_started: TODO
+    :attr TODO gamedata: TODO
+    :attr TODO reaction_table: TODO
     """
+
     def __init__(self):
         self.game_id = None
         self.owner = None
@@ -56,12 +55,21 @@ class Game:
         self.gamedata = {}
         self.reaction_table = {}
 
-    def set_owner(self, username):
+    def set_owner(self, username: str) -> Member:
+        """
+        Set the owner of the game
+
+        :param username: the username of the owner.
+        :return: the Member object created by this method
+        """
         self.owner = Member(username)
         self.members.append(self.owner)
         return self.owner
     
-    def generateGameResults(self):
+    def generateGameResults(self) -> None:
+        """
+        TODO + TODO RET TYPE
+        """
         data = {}
         npcs = data["npcs"] = {}
         for npc_id in self.gamedata["npcs"]:
@@ -75,29 +83,50 @@ class Game:
             player_results[member.username] = member.results
         return data
 
-    def generate_data(self):
+    def generate_data(self) -> None:
+        """
+        TODO
+        """
         #TODO Get language from player
         self.gamedata, self.reaction_table = generateGameData("FR")
 
-    def get_member(self, username):
+    def get_member(self, username: str) -> Union[Member, None]:
+        """
+        Get a Member object from a username
+
+        :param username: the username of the member to search for
+        :return the member corresponding to the username, or None if none if found:
+        """
         for member in self.members:
             if member.username == username:
                 return member
         
-    def add_member(self, username):
+    def add_member(self, username: str) -> Union[Member, None]:
+        """
+        Add a Member to the game
+
+        :param username: the username of the member to add
+        :return: the Member created, or None if a Member with this username already exists in the game
+        """
         if self.get_member(username):
             return None
         member = Member(username)
         self.members.append(member)
         return member
 
-    def get_npc_reaction(self,npc_id,reaction):
+    def get_npc_reaction(self, npc_id, reaction) -> None:
+        """
+        TODO + TODO TYPES
+        """
         if npc_id not in self.reaction_table.keys():
             return 0
         reaction_id = self.reaction_table[npc_id][int(reaction)]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
     
-    def getPlayerResults(self,responses: dict):
+    def getPlayerResults(self, responses: dict) -> None:
+        """
+        TODO + TODO RETTYPE
+        """
         results = {}
         try:
             for npc_id in responses:
@@ -108,7 +137,12 @@ class Game:
             return False
 
 
-    def has_finished(self):
+    def has_finished(self) -> bool:
+        """
+        Checks if the game has finished by checking if every Member has submitted answers
+        
+        :return: True if the game has finished, else False
+        """
         for member in self.members:
             if member.results == None : return False
         return True
@@ -119,13 +153,12 @@ class Game:
     def __repr__(self) -> str:
         return self.__str__()
 
-def create_game(owner):
+def create_game(owner: str) -> Game:
     """
     This function creates a new game by creating a Game object and stores 
     it into the games_list dictionnary
 
-    : return      : a new Game
-    : return type : Game
+    :return: a new Game
     """
     game = Game()
     game.owner = owner
@@ -134,32 +167,26 @@ def create_game(owner):
     APP.games_list[game.game_id] = game
     return game
 
-def get_game(game_id):
-    if game_id in APP.games_list:
-        return APP.games_list[game_id]
-    else:
-        return None
+def get_game(game_id: str) -> Union[Game, None]:
+    """
+    Get a game from its ID
 
-def get_game_info(game_id):
-    """    if not flask.session:
-        return {"error": 1, "msg": "No session"}
-    game = game_logic.get_game(flask.session["game_id"])
-    if game == None:
-        return {"error": 1, "msg": "this game doesn't exist"}
-    This function retrieve a the Game object linked to the game_id
-    passed as parametter
-
-    : param game_id : the lenght of the random string
-    : type game_id  : str
-    : return        : The Game Object linked to the game_id
-    : return type   : Game
+    :param game_id: the id of the game to search
+    :return: the Game object or None if not found
     """
     if game_id in APP.games_list:
         return APP.games_list[game_id]
     else:
         return None
 
-def check_username(username):
+def check_username(username: str) -> bool:
+    """
+    Check if a username is valid using a set of rules
+
+    :param username: the username to check
+    :return: True or False depending on if the rules are respected
+    """
+    
     if not username:
         return False
     if not username.isalnum():
@@ -178,10 +205,10 @@ def generateNpcText(npc: tables.Npc, lang: str) -> dict:
     data["QA_1"] = getTextFromLid(lang, getNpcRandomAnswer(npc,1).TEXT_LID)
     return data
 
-def generateNpcReactions(npc : tables.Npc) ->list:
+def generateNpcReactions(npc: tables.Npc) ->list:
     return getNpcRandomTraitId(npc)
 
-def generatePlaceData(npcs :list, places: list, lang : str) -> dict:
+def generatePlaceData(npcs: list, places: list, lang: str) -> dict:
     data = {}
     random.shuffle(npcs)
     for place in places:
