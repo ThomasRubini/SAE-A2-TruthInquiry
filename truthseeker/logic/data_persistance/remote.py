@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy import engine as eg
@@ -12,18 +14,16 @@ from data.questions import QUESTIONS
 from data.reactions import REACTIONS
 from data.traits import TRAITS
 
-from secret import HOST, USER, PASS
 
 url_object = eg.URL.create(
     "mariadb+pymysql",
-    username=USER,
-    password=PASS,
-    host=HOST,
-    port=6776,
-    database="truthInquiry",
+    username=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT"),
+    database=os.getenv("DB_DBNAME"),
 )
 engine = create_engine(url_object)
-
 
 # Reset data tables
 with Session(engine) as session:
