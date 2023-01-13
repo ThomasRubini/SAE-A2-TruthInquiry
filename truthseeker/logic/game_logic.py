@@ -1,9 +1,9 @@
 import string
 import random
+from typing import Union
+
 from truthseeker.logic.data_persistance.data_access import *
-from datetime import datetime, timedelta
 from truthseeker import APP
-from typing import Union, Optional
 
 def random_string(length: int) ->str:
     """

@@ -1,7 +1,9 @@
-import discord
 import threading
-import truthseeker
 import asyncio
+
+import discord
+import truthseeker
+
 
 class DiscordBot:
     """
@@ -9,6 +11,7 @@ class DiscordBot:
 
     :attr Client bot: the underlying discord bot from discord.py
     :attr TextChannel __channel__: the channel used by the bot to send messages
+    :attr event_loop: event_loop used by discord.py. Used to schedule tasks from another thread
     """
 
     def __init__(self):
