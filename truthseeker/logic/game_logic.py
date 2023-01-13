@@ -179,7 +179,13 @@ def get_game(game_id: str) -> Union[Game, None]:
     else:
         return None
 
-def check_username(username):
+def check_username(username: str) -> bool:
+    """
+    Check if a username is valid using a set of rules
+
+    :param username: the username to check
+    :return: True or False depending on if the rules are respected
+    """
     if not username:
         return False
     if not username.isalnum():
