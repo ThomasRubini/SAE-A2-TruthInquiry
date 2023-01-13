@@ -241,7 +241,7 @@ html {
     margin: 0;
     margin-left: 0.6em;
     text-align: left;
-    margin-bottom:0;
+    margin-bottom: 0.3em;
 }
 
 .reveal {
@@ -255,6 +255,28 @@ html {
 .summary {
     font-family: "Titan One", sans-serif;
     text-align: center;
+    margin-left: 1.3;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    margin: 1em;
+}
+
+.scores {
+    font-family: "Titan One", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    margin: 1em;
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
 }
 
 .reveal_and_scores {
@@ -271,26 +293,30 @@ html {
 }
 
 .reveal_culprit_title {
-    color: white;
+    color: #B94444;
     font-family: "Spicy Rice", serif;
     font-weight: bold;
     font-size: 2em;
     margin-left: 1.3em;
 }
 
+.explain_culprit_reveal, .explain_suspect {
+    font-family: "Roboto Mono", sans-serif;
+}
+
 .score_title {
+    color:#b94444;
+    font-family: "Spicy Rice", serif;
     text-align: center;
 }
 
 .reveal_score {
-    width: 15em;
-    height: 3em;
-    border-radius: 10%;
-    background-color: var(--button-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 2.3em;
+    color:#BD1E1E;
+    font-size: 3em;
+    margin: 0.2em;
 }
 
 .players_list {
@@ -304,6 +330,16 @@ html {
 
 .summary_title {
     font-family: "Spicy Rice", sans-serif;
+    text-align: center;
+    font-size: 4em;
+    color:#b94444;
+}
+
+.suspect_title {
+    font-family: "Titan One", sans-serif;
+    display: flex;
+    flex-direction: row;
+    display: inline-block;
 }
 
 .suspects_list {
@@ -313,15 +349,8 @@ html {
     margin-right: 1em;
 }
 
-.suspect_title {
-    display: flex;
-    flex-direction: row;
-    display: inline-block;
-}
-
-
 @media (max-width: 650px) {
-    .suspects_list{
+    .suspects_list {
         display: flex;
         flex-direction: column;
     }
@@ -334,4 +363,11 @@ html {
 #return_lobby_button {
     background-color: transparent;
     border: transparent;
+}
+
+.summary_suspect{
+    display: flex;
+    flex-direction: column;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
 }
