@@ -42,26 +42,6 @@
                 </svg>
             </button>
             <div class="suspects">
-                <!-- TODO: model, remove from HTML and add it dynamically with JavaScript for each suspect -->
-                <div class="suspect">
-                    <select class="suspect_emotion_chooser" required="required">
-                        <!-- This is the place holder value-->
-                        <option value="">Choisissez une émotion</option>
-                        <!-- Add other emotions here -->
-                    </select>
-                    <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
-                    <!-- Add culprit_btn_checked class when a choice is checked -->
-                    <!-- Only one button can be checked at a time, so when one is checked, the previous one, if applicable, is unchecked -->
-                    <button class="culprit_btn action_button">
-                        <svg class="culprit_checked_icon hidden culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
-                            <path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"></path>
-                        </svg>
-                        <svg class="culprit_unchecked_icon culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
-                            <path d="M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z">
-                        </svg>
-                        <p class="culprit_btn_text">Couplable</p>
-                    </button>
-                </div>
             </div>
         </div>
         <div class="interrogation_suspect hidden">
@@ -145,6 +125,8 @@
                 </div>
             </div>
         </noscript>
+        <script src="/static/js/api.js"></script>
         <script src="/static/js/game_common.js"></script>
+        <script src="/static/js/game.js"></script>
     </body>
 </html>
