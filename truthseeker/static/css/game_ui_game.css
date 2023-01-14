@@ -136,6 +136,7 @@ html {
     color: var(--red-color);
     font-size: 3em;
     font-weight: bold;
+    max-width: calc(100vw - 2em);
 }
 
 .suspects {
