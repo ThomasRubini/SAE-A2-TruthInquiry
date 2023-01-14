@@ -1,6 +1,8 @@
 var npcs_ids = []
 var gamedata = {}
 var currentNpc = null
+
+//TODO ask the server for the user's score or username 
 var score = null
 
 function show(className){
@@ -115,6 +117,7 @@ async function sendAnswers(){
     data = {};
     data["responses"] = JSON.stringify(playerResponses);
     return await makeAPIRequest("submitAnswers",data);
+    //TODO Waiting screen until results shows
 }
 
 function renderAnswerSelectionPanel() {
@@ -141,6 +144,7 @@ function renderAnswerSelectionPanel() {
         let button_clone = button.cloneNode(true);
         button_clone.addEventListener("click",()=>{
             sendAnswers();
+            //TODO Make this button green when clicked, and reset all other green button if any 
         });
         button_clone.removeAttribute("id");
         button_clone.classList.remove("hidden");
@@ -164,6 +168,7 @@ function renderInterogation(){
         let button_clone = button.cloneNode(true);
         button_clone.classList.remove("hidden");
         button_clone.addEventListener("click",()=>{
+            // TODO remove this listener when we know the questions has already been asked;
             currentNpc = element
             document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+element;
             hide("interrogation");
@@ -185,6 +190,7 @@ function initSock(){
         console.log("Connected !")
     })
 
+    //TODO Send and receive userprogress when they have sent their responses
     socket.on("gameprogress", (username) => {
         console.log(username);
     });
@@ -217,6 +223,7 @@ function initSock(){
 
             let emotionDesc = document.createElement("p");
             emotionDesc.classList.add("explain_suspect_emotion_description");
+            //TODO fix typos here and on the database 
             emotionDesc.textContent = "Qui se caractérise par un " + finalResults["npcs"][npcid]["description"];
             suspect.appendChild(emotionDesc)
 
@@ -229,7 +236,7 @@ async function setGameData(){
     data = {};
     response = await makeAPIRequest("getGameData");
     gamedata = response["gamedata"];
-    npcs_ids = Object.keys(gamedata["npcs"]);
+    npcs_ids = Object.keys(gamedata["npcs"]).sort((a, b) => 0.5 - Math.random())
 }
 
 async function initGame(){
