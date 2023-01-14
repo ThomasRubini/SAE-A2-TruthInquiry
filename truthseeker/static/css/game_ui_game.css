@@ -226,10 +226,20 @@ html {
     text-transform: none;
 }
 
+.questions_and_image {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
 .questions_list {
-    align-items: flex-end;
+    align-content: center;
+    align-items: normal;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 /* Results and scores */
