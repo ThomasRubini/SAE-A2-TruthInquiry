@@ -16,18 +16,32 @@ function hideEmotionAndCulpritChoices(){
     document.getElementsByClassName("emotion_and_culprit_choices")[0].classList.add("hidden");
 }
 
+function showIntroduction(){
+    document.getElementsByClassName("introduction")[0].classList.remove("hidden");
+}
+function hideIntroduction(){
+    document.getElementsByClassName("introduction")[0].classList.add("hidden");
+}
+function setListenerToIntroductionNextBtn(){
+    document.getElementById("introduction_next_btn").addEventListener("click", showInterogation)
+}
+
 function setListenerToInterrogationNextBtn(){
-    document.getElementById("interrogation_next_btn").addEventListener("click", showInterogationView)
+    document.getElementById("interrogation_next_btn").addEventListener("click", showEmotionAndCulpritChoicesView)
 }
 
 function showInterogationView(){
+    hideIntroduction();
+    showInterogation();
+}
+
+function showEmotionAndCulpritChoicesView(){
     hideInterogation();
     showEmotionAndCulpritChoices();
 }
 
 function renderAnswerSelectionPanel() {
     npcs_ids.forEach(element => {
-        console.log(element);
         let suspect = document.createElement("div");
         suspect.classList.add("suspect");
 
@@ -98,8 +112,8 @@ async function initGame(){
     //initSock();
     renderAnswerSelectionPanel();
     renderInterogation();
+    setListenerToIntroductionNextBtn()
     setListenerToInterrogationNextBtn();
-    showInterogation();
+    showIntroduction();
 }
-
 initGame();
