@@ -1,10 +1,11 @@
+:root {
+    --grey-color: #5A5656;
+    --red-color: #BD1E1E;
+}
+
 html {
     background-color: black;
     color: white;
-}
-
-:root {
-    --button-color : #FF0000;
 }
 
 .game_app {
@@ -21,15 +22,55 @@ html {
     z-index: -9999;
 }
 
+.action_button, .scores, .summary {
+    font-family: "Titan One", sans-serif;
+}
+
+.anwser_title, .emotion_and_culprit_choices_title, .introduction_text, .introduction_title, .interrogation_title, .results_title, .reveal_culprit_title, .score_title, .summary_title {
+    font-family: "Spicy Rice", serif;
+}
+
+.introduction_title, .results_title, .summary_title {
+    font-size: 4em;
+}
+
+.reveal_culprit_explaination, .explain_suspect_emotion_description, .reveal_score, .suspect_emotion_chooser, .suspect_answer, .suspect_picture[alt] {
+    font-family: "Roboto Mono", sans-serif;
+}
+
+.interrogation_title, .reveal_culprit_title, .reveal_score, .results_title, .score_title, .summary_title {
+    margin: 0.25em;
+}
+
+.reveal_culprit_explaination, .question_button, .players_list, .reveal_culprit, .scores, .summary, .suspect, .suspect_emotion_chooser {
+    margin: 1em;
+}
+
+.suspect_picture {
+    margin: 1em;
+    height: 15em;
+    width: 15em;
+}
+
+.suspect_picture[alt] {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    font-size: 1em;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+}
+
 /* Buttons */
 .action_button {
     border-color: black;
     border-style: solid;
     border-width: 0.125em;
-    background-color: var(--button-color);
+    background-color: var(--red-color);
     border-radius: var(--button-and-dialog-border-radius);
     cursor: pointer;
-    font-family: "Titan One", sans-serif;
     font-size: 1.5em;
     min-width: 10em;
     padding-bottom: 0.5em;
@@ -50,14 +91,14 @@ html {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    fill: var(--button-color);
+    fill: var(--red-color);
     height: 5em;
     padding: 0;
     transform: rotate(180deg);
     width: 5em;
 }
 
-#emotion_and_culprit_choices_next_btn, #interrogation_next_btn {
+#emotion_and_culprit_choices_next_btn, #interrogation_next_btn, #interrogation_suspect_previous_btn {
     position: fixed;
     left: calc(100% - 6em);
     top: 1em;
@@ -70,16 +111,13 @@ html {
 }
 
 .introduction_title {
-    color: var(--button-color);
-    font-family: "Spicy Rice", serif;
-    font-size: 5em;
+    color: var(--red-color);
     font-weight: bold;
     margin: 0;
     text-align: left;
 }
 
 .introduction_text {
-    font-family: "Spicy Rice", serif;
     font-size: 2em;
     margin-bottom: 1em;
     margin-top: 1em;
@@ -95,11 +133,9 @@ html {
 }
 
 .interrogation_title {
-    color: var(--button-color);
-    font-family: "Spicy Rice", sans-serif;
+    color: var(--red-color);
     font-size: 3em;
-    margin: 1em;
-    text-transform: uppercase;
+    font-weight: bold;
 }
 
 .suspects {
@@ -117,31 +153,30 @@ html {
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
-    margin: 1em;
-}
-
-.suspect_picture {
-    margin-bottom: 1em;
-    height: 15em;
-    width: 15em;
-}
-
-.suspect_picture[alt] {
-    align-content: center;
-    align-items: center;
-    display: flex;
-    font-family: "Roboto Mono", sans-serif;
-    font-size: 1em;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
 }
 
 .ask_button {
     background-color: white;
     color: black;
     text-transform: none;
+}
+
+#interrogation_suspect_previous_btn {
+    margin-right: 1em;
+}
+
+.anwser_title {
+    font-size: 2.5em;
+    margin: 0.25em;
+}
+
+.suspect_answer {
+    font-size: 1.375em;
+    font-weight: bold;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 /* Emotion and culprit choices */
@@ -170,20 +205,153 @@ html {
 }
 
 .suspect_emotion_chooser {
-    background-color: #5A5656;
+    background-color: var(--grey-color);
     border: none;
     border-radius: var(--button-and-dialog-border-radius);
     color: white;
-    font-family: "Roboto Mono", sans-serif;
     font-size: 1em;
-    margin: 1em;
     padding: 0.5em;
 }
 
 .emotion_and_culprit_choices_title {
+    color: var(--red-color);
     font-size: 2em;
     margin: 0.5em;
     text-align: center;
-    font-family: "Spicy Rice", sans-serif;
-    color: var(--button-color);
+}
+
+.question_button {
+    background-color: var(--grey-color);
+    border-radius: 2em;
+    text-transform: none;
+}
+
+.questions_list {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Results and scores */
+.results_title {
+    color: var(--red-color);
+    font-weight: bold;
+    font-size: 4.5em;
+    text-align: center;
+}
+
+.summary {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.scores {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    min-width: 15em;
+}
+
+.reveal_and_scores {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.reveal_culprit_title {
+    color: var(--red-color);
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.score_title {
+    color: var(--red-color);
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.reveal_score {
+    align-items: center;
+    color: var(--red-color);
+    display: flex;
+    font-size: 2em;
+    justify-content: center;
+}
+
+.summary_title {
+    color: var(--red-color);
+    display: flex;
+    font-size: 4em;
+    flex-direction: row;
+    text-align: center;
+}
+
+.suspects_list {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1em;
+}
+
+#return_lobby_button {
+    background-color: transparent;
+    border: transparent;
+}
+
+.summary_suspect {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+}
+
+.reveal_culprit_explaination {
+    font-size: 1.25em;
+}
+
+.explain_suspect_emotion_title {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin: 0.5em;
+}
+
+.explain_suspect_emotion_description {
+    font-size: 1.25em;
+    font-weight: normal;
+    margin: 1em;
+}
+
+.player_score {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.player_name_and_score {
+    font-size: 1.5em;
+    font-weight: normal;
+    padding: 0.25em;
+}
+
+.reveal_culprit {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }

@@ -27,14 +27,14 @@
                 </svg>
             </button>
             <div class="suspects">
-                <!-- TODO: suspect model, remove from HTML and add it dynamically with JavaScript for each suspect -->
+                <!-- TODO: model, remove from HTML and add it dynamically with JavaScript for each suspect -->
                 <div class="suspect">
                     <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
                     <button class="ask_button action_button">Interroger</button>
                 </div>
             </div>
         </div>
-        <div class="emotion_and_culprit_choices">
+        <div class="emotion_and_culprit_choices hidden">
             <h1 class="emotion_and_culprit_choices_title">Choix du coupable et émotion des suspects</h1>
             <button id="emotion_and_culprit_choices_next_btn" class="next_btn hidden" aria-label="Passer à la suite">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
@@ -42,9 +42,10 @@
                 </svg>
             </button>
             <div class="suspects">
-                <!-- TODO: suspect model, remove from HTML and add it dynamically with JavaScript for each suspect -->
+                <!-- TODO: model, remove from HTML and add it dynamically with JavaScript for each suspect -->
                 <div class="suspect">
                     <select class="suspect_emotion_chooser" required="required">
+                        <!-- This is the place holder value-->
                         <option value="">Choisissez une émotion</option>
                         <!-- Add other emotions here -->
                     </select>
@@ -63,6 +64,71 @@
                 </div>
             </div>
         </div>
+        <div class="interrogation_suspect hidden">
+            <h1 class="interrogation_title">Poser une question au suspect</h1>
+            <button id="interrogation_suspect_previous_btn" class="next_btn" aria-label="Revenir à la sélection du suspect">
+                <svg class="next_btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path d="m23.15 36.95-17.3-11.1Q4.7 25.25 4.7 24t1.15-1.9L23.15 11q1.15-.7 2.35-.075 1.2.625 1.2 2.025v8.75h15.8q.95 0 1.625.675T44.8 24q0 .95-.675 1.6-.675.65-1.625.65H26.7V35q0 1.45-1.2 2.075-1.2.625-2.35-.125Z"/>
+                </svg>
+            </button>
+            <div class="questions_list">
+                <button class="action_button question_button">Où étiez vous hier soir&nbsp;?</button>
+                <button class="action_button question_button">Avec qui étiez vous&nbsp;?</button>
+            </div>
+            <div class="question_answer hidden">
+                <h1 class="anwser_title">Réponse du suspect à la question</h1>
+                <p class="suspect_answer"></p>
+            </div>
+        </div>
+        <div class="results_game hidden">
+            <h1 class="results_title">Résultats</h1>
+            <div class="reveal_and_scores">
+                <div class="scores">
+                    <div class="player_score">
+                        <h1 class="score_title">Votre score est de&nbsp;:</h1>
+                        <h2 class="reveal_score">4/5</h2>
+                    </div>
+                    <div class="results_game_multiplayer">
+                        <div class="players_list">
+                            <!-- TODO: model, remove from HTML and add it dynamically with JavaScript for each player -->
+                            <h3 class="player_name_and_score">nom&nbsp;: score</h3>
+                            <h3 class="player_name_and_score">nom&nbsp;: score</h3>
+                            <h3 class="player_name_and_score">nom&nbsp;: score</h3>
+                            <h3 class="player_name_and_score">nom&nbsp;: score</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal_culprit">
+                    <h2 class="reveal_culprit_title">Le coupable était ...</h2>
+                    <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
+                    <h3 class="reveal_culprit_explaination">Ce suspect était le coupable car il ...</h3>
+                </div>
+            </div>
+            <div class="summary">
+                <h1 class="summary_title">Débrief</h1>
+                <div class="suspects_list">
+                    <div class="summary_suspect">
+                        <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
+                        <h2 class="explain_suspect_emotion_title">Ce suspect était ...</h2>
+                        <p class="explain_suspect_emotion_description">En effet, la ... se caractérise par un ...</p>
+                    </div>
+                    <div class="summary_suspect">
+                        <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
+                        <h2 class="explain_suspect_emotion_title">Ce suspect était ...</h2>
+                        <p class="explain_suspect_emotion_description">En effet, la ... se caractérise par un ...</p>
+                    </div>
+                    <div class="summary_suspect">
+                        <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
+                        <h2 class="explain_suspect_emotion_title">Ce suspect était ...</h2>
+                        <p class="explain_suspect_emotion_description">En effet, la ... se caractérise par un ...</p>
+                    </div>
+                    <div class="summary_suspect">
+                        <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
+                        <h2 class="explain_suspect_emotion_title">Ce suspect était ...</h2>
+                        <p class="explain_suspect_emotion_description">En effet, la ... se caractérise par un ...</p>
+                    </div>
+                </div>
+            </div>
         <div class="alert_dialog_background"></div>
         <div class="unsupported_browser">
             <div id="unsupported_browser_dialog" class="alert_dialog">
