@@ -120,8 +120,11 @@ def get_data():
 @routes_api.route("/getNpcImage", methods=["GET", "POST"])
 def getNpcImage():
     npc_id = flask.request.values.get("npcid")
+    if npc_id is None:
+        return {"error": 1, "msg": "no npc was given"}
     image = game_logic.get_npc_image(npc_id)
-    
+    if image is None:
+         return {"error": 1, "msg": "npc not found"}
     response = flask.make_response(image)
     response.headers.set('Content-Type', 'image/png')
     response.headers.set(
@@ -137,9 +140,8 @@ def getNpcReaction():
     if game == None:
         return {"error": 1, "msg": "this game doesn't exist"}
     npc_id = flask.request.values.get("npcid")
-    reactionid = flask.request.values.get("reactionid")
-    image = game.get_npc_reaction(npc_id,reactionid)
 
+    image = game.get_npc_reaction(npc_id)
     errors = ["npc not in game","error reading file"]
     if image in [0,1]:
         return {"error" :1, "msg": errors[image]} , 500
@@ -147,7 +149,7 @@ def getNpcReaction():
     response = flask.make_response(image)
     response.headers.set('Content-Type', 'image/png')
     response.headers.set(
-        'Content-Disposition', 'attachment', filename=f'{reactionid}.png')
+        'Content-Disposition', 'attachment', filename=f'reaction.png')
     return response
 
 @routes_api.route("/gameProgress", methods=["GET", "POST"])
@@ -194,6 +196,7 @@ def checkAnwser():
     if game.has_finished(): 
         jsonGameResults = game.generate_game_results()
         APP.socketio_app.emit("gamefinshed",jsonGameResults,room="game."+game.game_id)
+        #TODO desctruct game
     response = {"error": 0}
     return response
 
