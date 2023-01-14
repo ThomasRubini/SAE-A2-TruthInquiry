@@ -14,7 +14,6 @@ from data.questions import QUESTIONS
 from data.reactions import REACTIONS
 from data.traits import TRAITS
 
-
 url_object = eg.URL.create(
     "mariadb+pymysql",
     username=os.getenv("DB_USER"),
