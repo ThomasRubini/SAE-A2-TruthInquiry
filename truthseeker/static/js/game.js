@@ -23,7 +23,7 @@ function hideIntroduction(){
     document.getElementsByClassName("introduction")[0].classList.add("hidden");
 }
 function setListenerToIntroductionNextBtn(){
-    document.getElementById("introduction_next_btn").addEventListener("click", showInterogation)
+    document.getElementById("introduction_next_btn").addEventListener("click", showInterogationView)
 }
 
 function setListenerToInterrogationNextBtn(){
