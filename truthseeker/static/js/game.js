@@ -191,6 +191,7 @@ async function initGame(){
     initSock();
     renderAnswerSelectionPanel();
     renderInterogation();
+    setQuestionButtonsListeners()
     setListenerToInterrogationSuspectPreviousBtn()
     setListenerToIntroductionNextBtn()
     setListenerToInterrogationNextBtn();
