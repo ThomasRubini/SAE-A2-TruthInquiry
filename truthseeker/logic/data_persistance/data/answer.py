@@ -32,13 +32,5 @@ ANSWERS = [
     Answer(29,0,8,36),
     Answer(30,0,8,37),
     Answer(31,1,8,38),
-    Answer(32,1,8,39),
-    Answer(33,0,9,41),
-    Answer(34,0,9,42),
-    Answer(35,1,9,43),
-    Answer(36,1,9,44),
-    Answer(37,0,10,46),
-    Answer(38,0,10,47),
-    Answer(39,1,10,48),
-    Answer(40,1,10,49)
+    Answer(32,1,8,39)
 ]
