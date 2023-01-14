@@ -23,6 +23,11 @@ function setListenerToInterrogationNextBtn(){
     document.getElementById("interrogation_next_btn").addEventListener("click", showEmotionAndCulpritChoicesView)
 }
 
+function setQuestionButtonsListeners(){
+    document.getElementById("QA_0").addEventListener("click",askTypeZeroQuestion);
+    document.getElementById("QA_1").addEventListener("click",askTypeOneQuestion);
+}
+
 function goBackToInterogation(){
     hide("interrogation_suspect");
     show("interrogation");
