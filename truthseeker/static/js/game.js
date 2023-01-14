@@ -1,44 +1,92 @@
 var npcs_ids = []
 var gamedata = {}
+var currentNpc = null
 
-function showInterogation(){
-    document.getElementsByClassName("interrogation")[0].classList.remove("hidden");
-}
-function hideInterogation(){
-    document.getElementsByClassName("interrogation")[0].classList.add("hidden");
-}
 
-function showEmotionAndCulpritChoices(){
-    document.getElementsByClassName("emotion_and_culprit_choices")[0].classList.remove("hidden");
-}
-function hideEmotionAndCulpritChoices(){
-    document.getElementsByClassName("emotion_and_culprit_choices")[0].classList.add("hidden");
+function show(className){
+    document.getElementsByClassName(className)[0].classList.remove("hidden");
 }
 
-function showIntroduction(){
-    document.getElementsByClassName("introduction")[0].classList.remove("hidden");
+function hide(className){
+    document.getElementsByClassName(className)[0].classList.add("hidden");
 }
-function hideIntroduction(){
-    document.getElementsByClassName("introduction")[0].classList.add("hidden");
-}
+
 function setListenerToIntroductionNextBtn(){
-    document.getElementById("introduction_next_btn").addEventListener("click", showInterogationView)
+    document.getElementById("introduction_next_btn").addEventListener("click", showInterogationViewFromIntroduction);
+}
+
+function setListenerToInterrogationSuspectPreviousBtn(){
+    document.getElementById("interrogation_suspect_previous_btn").addEventListener("click",goBackToInterogation)
 }
 
 function setListenerToInterrogationNextBtn(){
     document.getElementById("interrogation_next_btn").addEventListener("click", showEmotionAndCulpritChoicesView)
 }
 
-function showInterogationView(){
-    hideIntroduction();
-    showInterogation();
+function goBackToInterogation(){
+    hide("interrogation_suspect");
+    show("interrogation");
+}
+
+
+function showInterogationViewFromIntroduction(){
+    hide("introduction");
+    show("interrogation");
 }
 
 function showEmotionAndCulpritChoicesView(){
-    hideInterogation();
-    showEmotionAndCulpritChoices();
+    hide("interrogation");
+    show("emotion_and_culprit_choices");
 }
 
+function getNpcLocationAndPartner(npcid){
+    data = {}
+    npcid = parseInt(npcid)
+    for(const room in gamedata["rooms"]){
+        if(gamedata["rooms"][room]["npcs"].includes(npcid)){
+            data["room"] = gamedata["rooms"][room]["name"];
+            if(gamedata["rooms"][room]["npcs"].length === 1){
+                do{
+                    const random = Math.floor(Math.random() * npcs_ids.length);
+                    data["partner"] = npcs_ids[random]
+                }while(data["partner"] === npcid);
+            }
+            else{
+                data["partner"] = gamedata["rooms"][room]["npcs"][gamedata["rooms"][room]["npcs"][1] === npcid ?0:1];
+            }
+        }
+    }
+    return data;
+}
+
+async function askTypeOneQuestion(){
+    partnerId = getNpcLocationAndPartner(currentNpc)["partner"];
+    anwser = gamedata["npcs"][currentNpc]["QA_1"];
+    anwser = anwser.replace("{NPC}",gamedata["npcs"][partnerId]["name"]);
+    document.getElementsByClassName("suspect_answer")[0].textContent = anwser;
+    show("question_answer");
+    document.getElementById("currentNpcPicure").src = "/api/v1//getNpcReaction?npcid="+currentNpc;
+    //sleep for 5 sec
+    await new Promise(r => setTimeout(r, 5000));
+    document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
+    hide("question_answer");
+    document.getElementsByClassName("suspect_answer")[0].textContent = "";
+}
+
+
+async function askTypeZeroQuestion(){
+    room = getNpcLocationAndPartner(currentNpc)["room"];
+    anwser = gamedata["npcs"][currentNpc]["QA_0"];
+    anwser = anwser.replace("{SALLE}",room);
+    document.getElementsByClassName("suspect_answer")[0].textContent = anwser;
+    show("question_answer");
+    document.getElementById("currentNpcPicure").src = "/api/v1//getNpcReaction?npcid="+currentNpc;
+    //sleep for 5 sec
+    await new Promise(r => setTimeout(r, 5000));
+    document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
+    hide("question_answer");
+    document.getElementsByClassName("suspect_answer")[0].textContent = "";
+}
 
 async function sendAnswers(){
     selects = document.getElementsByClassName("suspect_emotion_chooser");
@@ -82,6 +130,8 @@ function renderAnswerSelectionPanel() {
 }
 
 function renderInterogation(){
+    document.getElementById("QA_0").textContent = gamedata["questions"]["QA_0"],
+    document.getElementById("QA_1").textContent = gamedata["questions"]["QA_1"],
     npcs_ids.forEach(element => {
         let suspect = document.createElement("div");
         suspect.classList.add("suspect");
@@ -93,6 +143,12 @@ function renderInterogation(){
         let button = document.getElementById("interogationButton");
         let button_clone = button.cloneNode(true);
         button_clone.classList.remove("hidden");
+        button_clone.addEventListener("click",()=>{
+            currentNpc = element
+            document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+element;
+            hide("interrogation");
+            show("interrogation_suspect");
+        })
         suspect.appendChild(button_clone)
         document.getElementById("interrogation_suspects").appendChild(suspect);
     });
@@ -130,8 +186,9 @@ async function initGame(){
     initSock();
     renderAnswerSelectionPanel();
     renderInterogation();
+    setListenerToInterrogationSuspectPreviousBtn()
     setListenerToIntroductionNextBtn()
     setListenerToInterrogationNextBtn();
-    showIntroduction();
+    show("introduction");
 }
 initGame();

@@ -116,7 +116,7 @@ class Game:
         self.members.append(member)
         return member
 
-    def get_npc_reaction(self, npc_id, reaction) -> None:
+    def get_npc_reaction(self, npc_id) -> None:
         """
         TODO + TODO TYPES
         """

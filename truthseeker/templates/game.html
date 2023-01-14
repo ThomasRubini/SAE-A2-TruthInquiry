@@ -41,14 +41,15 @@
         </div>
         <div class="interrogation_suspect hidden">
             <h1 class="interrogation_title">Poser une question au suspect</h1>
+            <img class="suspect_picture" id="currentNpcPicure" src="">
             <button id="interrogation_suspect_previous_btn" class="next_btn" aria-label="Revenir à la sélection du suspect">
                 <svg class="next_btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                     <path d="m23.15 36.95-17.3-11.1Q4.7 25.25 4.7 24t1.15-1.9L23.15 11q1.15-.7 2.35-.075 1.2.625 1.2 2.025v8.75h15.8q.95 0 1.625.675T44.8 24q0 .95-.675 1.6-.675.65-1.625.65H26.7V35q0 1.45-1.2 2.075-1.2.625-2.35-.125Z"/>
                 </svg>
             </button>
             <div class="questions_list">
-                <button class="action_button question_button">Où étiez vous hier soir&nbsp;?</button>
-                <button class="action_button question_button">Avec qui étiez vous&nbsp;?</button>
+                <button class="action_button question_button" id="QA_0">Où étiez vous hier soir&nbsp;?</button>
+                <button class="action_button question_button" id="QA_1">Avec qui étiez vous&nbsp;?</button>
             </div>
             <div class="question_answer hidden">
                 <h1 class="anwser_title">Réponse du suspect à la question</h1>
@@ -104,6 +105,7 @@
                     </div>
                 </div>
             </div>
+        </div>    
         <div class="alert_dialog_background"></div>
         <div class="unsupported_browser">
             <div id="unsupported_browser_dialog" class="alert_dialog">
