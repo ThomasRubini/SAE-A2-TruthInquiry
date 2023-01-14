@@ -1,5 +1,6 @@
 var npcs_ids = []
 var gamedata = {}
+var button = ""
 async function showAnswerSelectionPanel() {
     npcs_ids.forEach(async element => {
         console.log(element);
@@ -16,14 +17,15 @@ async function showAnswerSelectionPanel() {
         });
         suspect.appendChild(suspect_emotion_chooser);
         let data = {};
-        data["npcid"] = element;
-        let img_binary = await makeAPIImageRequest("getNpcImage",data);
         let img = document.createElement('img');
         img.classList.add("suspect_picture");
-        img.src = img_binary;
-        //img.src = 'data:image/png;base64,' + btoa('your-binary-data');
+        img.src = "/api/v1/getNpcImage?npcid="+element; 
         suspect.appendChild(img);
-        document.getElementById("123").appendChild(suspect);
+        let button = document.getElementById("mainButton");
+        let button_clone = button.cloneNode(true);
+        button_clone.classList.remove("hidden");
+        suspect.appendChild(button_clone);
+        document.getElementById("culprits_choices").appendChild(suspect);
     });
 }
 
