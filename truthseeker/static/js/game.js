@@ -1,7 +1,7 @@
 var npcs_ids = []
 var gamedata = {}
 var currentNpc = null
-
+var score = null
 
 function show(className){
     document.getElementsByClassName(className)[0].classList.remove("hidden");
@@ -62,6 +62,18 @@ function getNpcLocationAndPartner(npcid){
         }
     }
     return data;
+}
+
+
+function getCulprit(){
+    culprit = null
+    Object.values(gamedata["rooms"]).forEach(element =>{
+        if (element['npcs'].length === 1){
+            culprit = element['npcs'][0];
+            return;  
+        } 
+    })
+    return culprit
 }
 
 async function askTypeOneQuestion(){
@@ -127,6 +139,9 @@ function renderAnswerSelectionPanel() {
         suspect.appendChild(img);
         let button = document.getElementById("culpritButton");
         let button_clone = button.cloneNode(true);
+        button_clone.addEventListener("click",()=>{
+            sendAnswers();
+        });
         button_clone.removeAttribute("id");
         button_clone.classList.remove("hidden");
         suspect.appendChild(button_clone);
@@ -175,7 +190,38 @@ function initSock(){
     });
     
     socket.on("gamefinshed", (finalResults) => {
+        hide("emotion_and_culprit_choices");
         console.log(finalResults);
+        for (const player in finalResults["player"]){
+            let playerNode = document.createElement("h3")
+            playerNode.classList.add("player_name_and_score")
+            let playerResultArray = Object.values(finalResults["player"][player])
+            playerNode.textContent = "" + player + " : " + playerResultArray.filter(x => x==true).length
+            document.getElementsByClassName("players_list")[0].appendChild(playerNode);
+        }
+        culprit = getCulprit();
+        document.getElementsByClassName("reveal_culprit_title")[0].textContent += " " + gamedata["npcs"][culprit]["name"];
+        document.getElementById("culprit").src = "/api/v1/getNpcImage?npcid="+culprit;
+        show("results_game");
+        npcs_ids.filter(x => x!=culprit).forEach(npcid =>{
+            let suspect = document.createElement("div");
+            suspect.classList.add("summary_suspect");
+            let img = document.createElement("img")
+            img.src = "/api/v1/getNpcImage?npcid=" + npcid;
+            suspect.appendChild(img)
+
+            let emotionTitle = document.createElement("h2");
+            emotionTitle.classList.add("explain_suspect_emotion_title");
+            emotionTitle.textContent = "Ce suspect était " + finalResults["npcs"][npcid]["reaction"];
+            suspect.appendChild(emotionTitle);
+
+            let emotionDesc = document.createElement("p");
+            emotionDesc.classList.add("explain_suspect_emotion_description");
+            emotionDesc.textContent = "Qui se caractérise par un " + finalResults["npcs"][npcid]["description"];
+            suspect.appendChild(emotionDesc)
+
+            document.getElementsByClassName("suspects_list")[0].appendChild(suspect)
+        })
     });
 }
 
