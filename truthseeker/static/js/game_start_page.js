@@ -108,16 +108,6 @@ function areInputsValid(checkRoomCode) {
     return true;
 }
 
-function startSoloGame() {
-    if (!areInputsValid(false)) {
-        return;
-    }
-
-    hideInvalidInputErrorMessage();
-
-    //TODO: code to start solo game
-}
-
 function createMultiPlayerRoom() {
     if (!areInputsValid(false)) {
         return;
@@ -209,6 +199,13 @@ function changeTheme() {
 }
 
 async function startSoloGame(){
+
+    if (!areInputsValid(false)) {
+        return;
+    }
+
+    hideInvalidInputErrorMessage();
+
     username = document.getElementById("game_username").value;
     let data = {}
     data["username"] = username;

@@ -16,6 +16,15 @@ function hideEmotionAndCulpritChoices(){
     document.getElementsByClassName("emotion_and_culprit_choices")[0].classList.add("hidden");
 }
 
+function setListenerToInterrogationNextBtn(){
+    document.getElementById("interrogation_next_btn").addEventListener("click", showInterogationView)
+}
+
+function showInterogationView(){
+    hideInterogation();
+    showEmotionAndCulpritChoices();
+}
+
 function renderAnswerSelectionPanel() {
     npcs_ids.forEach(element => {
         console.log(element);
@@ -89,6 +98,7 @@ async function initGame(){
     //initSock();
     renderAnswerSelectionPanel();
     renderInterogation();
+    setListenerToInterrogationNextBtn();
     showInterogation();
 }
 
