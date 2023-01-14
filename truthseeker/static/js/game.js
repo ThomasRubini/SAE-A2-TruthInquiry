@@ -1,6 +1,5 @@
 var npcs_ids = []
 var gamedata = {}
-var button = ""
 
 function showInterogation(){
     document.getElementsByClassName("interrogation")[0].classList.remove("hidden");
@@ -40,6 +39,19 @@ function showEmotionAndCulpritChoicesView(){
     showEmotionAndCulpritChoices();
 }
 
+
+async function sendAnswers(){
+    selects = document.getElementsByClassName("suspect_emotion_chooser");
+    let playerResponses = {}
+    for (let index = 0; index < selects.length; index++) {
+        select = selects[index];
+        playerResponses[select.id] = select.value
+    }
+    data = {};
+    data["responses"] = JSON.stringify(playerResponses);
+    return await makeAPIRequest("submitAnswers",data);
+}
+
 function renderAnswerSelectionPanel() {
     npcs_ids.forEach(element => {
         let suspect = document.createElement("div");
@@ -47,6 +59,7 @@ function renderAnswerSelectionPanel() {
 
         suspect_emotion_chooser = document.createElement("select");
         suspect_emotion_chooser.classList.add("suspect_emotion_chooser")
+        suspect_emotion_chooser.setAttribute("id",element);
         gamedata["traits"].forEach(trait =>{
             let option = document.createElement("option");
             option.value = trait;
@@ -61,6 +74,7 @@ function renderAnswerSelectionPanel() {
         suspect.appendChild(img);
         let button = document.getElementById("culpritButton");
         let button_clone = button.cloneNode(true);
+        button_clone.removeAttribute("id");
         button_clone.classList.remove("hidden");
         suspect.appendChild(button_clone);
         document.getElementById("culprits_choices").appendChild(suspect);
@@ -87,7 +101,7 @@ function renderInterogation(){
 function initSock(){
     socket = io({
         auth:{
-            game_id: gameid
+            game_id: gamedata["game_id"]
         }
     });
 
@@ -97,6 +111,10 @@ function initSock(){
 
     socket.on("gameprogress", (username) => {
         console.log(username);
+    });
+    
+    socket.on("gamefinshed", (finalResults) => {
+        console.log(finalResults);
     });
 }
 
@@ -109,7 +127,7 @@ async function setGameData(){
 
 async function initGame(){
     await setGameData();
-    //initSock();
+    initSock();
     renderAnswerSelectionPanel();
     renderInterogation();
     setListenerToIntroductionNextBtn()

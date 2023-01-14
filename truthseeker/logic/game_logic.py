@@ -78,7 +78,7 @@ class Game:
             traitId = self.reaction_table[npc_id]
             trait = get_trait_from_trait_id(traitId)
             npcs[npc_id]["reaction"] = get_text_from_lid("FR",trait.NAME_LID)
-            npcs[npc_id]["description"] = get_reaction_description("FR",trait.TRAIT_ID)
+            npcs[npc_id]["description"] = get_reaction_description("FR",npc_id,trait.TRAIT_ID)
         player_results = data["player"] = {}
         for member in self.members:
             player_results[member.username] = member.results
@@ -90,6 +90,7 @@ class Game:
         """
         #TODO Get language from player
         self.gamedata, self.reaction_table = generate_game_data("FR")
+        self.gamedata["game_id"] = self.game_id
 
     def get_member(self, username: str) -> Union[Member, None]:
         """
@@ -132,7 +133,7 @@ class Game:
         try:
             for npc_id in responses:
                 trait_id = get_trait_id_from_string(responses[npc_id])
-                results[npc_id] = trait_id == str(self.reaction_table[npc_id])
+                results[npc_id] = trait_id == self.reaction_table[npc_id]
             return results
         except:
             return False
