@@ -26,12 +26,7 @@
                     <path d="m23.15 36.95-17.3-11.1Q4.7 25.25 4.7 24t1.15-1.9L23.15 11q1.15-.7 2.35-.075 1.2.625 1.2 2.025v8.75h15.8q.95 0 1.625.675T44.8 24q0 .95-.675 1.6-.675.65-1.625.65H26.7V35q0 1.45-1.2 2.075-1.2.625-2.35-.125Z">
                 </svg>
             </button>
-            <div class="suspects">
-                <!-- TODO: model, remove from HTML and add it dynamically with JavaScript for each suspect -->
-                <div class="suspect">
-                    <img class="suspect_picture" src="/static/images/suspect_example.png" alt="Example" draggable="false">
-                    <button class="ask_button action_button">Interroger</button>
-                </div>
+            <div class="suspects" id="interrogation_suspects">
             </div>
         </div>
         <div class="emotion_and_culprit_choices hidden">
@@ -125,10 +120,11 @@
                 </div>
             </div>
         </noscript>
-        <!-- button to clone in js-->   
+        <!-- buttons to clone in js-->
+        <button class="ask_button action_button hidden" id="interogationButton">Interroger</button>
         <!-- Add culprit_btn_checked class when a choice is checked -->
         <!-- Only one button can be checked at a time, so when one is checked, the previous one, if applicable, is unchecked -->
-        <button class="culprit_btn action_button hidden", id="mainButton">
+        <button class="culprit_btn action_button hidden", id="culpritButton">
             <svg class="culprit_checked_icon hidden culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
                 <path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"></path>
             </svg>
@@ -137,6 +133,7 @@
             </svg>
             <p class="culprit_btn_text">Couplable</p>
         </button>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
         <script src="/static/js/api.js"></script>
         <script src="/static/js/game_common.js"></script>
         <script src="/static/js/game.js"></script>
