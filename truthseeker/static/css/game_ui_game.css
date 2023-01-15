@@ -243,6 +243,15 @@ html {
     justify-content: center;
 }
 
+.question_answer {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 /* Results and scores */
 .results_title {
     color: var(--red-color);
