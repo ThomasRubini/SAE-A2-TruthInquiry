@@ -160,7 +160,6 @@ function setCurrentTheme() {
     } catch (e) {
         console.error("Unable to set theme from localStorage", e);
         htmlElement.classList.add("dark");
-        showUnsupportedBrowserMessage("Votre navigateur ne semble pas supporter le localStorage. Certains navigateurs nécessitant l'autorisation d'utiliser des cookies pour utiliser le localStorage, vérifiez que les cookies sont autorisés pour le site du jeu dans le vôtre.");
     }
 }
 

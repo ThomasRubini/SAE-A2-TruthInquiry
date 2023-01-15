@@ -32,6 +32,42 @@ function checkWebSocketAvailability() {
 }
 
 /**
+ * Create a temporary cookie to detect whether cookies are allowed for the game website domain.
+ *
+ * <p>
+ * This cookie, cookietest, with 1 as a value, is automatically deleted after being created.
+ * </p>
+ *
+ * @returns whether cookies are allowed for the website domain
+ */
+function createTemporaryCookieThenDeleteIt() {
+    try {
+        // Create a temporary cookie
+        document.cookie = "cookietest=1; path=/";
+        let cookieTestResult = document.cookie.indexOf("cookietest=") !== -1;
+        // Delete the temporary cookie
+        document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/";
+        return cookieTestResult;
+    } catch (e) {
+        return false;
+    }
+}
+
+/**
+ * Check the availability of cookies in the client.
+ *
+ * <p>
+ * If it is not available, an error message which prevents playing the game and requesting user to
+ * enable website cookies is shown.
+ * </p>
+ */
+function checkCookiesAvailability() {
+    if (!createTemporaryCookieThenDeleteIt()) {
+        showUnsupportedBrowserMessage("Votre navigateur ne prend pas en charge les cookies, nécessaires au fonctionnement du jeu. Veuillez les activer dans les paramètres de votre navigateur.");
+    }
+}
+
+/**
  * Show the unsupported browser dialog, which disables ability to play the game, using the given
  * unsupported browser message text.
  *
@@ -68,3 +104,4 @@ function showAlertDialog(element) {
 
 detectIEBrowsers();
 checkWebSocketAvailability();
+checkCookiesAvailability();
