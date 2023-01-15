@@ -133,7 +133,7 @@ class Game:
         reaction_id = self.reaction_table[npc_id]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
 
-    def get_player_results(self, responses: dict) -> Union[dict, False]:
+    def get_player_results(self, responses: dict) -> Union[dict, None]:
         """
         Checks the player's answers againts the reaction map.
         Return None when a npc is not found in the reaction table, meaning an invalid npc was sent
