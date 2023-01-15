@@ -223,8 +223,8 @@ function initSock(){
 
             let emotionDesc = document.createElement("p");
             emotionDesc.classList.add("explain_suspect_emotion_description");
-            //TODO fix typos here and on the database 
-            emotionDesc.textContent = "Qui se caractérise par un " + finalResults["npcs"][npcid]["description"];
+            //TODO fix typos on the database 
+            emotionDesc.textContent = "Qui se caractérise par " + finalResults["npcs"][npcid]["description"];
             suspect.appendChild(emotionDesc)
 
             document.getElementsByClassName("suspects_list")[0].appendChild(suspect)
