@@ -1,5 +1,4 @@
 import json
-
 import flask
 
 from truthseeker import APP
@@ -11,7 +10,7 @@ routes_api = flask.Blueprint("api", __name__)
 @routes_api.route("/createGame", methods=["GET", "POST"])
 def create_game():
     username = flask.request.values.get("username")
-    if username==None:
+    if username is None:
         return {"error": 1, "msg": "username not set"}
     if not game_logic.check_username(username):
         return {"error": 1, "msg": "invalid username"}
@@ -30,31 +29,31 @@ def create_game():
     return response
 
 @routes_api.route("/getGameMembers", methods=["GET", "POST"])
-def getMembers():
+def get_members():
     if not flask.session:
         return {"error": 1, "msg": "No session"}
     game = game_logic.get_game(flask.session["game_id"])
-    if game == None:
+    if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
-    
+
     response = {"error" : 0}
     player_list = [member.username for member in game.members]
     response["members"] = player_list
     return response
-    
+
 @routes_api.route("/joinGame", methods=["GET", "POST"])
 def join_game():
     game_id = flask.request.values.get("game_id")
     username = flask.request.values.get("username")
-    if game_id==None or username==None:
+    if game_id is None or username is None:
         return {"error": 1, "msg": "username or game id not set"}
     if not game_logic.check_username(username):
         return {"error": 1, "msg": "invalid username"}
 
     game = game_logic.get_game(game_id)
-    if game == None:
+    if game is None:
         return {"error": 1, "msg": "game does not exist"}
-    
+
     if not game.add_member(username):
         return {"error": 1, "msg": f"Username '{username}' already used in game {game.game_id}"}
 
@@ -71,10 +70,10 @@ def is_owner():
     if not flask.session:
         return {"error": 0, "owner": False}
     game = game_logic.get_game(flask.session["game_id"])
-    if game == None:
+    if game is None:
         return {"error": 0, "owner": False}
 
-    if not flask.session["is_owner"]:   
+    if not flask.session["is_owner"]:
         return {"error": 0, "owner": False}
 
     return {"error": 0, "owner": True}
@@ -84,7 +83,7 @@ def has_joined():
     if not flask.session:
         return {"error": 0, "joined": False}
     game = game_logic.get_game(flask.session["game_id"])
-    if game == None:
+    if game is None:
         return {"error": 0, "joined": False}
     return {"error": 0, "joined": True}
 
@@ -95,7 +94,7 @@ def start_game():
     if not flask.session["is_owner"]:
         return {"error": 1, "msg": "you are not the owner of this game"}
     game = game_logic.get_game(flask.session["game_id"])
-    if game == None:
+    if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
     if game.has_started:
         return {"error": 1, "msg": "this game is already started"}
@@ -109,35 +108,35 @@ def get_data():
     if not flask.session:
         return {"error": 1, "msg": "No session"}
     game = game_logic.get_game(flask.session["game_id"])
-    if game == None:
+    if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
-    
+
     response = {}
     response["error"] = 0
     response["gamedata"] = game.gamedata
     return response
 
 @routes_api.route("/getNpcImage", methods=["GET", "POST"])
-def getNpcImage():
+def get_npc_image():
     npc_id = flask.request.values.get("npcid")
     if npc_id is None:
         return {"error": 1, "msg": "no npc was given"}
     image = game_logic.get_npc_image(npc_id)
     if image is None:
-         return {"error": 1, "msg": "npc not found"}
+        return {"error": 1, "msg": "npc not found"}
     response = flask.make_response(image)
     response.headers.set('Content-Type', 'image/png')
     response.headers.set(
-        'Content-Disposition', 'attachment', filename=f'0.png')
+        'Content-Disposition', 'attachment', filename='0.png')
     return response
 
 @routes_api.route("/getNpcReaction", methods=["GET", "POST"])
-def getNpcReaction():
+def get_npc_reaction():
 
     if not flask.session:
         return {"error": 1, "msg": "No session"}
     game = game_logic.get_game(flask.session["game_id"])
-    if game == None:
+    if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
     npc_id = flask.request.values.get("npcid")
 
@@ -145,58 +144,59 @@ def getNpcReaction():
     errors = ["npc not in game","error reading file"]
     if image in [0,1]:
         return {"error" :1, "msg": errors[image]} , 500
-    
+
     response = flask.make_response(image)
     response.headers.set('Content-Type', 'image/png')
     response.headers.set(
-        'Content-Disposition', 'attachment', filename=f'reaction.png')
+        'Content-Disposition', 'attachment', filename='reaction.png')
     return response
 
+
 @routes_api.route("/gameProgress", methods=["GET", "POST"])
-def gameProgress():
+def game_progress():
     if not flask.session:
         return {"error": 1, "msg": "No session"}
     game = game_logic.get_game(flask.session["game_id"])
-    
-    if game == None:
+
+    if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
-    
+
     username = flask.session["username"]
     game.get_member(username).progress += 1
-    
+
     APP.socketio_app.emit("gameprogress", [flask.session["username"]], room="game."+game.game_id)
-    
+
     return {"error": 0}
 
+
 @routes_api.route("/submitAnswers", methods=["GET", "POST"])
-def checkAnwser():
+def check_anwser():
     if not flask.session:
         return {"error": 1, "msg": "No session"}
     game = game_logic.get_game(flask.session["game_id"])
 
-    if game == None:
+    if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
 
     member = game.get_member(flask.session["username"])
 
-    if member.results != None:
+    if member.results is not None:
         return {"error": 1, "msg": "answers already submitted for this member"}
 
-    playerResponses = flask.request.values.get("responses")
+    player_responses = flask.request.values.get("responses")
 
-    if playerResponses == None:
+    if player_responses is None:
         return {"error": 1, "msg": "no responses were sent"}
-        
-    results = game.get_player_results(json.loads(playerResponses))
-    if results == False:
+
+    results = game.get_player_results(json.loads(player_responses))
+    if results is False:
         return {"error": 1, "msg": "invalid npc sent"}
-        
+
     member.has_submitted = True
     member.results = results
-    if game.has_finished(): 
-        jsonGameResults = game.generate_game_results()
-        APP.socketio_app.emit("gamefinshed",jsonGameResults,room="game."+game.game_id)
-        #TODO desctruct game
+    if game.has_finished():
+        json_game_results = game.generate_game_results()
+        APP.socketio_app.emit("gamefinshed", json_game_results, room="game."+game.game_id)
+#       TODO desctruct game
     response = {"error": 0}
     return response
-

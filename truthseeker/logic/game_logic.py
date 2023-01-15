@@ -5,15 +5,17 @@ from typing import Union
 from truthseeker.logic.data_persistance.data_access import *
 from truthseeker import APP
 
-def random_string(length: int) ->str:
+
+def random_string(length: int) -> str:
     """
-    This function create a random string as long as the lint passed as 
+    This function create a random string as long as the lint passed as
     parameter
-    
+
     :param length: the length of the random string to create
     :return: a random string
     """
     return "".join(random.choice(string.ascii_letters) for _ in range(length))
+
 
 class Member:
     """
@@ -23,17 +25,18 @@ class Member:
     :attr TODO progress: TODO
     :attr TODO results: TODO
     """
-    
+
     def __init__(self, username):
         self.username = username
         self.progress = 0
         self.results = None
 
     def __str__(self) -> str:
-        return "Member[username={}]".format(self.username)
+        return f"Member[username={self.username}]"
 
     def __repr__(self) -> str:
         return self.__str__()
+
 
 class Game:
     """
@@ -65,7 +68,7 @@ class Game:
         self.owner = Member(username)
         self.members.append(self.owner)
         return self.owner
-    
+
     def generate_game_results(self) -> None:
         """
         TODO + TODO RET TYPE
@@ -75,10 +78,10 @@ class Game:
         for npc_id in self.gamedata["npcs"]:
             npcs[npc_id] = {}
             npcs[npc_id]["name"] = self.gamedata["npcs"][npc_id]["name"]
-            traitId = self.reaction_table[npc_id]
-            trait = get_trait_from_trait_id(traitId)
-            npcs[npc_id]["reaction"] = get_text_from_lid("FR",trait.NAME_LID)
-            npcs[npc_id]["description"] = get_reaction_description("FR",npc_id,trait.TRAIT_ID)
+            trait_id = self.reaction_table[npc_id]
+            trait = get_trait_from_trait_id(trait_id)
+            npcs[npc_id]["reaction"] = get_text_from_lid("FR", trait.NAME_LID)
+            npcs[npc_id]["description"] = get_reaction_description("FR", npc_id, trait.TRAIT_ID)
         player_results = data["player"] = {}
         for member in self.members:
             player_results[member.username] = member.results
@@ -88,7 +91,7 @@ class Game:
         """
         TODO
         """
-        #TODO Get language from player
+#       TODO Get language from player
         self.gamedata, self.reaction_table = generate_game_data("FR")
         self.gamedata["game_id"] = self.game_id
 
@@ -102,7 +105,7 @@ class Game:
         for member in self.members:
             if member.username == username:
                 return member
-        
+
     def add_member(self, username: str) -> Union[Member, None]:
         """
         Add a Member to the game
@@ -120,11 +123,11 @@ class Game:
         """
         TODO + TODO TYPES
         """
-        if npc_id not in self.reaction_table.keys():
+        if npc_id not in self.reaction_table:
             return 0
         reaction_id = self.reaction_table[npc_id]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
-    
+
     def get_player_results(self, responses: dict) -> None:
         """
         TODO + TODO RETTYPE
@@ -138,26 +141,27 @@ class Game:
         except:
             return False
 
-
     def has_finished(self) -> bool:
         """
         Checks if the game has finished by checking if every Member has submitted answers
-        
+
         :return: True if the game has finished, else False
         """
         for member in self.members:
-            if member.results == None : return False
+            if member.results is None:
+                return False
         return True
 
     def __str__(self) -> str:
-        return "Game[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
+        return f"Game[game_id={self.game_id}, owner={self.owner}, members={self.members}]"
 
     def __repr__(self) -> str:
         return self.__str__()
 
+
 def create_game(owner: str) -> Game:
     """
-    This function creates a new game by creating a Game object and stores 
+    This function creates a new game by creating a Game object and stores
     it into the games_list dictionnary
 
     :return: a new Game
@@ -168,6 +172,7 @@ def create_game(owner: str) -> Game:
     game.game_id = random_string(6)
     APP.games_list[game.game_id] = game
     return game
+
 
 def get_game(game_id: str) -> Union[Game, None]:
     """
@@ -181,6 +186,7 @@ def get_game(game_id: str) -> Union[Game, None]:
     else:
         return None
 
+
 def check_username(username: str) -> bool:
     """
     Check if a username is valid using a set of rules
@@ -188,7 +194,7 @@ def check_username(username: str) -> bool:
     :param username: the username to check
     :return: True or False depending on if the rules are respected
     """
-    
+
     if not username:
         return False
     if not username.isalnum():
@@ -197,43 +203,47 @@ def check_username(username: str) -> bool:
         return False
     if not len(username) < 16:
         return False
-    
+
     return True
+
 
 def generate_npc_text(npc: tables.Npc, lang: str) -> dict:
     data = {}
     data["name"] = get_text_from_lid(lang, npc.NAME_LID)
-    data["QA_0"] = get_text_from_lid(lang, get_npc_random_answer(npc,0).TEXT_LID)
-    data["QA_1"] = get_text_from_lid(lang, get_npc_random_answer(npc,1).TEXT_LID)
+    data["QA_0"] = get_text_from_lid(lang, get_npc_random_answer(npc, 0).TEXT_LID)
+    data["QA_1"] = get_text_from_lid(lang, get_npc_random_answer(npc, 1).TEXT_LID)
     return data
 
-def generate_npc_reactions(npc: tables.Npc) ->list:
+
+def generate_npc_reactions(npc: tables.Npc) -> list:
     return get_npc_random_trait_id(npc)
+
 
 def generate_place_data(npcs: list, places: list, lang: str) -> dict:
     data = {}
     random.shuffle(npcs)
     for place in places:
         placedata = data[str(place.PLACE_ID)] = {}
-        placedata["name"] = get_text_from_lid(lang,place.NAME_LID)
+        placedata["name"] = get_text_from_lid(lang, place.NAME_LID)
         placedata["npcs"] = []
         for _ in npcs:
             placedata["npcs"].append(npcs.pop().NPC_ID)
-            if len(placedata["npcs"]) == 2: break
+            if len(placedata["npcs"]) == 2:
+                break
     return data
 
 
-def generate_game_data(LANG):
+def generate_game_data(lang):
     data = {}
     data["npcs"] = {}
     reactions_table = {}
     npcs = []
     while len(npcs) != 5:
         npc = get_random_npc()
-        if npc not in npcs :
+        if npc not in npcs:
             npcs.append(npc)
     for npc in npcs:
-        data["npcs"][str(npc.NPC_ID)] = generate_npc_text(npc,LANG)
+        data["npcs"][str(npc.NPC_ID)] = generate_npc_text(npc, lang)
         reactions_table[str(npc.NPC_ID)] = generate_npc_reactions(npc)
 
     places = []
@@ -242,22 +252,25 @@ def generate_game_data(LANG):
         if place not in places:
             places.append(place)
 
-    data["rooms"] = generate_place_data(npcs,places,LANG)
+    data["rooms"] = generate_place_data(npcs, places, lang)
     data["questions"] = {}
-    data["questions"]["QA_0"] = get_text_from_lid("FR",get_random_question(0).TEXT_LID)
-    data["questions"]["QA_1"] = get_text_from_lid("FR",get_random_question(1).TEXT_LID)
-    data["traits"] = get_traits(LANG)
+    data["questions"]["QA_0"] = get_text_from_lid("FR", get_random_question(0).TEXT_LID)
+    data["questions"]["QA_1"] = get_text_from_lid("FR", get_random_question(1).TEXT_LID)
+    data["traits"] = get_traits(lang)
     return data, reactions_table
 
-def read_image(path:str):
+
+def read_image(path: str) -> bytes:
     try:
-        with open(path, "rb") as f:
-            return f.read()
+        with open(path, "rb") as file:
+            return file.read()
     except IOError:
         return None
 
-def get_trait_id_from_string(trait):
+
+def get_trait_id_from_string(trait: str) -> int:
     return get_trait_from_text(trait)
+
 
 def get_npc_image(npc_id):
     return read_image(f"./truthseeker/static/images/npc/{npc_id}/0.png")

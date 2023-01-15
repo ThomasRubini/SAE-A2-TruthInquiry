@@ -1,10 +1,10 @@
 import os
+import random
+import truthseeker.logic.data_persistance.tables as tables
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy import engine as eg
-import random
-import truthseeker.logic.data_persistance.tables as tables
 
 url_object = eg.URL.create(
     "mariadb+pymysql",
@@ -17,7 +17,8 @@ url_object = eg.URL.create(
 engine = create_engine(url_object)
 session = Session(engine)
 
-def get_text_from_lid(lang,lid) -> str:
+
+def get_text_from_lid(lang, lid) -> str:
     return session.query(tables.Locale).filter_by(LANG=lang, TEXT_ID=lid).one().TEXT
 
 def get_random_place() -> tables.Place:
@@ -31,12 +32,12 @@ def get_npc_random_trait_id(npc) -> int:
     reaction = random.choice(reactions)
     return reaction.TRAIT_ID
 
-def get_npc_random_answer(npc, QA_TYPE) -> tables.Answer :
-    answers = session.query(tables.Answer).filter_by(QA_TYPE=QA_TYPE,NPC_ID=npc.NPC_ID).all()
+def get_npc_random_answer(npc, qa_type) -> tables.Answer :
+    answers = session.query(tables.Answer).filter_by(QA_TYPE=qa_type,NPC_ID=npc.NPC_ID).all()
     return random.choice(answers)
 
-def get_random_question(QA_TYPE) -> tables.Answer :
-    answers = session.query(tables.Question).filter_by(QUESTION_TYPE=QA_TYPE).all()
+def get_random_question(qa_type) -> tables.Answer :
+    answers = session.query(tables.Question).filter_by(QUESTION_TYPE=qa_type).all()
     return random.choice(answers)
 
 def get_trait_from_text(text):

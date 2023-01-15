@@ -34,43 +34,37 @@ with Session(engine) as session:
         print(locale)
         session.add(locale)
         session.commit()
-    
-    
+
     print("adding places")
     for place in PLACES:
         print(place)
         session.add(place)
         session.commit()
 
-    
     print("adding NPCS")
     for npc in NPCS:
         print(npc)
         session.add(npc)
         session.commit()
-    
-    
+
     print("adding trait")
     for trait in TRAITS:
         print(trait)
         session.add(trait)
         session.commit()
-    
-    
+
     print("adding questions")
     for question in QUESTIONS:
         print(question)
         session.add(question)
         session.commit()
-    
-    
+
     print("adding answers")
     for answer in ANSWERS:
         print(answer)
         session.add(answer)
         session.commit()
-    
-    
+
     print("adding reactions")
     for reaction in REACTIONS:
         print(reaction)
