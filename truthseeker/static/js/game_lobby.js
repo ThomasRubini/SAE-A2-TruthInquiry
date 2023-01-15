@@ -1,4 +1,5 @@
 // Display functions
+
 /**
  * Display the invalid rounds count message element, by removing the hidden CSS class.
  *
@@ -57,10 +58,22 @@ function displayJoinRoomView() {
     document.getElementsByClassName("join_room_view")[0].classList.remove("hidden");
 }
 
-
+/**
+ * Hide the join room view, by removing the hidden CSS class on the first join_room_view element.
+ */
 function hideJoinRoomView() {
     document.getElementsByClassName("join_room_view")[0].classList.add("hidden");
 }
+
+/**
+ * Display the room view, by removing the hidden CSS class on the first
+ * multi_player_mode_waiting_for_host element.
+ */
+function displayWaitingForHostMessage() {
+    document.getElementsByClassName("multi_player_mode_waiting_for_host")[0].classList
+        .remove("hidden");
+}
+
 /**
  * Show an error message on the first game_start_failed CSS element.
  *
@@ -121,6 +134,7 @@ function joinRoom() {
     }
 
     hideInvalidNickNameErrorMessage();
+    displayWaitingForHostMessage();
     data = {}
     data["username"] = document.getElementById("game_username").value;
     data["game_id"] = getRoomCode();
@@ -132,6 +146,7 @@ function joinRoom() {
         hideJoinRoomView();
     })
 }
+
 // Room code functions
 
 /**
@@ -366,6 +381,8 @@ async function initLobby() {
             displayMultiPlayerModeChoices();
             setListenersToGameButtons();
             setListenerToCopyCodeButton();
+        } else {
+            displayWaitingForHostMessage();
         }
 
         displayPlayerList();
