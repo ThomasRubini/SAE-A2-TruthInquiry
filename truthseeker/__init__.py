@@ -23,7 +23,10 @@ class TruthSeekerApp(flask.Flask):
 
         self.config["SECRET_KEY"] = os.getenv("FLASK_SECRET")
 
-        self.socketio_app = SocketIO(self,cors_allowed_origins=["https://truthinquiry.simailadjalim.fr","http://127.0.0.1:5000"])
+        self.socketio_app = SocketIO(
+            self,
+            cors_allowed_origins=(os.getenv("ORIGIN"), "http://127.0.0.1:5000", "http://localhost:5000")
+        )
 
         self.discord_bot = discord_bot.DiscordBot()
         token = os.getenv("DISCORD_BOT_TOKEN")
