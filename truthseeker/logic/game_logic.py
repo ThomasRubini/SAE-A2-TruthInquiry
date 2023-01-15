@@ -5,15 +5,17 @@ from typing import Union
 from truthseeker.logic.data_persistance.data_access import *
 from truthseeker import APP
 
-def random_string(length: int) ->str:
+
+def random_string(length: int) -> str:
     """
-    This function create a random string as long as the lint passed as 
+    This function create a random string as long as the lint passed as
     parameter
-    
+
     :param length: the length of the random string to create
     :return: a random string
     """
     return "".join(random.choice(string.ascii_letters) for _ in range(length))
+
 
 class Member:
     """
@@ -23,28 +25,29 @@ class Member:
     :attr TODO progress: TODO
     :attr TODO results: TODO
     """
-    
+
     def __init__(self, username):
         self.username = username
         self.progress = 0
         self.results = None
 
     def __str__(self) -> str:
-        return "Member[username={}]".format(self.username)
+        return f"Member[username={self.username}]"
 
     def __repr__(self) -> str:
         return self.__str__()
+
 
 class Game:
     """
     The game info class stores all information linked to a active game
 
-    :attr str game_id: str, the game identifier of the game
+    :attr str game_id: the game identifier of the game
     :attr owner  Member: the player start created the game. It is also stored in self.members
     :attr Member[] members: the members of the game
-    :attr bool has_started: TODO
-    :attr TODO gamedata: TODO
-    :attr TODO reaction_table: TODO
+    :attr bool has_started: status of the current game
+    :attr dict gamedata: data of the game (npcs, their text, their reactions and rooms placement)
+    :attr dict reaction_table: mapping of the npc_ids in the game to their reactions id
     """
 
     def __init__(self):
@@ -65,20 +68,22 @@ class Game:
         self.owner = Member(username)
         self.members.append(self.owner)
         return self.owner
-    
-    def generate_game_results(self) -> None:
+
+    def generate_game_results(self) -> dict:
         """
-        TODO + TODO RET TYPE
+        Create the final leaderboard of the game, containing all members score.
+
+        :return: a dictionnary representation of the leaderboard
         """
         data = {}
         npcs = data["npcs"] = {}
         for npc_id in self.gamedata["npcs"]:
             npcs[npc_id] = {}
             npcs[npc_id]["name"] = self.gamedata["npcs"][npc_id]["name"]
-            traitId = self.reaction_table[npc_id]
-            trait = get_trait_from_trait_id(traitId)
-            npcs[npc_id]["reaction"] = get_text_from_lid("FR",trait.NAME_LID)
-            npcs[npc_id]["description"] = get_reaction_description("FR",npc_id,trait.TRAIT_ID)
+            trait_id = self.reaction_table[npc_id]
+            trait = get_trait_from_trait_id(trait_id)
+            npcs[npc_id]["reaction"] = get_text_from_lid("FR", trait.NAME_LID)
+            npcs[npc_id]["description"] = get_reaction_description("FR", npc_id, trait.TRAIT_ID)
         player_results = data["player"] = {}
         for member in self.members:
             player_results[member.username] = member.results
@@ -86,9 +91,9 @@ class Game:
 
     def generate_data(self) -> None:
         """
-        TODO
+        Creates and sets the game's data (npcs, their text, their reactions and rooms placement)
         """
-        #TODO Get language from player
+#       TODO Get language from player
         self.gamedata, self.reaction_table = generate_game_data("FR")
         self.gamedata["game_id"] = self.game_id
 
@@ -97,12 +102,12 @@ class Game:
         Get a Member object from a username
 
         :param username: the username of the member to search for
-        :return the member corresponding to the username, or None if none if found:
+        :return: the member corresponding to the username, or None if none if found:
         """
         for member in self.members:
             if member.username == username:
                 return member
-        
+
     def add_member(self, username: str) -> Union[Member, None]:
         """
         Add a Member to the game
@@ -116,18 +121,25 @@ class Game:
         self.members.append(member)
         return member
 
-    def get_npc_reaction(self, npc_id) -> None:
+    def get_npc_reaction(self, npc_id) -> bytes:
         """
-        TODO + TODO TYPES
+        Returns the reaction image of a npc, if found in the reaction table
+
+        :param npc_id: the id of the npc, to get the reactions from, must be in the current game
+        :return: the reaction image as bytes
         """
-        if npc_id not in self.reaction_table.keys():
+        if npc_id not in self.reaction_table:
             return 0
         reaction_id = self.reaction_table[npc_id]
         return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
-    
-    def get_player_results(self, responses: dict) -> None:
+
+    def get_player_results(self, responses: dict) -> Union[dict, None]:
         """
-        TODO + TODO RETTYPE
+        Checks the player's answers againts the reaction map.
+        Return None when a npc is not found in the reaction table, meaning an invalid npc was sent
+
+        :param responses: the player anwsers, a dictionnary of npc_id to the string representation of the npc's reaction
+        :return: a dictionnary of npc_id to a boolean, true if they got the correct answer, false if not.
         """
         results = {}
         try:
@@ -138,26 +150,27 @@ class Game:
         except:
             return False
 
-
     def has_finished(self) -> bool:
         """
         Checks if the game has finished by checking if every Member has submitted answers
-        
+
         :return: True if the game has finished, else False
         """
         for member in self.members:
-            if member.results == None : return False
+            if member.results is None:
+                return False
         return True
 
     def __str__(self) -> str:
-        return "Game[game_id={}, owner={}, members={}]".format(self.game_id, self.owner, self.members)
+        return f"Game[game_id={self.game_id}, owner={self.owner}, members={self.members}]"
 
     def __repr__(self) -> str:
         return self.__str__()
 
+
 def create_game(owner: str) -> Game:
     """
-    This function creates a new game by creating a Game object and stores 
+    This function creates a new game by creating a Game object and stores
     it into the games_list dictionnary
 
     :return: a new Game
@@ -168,6 +181,7 @@ def create_game(owner: str) -> Game:
     game.game_id = random_string(6)
     APP.games_list[game.game_id] = game
     return game
+
 
 def get_game(game_id: str) -> Union[Game, None]:
     """
@@ -181,6 +195,7 @@ def get_game(game_id: str) -> Union[Game, None]:
     else:
         return None
 
+
 def check_username(username: str) -> bool:
     """
     Check if a username is valid using a set of rules
@@ -188,7 +203,7 @@ def check_username(username: str) -> bool:
     :param username: the username to check
     :return: True or False depending on if the rules are respected
     """
-    
+
     if not username:
         return False
     if not username.isalnum():
@@ -197,44 +212,69 @@ def check_username(username: str) -> bool:
         return False
     if not len(username) < 16:
         return False
-    
+
     return True
 
+
 def generate_npc_text(npc: tables.Npc, lang: str) -> dict:
+    """
+    Creates the dictionnary of a npc names and dialogs, it searches the npc's pool of answser for both question
+    types
+
+    :param npc: a Npc object
+    :param lang: the lang to get the text in
+    :return: a dictionnary object containing the npc's name and both answers
+    """
     data = {}
     data["name"] = get_text_from_lid(lang, npc.NAME_LID)
-    data["QA_0"] = get_text_from_lid(lang, get_npc_random_answer(npc,0).TEXT_LID)
-    data["QA_1"] = get_text_from_lid(lang, get_npc_random_answer(npc,1).TEXT_LID)
+    data["QA_0"] = get_text_from_lid(lang, get_npc_random_answer(npc, 0).TEXT_LID)
+    data["QA_1"] = get_text_from_lid(lang, get_npc_random_answer(npc, 1).TEXT_LID)
     return data
 
-def generate_npc_reactions(npc: tables.Npc) ->list:
-    return get_npc_random_trait_id(npc)
 
-def generate_place_data(npcs: list, places: list, lang: str) -> dict:
+def generate_place_data(npc_list: list, places: list, lang: str) -> dict:
+    """
+    Create the place dictionnary for a game, assigns two npc for each room given in the place_list
+    except the last one who will be alone :(
+
+    :param npcs_list: the list of all npcs in the game
+    :param place_list: the list of the given rooms
+    :param lang: the language to seach the name of the room in
+    :return: a dictionnary of place_id to an array of npc_id and a string of the room name
+    """
     data = {}
-    random.shuffle(npcs)
+    random.shuffle(npc_list)
     for place in places:
         placedata = data[str(place.PLACE_ID)] = {}
-        placedata["name"] = get_text_from_lid(lang,place.NAME_LID)
+        placedata["name"] = get_text_from_lid(lang, place.NAME_LID)
         placedata["npcs"] = []
-        for _ in npcs:
-            placedata["npcs"].append(npcs.pop().NPC_ID)
-            if len(placedata["npcs"]) == 2: break
+        for _ in npc_list:
+            placedata["npcs"].append(npc_list.pop().NPC_ID)
+            if len(placedata["npcs"]) == 2:
+                break
     return data
 
 
-def generate_game_data(LANG):
+def generate_game_data(lang: str) -> tuple[dict, dict]:
+    """
+    Create the gamedata of a game for a given language, chooses 5 random npcs, generate their texts and reactions,
+    chooses 3 random rooms and places the npcs in them and chooses an inspector question for each type of question
+    availible in the Question Table.
+
+    :param lang: the lang to generate all the texts in
+    :return: two dictionnaries, one containing the game data, the second containing the reaction table
+    """
     data = {}
     data["npcs"] = {}
     reactions_table = {}
     npcs = []
     while len(npcs) != 5:
         npc = get_random_npc()
-        if npc not in npcs :
+        if npc not in npcs:
             npcs.append(npc)
     for npc in npcs:
-        data["npcs"][str(npc.NPC_ID)] = generate_npc_text(npc,LANG)
-        reactions_table[str(npc.NPC_ID)] = generate_npc_reactions(npc)
+        data["npcs"][str(npc.NPC_ID)] = generate_npc_text(npc, lang)
+        reactions_table[str(npc.NPC_ID)] = get_npc_random_trait_id(npc)
 
     places = []
     while len(places) != 3:
@@ -242,22 +282,43 @@ def generate_game_data(LANG):
         if place not in places:
             places.append(place)
 
-    data["rooms"] = generate_place_data(npcs,places,LANG)
+    data["rooms"] = generate_place_data(npcs, places, lang)
     data["questions"] = {}
-    data["questions"]["QA_0"] = get_text_from_lid("FR",get_random_question(0).TEXT_LID)
-    data["questions"]["QA_1"] = get_text_from_lid("FR",get_random_question(1).TEXT_LID)
-    data["traits"] = get_traits(LANG)
+    data["questions"]["QA_0"] = get_text_from_lid("FR", get_random_question(0).TEXT_LID)
+    data["questions"]["QA_1"] = get_text_from_lid("FR", get_random_question(1).TEXT_LID)
+    data["traits"] = get_traits(lang)
     return data, reactions_table
 
-def read_image(path:str):
+
+def read_image(path: str) -> bytes:
+    """
+    Returns the byte representation of an image given its path
+
+    :param path: the path to the image
+    :return: the byte representation of the image, none if its not found or not readable
+    """
     try:
-        with open(path, "rb") as f:
-            return f.read()
+        with open(path, "rb") as file:
+            return file.read()
     except IOError:
         return None
 
-def get_trait_id_from_string(trait):
+
+def get_trait_id_from_string(trait: str) -> int:
+    """
+    Returns the trait_id from its text value
+
+    :param text: the text representation of the trait in any lang
+    :return: the trait_id linked to this text
+    """
     return get_trait_from_text(trait)
 
-def get_npc_image(npc_id):
+
+def get_npc_image(npc_id: int):
+    """
+    Returns the byte representation of the neutral image for an npc
+
+    :param npc_id: npc to get the neutral image from
+    :return: the byte representation of the image, none if its not found or not readable
+    """
     return read_image(f"./truthseeker/static/images/npc/{npc_id}/0.png")

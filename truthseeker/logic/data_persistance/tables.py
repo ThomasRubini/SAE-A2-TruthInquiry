@@ -4,6 +4,7 @@ from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
+
 class Locale(Base):
     __tablename__ = 'T_LOCALE'
     TEXT_ID = Column(Integer, primary_key=True)
@@ -18,6 +19,7 @@ class Locale(Base):
     def __str__(self):
         return f"{self.TEXT_ID}  {self.LANG} {self.TEXT}"
 
+
 class Place(Base):
     __tablename__ = 'T_PLACE'
     PLACE_ID = Column(Integer, primary_key=True)
@@ -30,6 +32,7 @@ class Place(Base):
 
     def __str__(self):
         return f"{self.PLACE_ID} {self.NAME_LID}"
+
 
 class Question(Base):
     __tablename__ = "T_QUESTION"
@@ -45,6 +48,7 @@ class Question(Base):
 
     def __str__(self):
         return f"{self.QUESTION_ID} {self.QUESTION_TYPE} {self.TEXT_LID}"
+
 
 class Answer(Base):
     __tablename__ = "T_ANSWER"
@@ -64,6 +68,7 @@ class Answer(Base):
     def __str__(self):
         return f"{self.ANSWER_ID} {self.QA_TYPE} {self.NPC_ID} {self.TEXT_LID}"
 
+
 class Npc(Base):
     __tablename__ = "T_NPC"
     NPC_ID = Column(Integer, primary_key=True)
@@ -75,6 +80,7 @@ class Npc(Base):
 
     def __str__(self) -> str:
         return f"{self.NPC_ID} {self.NAME_LID}"
+
 
 class Trait(Base):
     __tablename__ = "T_TRAIT"
@@ -88,11 +94,12 @@ class Trait(Base):
     def __str__(self) -> str:
         return f"{self.TRAIT_ID} {self.NAME_LID}"
 
+
 class Reaction(Base):
     __tablename__ = "T_REACTION"
     REACTION_ID = Column(Integer, primary_key=True)
-    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"),primary_key=True)
-    TRAIT_ID = Column(Integer, ForeignKey("T_TRAIT.TRAIT_ID"),primary_key=True)
+    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True)
+    TRAIT_ID = Column(Integer, ForeignKey("T_TRAIT.TRAIT_ID"), primary_key=True)
     DESC_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"))
     LOCALE = relationship("Locale")
     NPC = relationship("Npc")
