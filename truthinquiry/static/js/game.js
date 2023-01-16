@@ -79,6 +79,19 @@ function getNpcLocationAndPartner(npcid) {
     return data;
 }
 
+function disableCulpritButtons(culprit_choices_element, selected_suspect) {
+    let childrenCulpritChoicesElement = culprit_choices_element.children;
+    for (let index = 0; index < childrenCulpritChoicesElement.length; index++) {
+        let child = childrenCulpritChoicesElement[index];
+        if (selected_suspect != child) {
+            child.getElementsByClassName("culprit_btn")[0].classList.add("hidden");
+        } else {
+            child.getElementsByClassName("culprit_unchecked_icon")[0].classList.add("hidden");
+            child.getElementsByClassName("culprit_checked_icon")[0].classList.remove("hidden");
+            child.getElementsByClassName("culprit_btn")[0].classList.add("culprit_btn_checked");
+        }
+    }
+}
 
 function getCulprit() {
     culprit = null;
@@ -154,21 +167,25 @@ function renderAnswerSelectionPanel() {
         });
 
         suspect.appendChild(suspect_emotion_chooser);
+
         let img = document.createElement('img');
         img.classList.add("suspect_picture");
         img.src = "/api/v1/getNpcImage?npcid=" + element;
         suspect.appendChild(img);
+
         let button = document.getElementById("culpritButton");
         let button_clone = button.cloneNode(true);
+        let culprit_choices = document.getElementById("culprits_choices");
+
         button_clone.addEventListener("click", () => {
+            disableCulpritButtons(culprit_choices, suspect);
             sendAnswers();
-            //TODO Make this button green when clicked, and reset all other green button if any 
         });
 
         button_clone.removeAttribute("id");
         button_clone.classList.remove("hidden");
         suspect.appendChild(button_clone);
-        document.getElementById("culprits_choices").appendChild(suspect);
+        culprit_choices.appendChild(suspect);
     });
 }
 
