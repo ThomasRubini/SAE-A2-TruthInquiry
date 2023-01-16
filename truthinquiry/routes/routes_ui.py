@@ -22,6 +22,10 @@ def licenses():
 def legal():
     return flask.render_template("legal.html")
 
+@routes_ui.route("/docs")
+def doc():
+    return flask.render_template("doc.html")
+
 @routes_ui.route("/lobby")
 def lobbyRedirect():
     return flask.redirect("/")
