@@ -14,7 +14,7 @@ url_object = eg.URL.create(
     port=os.getenv("DB_PORT"),
     database=os.getenv("DB_DBNAME"),
 )
-engine = create_engine(url_object)
+engine = create_engine(url_object, pool_pre_ping=True, pool_recycle=300)
 session = Session(engine)
 
 
