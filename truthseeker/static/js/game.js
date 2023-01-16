@@ -195,7 +195,7 @@ function initSock(){
         console.log(username);
     });
     
-    socket.on("gamefinshed", (finalResults) => {
+    socket.on("gamefinished", (finalResults) => {
         hide("emotion_and_culprit_choices");
         console.log(finalResults);
         for (const player in finalResults["player"]){
