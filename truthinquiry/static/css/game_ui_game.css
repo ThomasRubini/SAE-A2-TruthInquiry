@@ -17,6 +17,8 @@ html {
     background-size: cover;
     position: fixed;
     height: 100%;
+    left: 0;
+    top: 0;
     width: 100%;
     /* Place the background behind everything */
     z-index: -9999;
