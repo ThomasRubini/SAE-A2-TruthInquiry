@@ -170,8 +170,12 @@ html {
 .player_names {
     border: 0.25em white solid;
     border-radius: 0.75em;
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 1.25em;
     max-height: 12em;
+    min-width: 25em;
     overflow-y: scroll;
+    padding: 0.25em;
 }
 
 .player_name {
