@@ -1,8 +1,8 @@
 import json
 import flask
 
-from truthseeker import APP
-from truthseeker.logic import game_logic
+from truthinquiry import APP
+from truthinquiry.logic import game_logic
 
 
 routes_api = flask.Blueprint("api", __name__)

@@ -2,8 +2,8 @@ import string
 import random
 from typing import Union
 
-from truthseeker.logic.data_persistance.data_access import *
-from truthseeker import APP
+from truthinquiry.logic.data_persistance.data_access import *
+from truthinquiry import APP
 
 
 def random_string(length: int) -> str:
@@ -131,7 +131,7 @@ class Game:
         if npc_id not in self.reaction_table:
             return 0
         reaction_id = self.reaction_table[npc_id]
-        return read_image(f"./truthseeker/static/images/npc/{npc_id}/{reaction_id}.png")
+        return read_image(f"./truthinquiry/static/images/npc/{npc_id}/{reaction_id}.png")
 
     def get_player_results(self, responses: dict) -> Union[dict, None]:
         """
@@ -321,4 +321,4 @@ def get_npc_image(npc_id: int):
     :param npc_id: npc to get the neutral image from
     :return: the byte representation of the image, none if its not found or not readable
     """
-    return read_image(f"./truthseeker/static/images/npc/{npc_id}/0.png")
+    return read_image(f"./truthinquiry/static/images/npc/{npc_id}/0.png")

@@ -1,6 +1,6 @@
 import os
 import random
-import truthseeker.logic.data_persistance.tables as tables
+import truthinquiry.logic.data_persistance.tables as tables
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
