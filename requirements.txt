@@ -1,8 +1,6 @@
 Flask==2.2.2
-pyjwt==2.6.0
 Flask-SocketIO==5.3.2
 SQLAlchemy==1.4.20
 pymysql==1.0.2
-discord.py==2.1.0
 discord.py==2.1.0
 python-dotenv==0.21.0
