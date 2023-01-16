@@ -3,10 +3,10 @@ import os
 import flask
 from flask_socketio import SocketIO
 
-from truthseeker import discord_bot
+from truthinquiry import discord_bot
 
 
-class TruthSeekerApp(flask.Flask):
+class TruthInquiryApp(flask.Flask):
     """
     Main class of the app
     A single instance 'APP' of this class will be created and shared across the files
@@ -17,7 +17,7 @@ class TruthSeekerApp(flask.Flask):
     """
 
     def __init__(self):
-        super().__init__("truthseeker")
+        super().__init__("truthinquiry")
 
         self.games_list = {}
 
@@ -35,9 +35,9 @@ class TruthSeekerApp(flask.Flask):
         else:
             print("No token set. Not starting discord bot")
 
-APP = TruthSeekerApp()
+APP = TruthInquiryApp()
 
-from truthseeker.routes import routes_api, routes_ui, routes_socketio
+from truthinquiry.routes import routes_api, routes_ui, routes_socketio
 
 APP.register_blueprint(routes_api.routes_api, url_prefix="/api/v1")
 APP.register_blueprint(routes_ui.routes_ui, url_prefix="/")
