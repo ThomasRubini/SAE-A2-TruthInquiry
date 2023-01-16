@@ -270,11 +270,12 @@ async function hasJoinedRoom() {
 function copyTextToClipboard(textToCopy) {
     if (!navigator.clipboard) {
         alert("Votre navigateur ne supporte pas l'API Clipboard. Veuillez copier le texte en ouvrant le menu contextuel de votre navigateur sur le lien et sélectionner l'option pour copier le lien.");
+        return;
     }
     navigator.clipboard.writeText(textToCopy).then(() => {
-        alert("Code copié avec succès dans le presse-papiers.");
+        alert("Lien copié avec succès dans le presse-papiers.");
     }, () => {
-        alert("Impossible de copier le texte. Vérifiez si vous avez donné la permission d'accès au presse-papiers pour le site de Thruth Inquiry dans les paramètres de votre navigateur.");
+        alert("Impossible de copier le lien. Vérifiez si vous avez donné la permission d'accès au presse-papiers pour le site de Thruth Inquiry dans les paramètres de votre navigateur.");
     });
 }
 
