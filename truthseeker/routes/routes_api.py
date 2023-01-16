@@ -114,6 +114,8 @@ def get_data():
     response = {}
     response["error"] = 0
     response["gamedata"] = game.gamedata
+    response["username"] = flask.session["username"]
+
     return response
 
 @routes_api.route("/getNpcImage", methods=["GET", "POST"])

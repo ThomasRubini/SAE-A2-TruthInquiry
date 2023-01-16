@@ -1,9 +1,7 @@
 var npcs_ids = []
 var gamedata = {}
 var currentNpc = null
-
-//TODO ask the server for the user's score or username 
-var score = null
+var username = null
 
 function show(className){
     document.getElementsByClassName(className)[0].classList.remove("hidden");
@@ -208,7 +206,9 @@ function initSock(){
     socket.on("gamefinished", (finalResults) => {
         hide("emotion_and_culprit_choices");
         console.log(finalResults);
+        document.getElementsByClassName("reveal_score")[0].textContent = Object.values(finalResults["player"][username]).filter(x => x==true).length +"/5"
         for (const player in finalResults["player"]){
+            if(player === username){continue}
             let playerNode = document.createElement("h3")
             playerNode.classList.add("player_name_and_score")
             let playerResultArray = Object.values(finalResults["player"][player])
@@ -246,6 +246,7 @@ async function setGameData(){
     data = {};
     response = await makeAPIRequest("getGameData");
     gamedata = response["gamedata"];
+    username = response["username"]
     npcs_ids = Object.keys(gamedata["npcs"]).sort((a, b) => 0.5 - Math.random())
 }
 
