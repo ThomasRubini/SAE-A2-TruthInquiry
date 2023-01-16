@@ -14,19 +14,25 @@ ___
 ## How to run
 
 In ordre to run the server you will need ```python3``` and ```python3-pip```. 
+
 Then to install the depedencies run ```pip install -r requirement.txt```. 
 
 If you want to contribute you may install the dev dependecies as well : ```pip install -r dev-requirement.txt```
 
 You will need to create the .env file from the .env.dist and fill the parameters. Do take note that this website was conceived to run on a mariadb sql database, however this can be easly changed in the data_access.py file. In order to fill the remote database with the data availible in this repo you will need to run the remote.py script : ```python3 truthinquiry/logic/data_persistance/remote.py ```
 
-To launch the web server just run the command ```flask run```
-To run the test run the command ```python3 -m pytest --verbose```
+To launch the web server just run the command ```flask run```.
+
+To run the tests, run the command ```python3 -m pytest --verbose```.
 
 ## Contributors
 
 [BIGA Paul](https://github.com/SujetDelta)
+
 [CAZALS Matthias](https://github.com/mathiascazals)
+
 [RUBINI Thomas](https://github.com/ThomasRubini)
+
 [SIMAILA Djalim](https://github.com/DjalimSimaila)
+
 [V Audric](https://github.com/AudricV)
