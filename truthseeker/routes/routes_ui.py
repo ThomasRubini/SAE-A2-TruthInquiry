@@ -22,10 +22,17 @@ def licenses():
 def legal():
     return flask.render_template("legal.html")
 
+@routes_ui.route("/lobby")
+def lobbyRedirect():
+    return flask.redirect("/")
+
 
 @routes_ui.route("/lobby/<game_id>")
 def lobby(game_id):
     # rendered by the javascript client-side
+    print(game_id)
+    if game_id is None:
+        return flask.redirect("")
     return flask.render_template("lobby.html", gameid=game_id)
 
 
