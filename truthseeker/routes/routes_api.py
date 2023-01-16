@@ -196,7 +196,7 @@ def check_anwser():
     member.results = results
     if game.has_finished():
         json_game_results = game.generate_game_results()
-        APP.socketio_app.emit("gamefinshed", json_game_results, room="game."+game.game_id)
+        APP.socketio_app.emit("gamefinished", json_game_results, room="game."+game.game_id)
         del game
     response = {"error": 0}
     return response
