@@ -30,6 +30,11 @@ function setQuestionButtonsListeners(){
     document.getElementById("QA_1").addEventListener("click",askTypeOneQuestion);
 }
 
+function removeQuestionButtonsListeners(){
+    document.getElementById("QA_0").removeEventListener("click",askTypeZeroQuestion);
+    document.getElementById("QA_1").removeEventListener("click",askTypeOneQuestion);
+}
+
 function goBackToInterogation(){
     hide("interrogation_suspect");
     show("interrogation");
@@ -79,6 +84,7 @@ function getCulprit(){
 }
 
 async function askTypeOneQuestion(){
+    removeQuestionButtonsListeners();
     partnerId = getNpcLocationAndPartner(currentNpc)["partner"];
     anwser = gamedata["npcs"][currentNpc]["QA_1"];
     anwser = anwser.replace("{NPC}",gamedata["npcs"][partnerId]["name"]);
@@ -90,10 +96,13 @@ async function askTypeOneQuestion(){
     document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
     hide("question_answer");
     document.getElementsByClassName("suspect_answer")[0].textContent = "";
+    setQuestionButtonsListeners();
 }
 
 
 async function askTypeZeroQuestion(){
+    removeQuestionButtonsListeners();
+    document.getElementById("QA_0")
     room = getNpcLocationAndPartner(currentNpc)["room"];
     anwser = gamedata["npcs"][currentNpc]["QA_0"];
     anwser = anwser.replace("{SALLE}",room);
@@ -105,6 +114,7 @@ async function askTypeZeroQuestion(){
     document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
     hide("question_answer");
     document.getElementsByClassName("suspect_answer")[0].textContent = "";
+    setQuestionButtonsListeners();
 }
 
 async function sendAnswers(){
