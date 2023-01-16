@@ -1,9 +1,7 @@
 var npcs_ids = []
 var gamedata = {}
 var currentNpc = null
-
-//TODO ask the server for the user's score or username 
-var score = null
+var username = null
 
 function show(className){
     document.getElementsByClassName(className)[0].classList.remove("hidden");
@@ -28,6 +26,11 @@ function setListenerToInterrogationNextBtn(){
 function setQuestionButtonsListeners(){
     document.getElementById("QA_0").addEventListener("click",askTypeZeroQuestion);
     document.getElementById("QA_1").addEventListener("click",askTypeOneQuestion);
+}
+
+function removeQuestionButtonsListeners(){
+    document.getElementById("QA_0").removeEventListener("click",askTypeZeroQuestion);
+    document.getElementById("QA_1").removeEventListener("click",askTypeOneQuestion);
 }
 
 function goBackToInterogation(){
@@ -79,6 +82,7 @@ function getCulprit(){
 }
 
 async function askTypeOneQuestion(){
+    removeQuestionButtonsListeners();
     partnerId = getNpcLocationAndPartner(currentNpc)["partner"];
     anwser = gamedata["npcs"][currentNpc]["QA_1"];
     anwser = anwser.replace("{NPC}",gamedata["npcs"][partnerId]["name"]);
@@ -90,10 +94,13 @@ async function askTypeOneQuestion(){
     document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
     hide("question_answer");
     document.getElementsByClassName("suspect_answer")[0].textContent = "";
+    setQuestionButtonsListeners();
 }
 
 
 async function askTypeZeroQuestion(){
+    removeQuestionButtonsListeners();
+    document.getElementById("QA_0")
     room = getNpcLocationAndPartner(currentNpc)["room"];
     anwser = gamedata["npcs"][currentNpc]["QA_0"];
     anwser = anwser.replace("{SALLE}",room);
@@ -105,6 +112,7 @@ async function askTypeZeroQuestion(){
     document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
     hide("question_answer");
     document.getElementsByClassName("suspect_answer")[0].textContent = "";
+    setQuestionButtonsListeners();
 }
 
 async function sendAnswers(){
@@ -198,7 +206,9 @@ function initSock(){
     socket.on("gamefinished", (finalResults) => {
         hide("emotion_and_culprit_choices");
         console.log(finalResults);
+        document.getElementsByClassName("reveal_score")[0].textContent = Object.values(finalResults["player"][username]).filter(x => x==true).length +"/5"
         for (const player in finalResults["player"]){
+            if(player === username){continue}
             let playerNode = document.createElement("h3")
             playerNode.classList.add("player_name_and_score")
             let playerResultArray = Object.values(finalResults["player"][player])
@@ -236,6 +246,7 @@ async function setGameData(){
     data = {};
     response = await makeAPIRequest("getGameData");
     gamedata = response["gamedata"];
+    username = response["username"]
     npcs_ids = Object.keys(gamedata["npcs"]).sort((a, b) => 0.5 - Math.random())
 }
 
