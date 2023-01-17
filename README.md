@@ -27,8 +27,6 @@ To run the tests, run the command ```python3 -m pytest --verbose```.
 
 ## Contributors
 
-[BIGA Paul](https://github.com/SujetDelta)
-
 [CAZALS Matthias](https://github.com/mathiascazals)
 
 [RUBINI Thomas](https://github.com/ThomasRubini)
@@ -36,3 +34,5 @@ To run the tests, run the command ```python3 -m pytest --verbose```.
 [SIMAILA Djalim](https://github.com/DjalimSimaila)
 
 [V Audric](https://github.com/AudricV)
+
+[SujetDelta](https://github.com/SujetDelta)
