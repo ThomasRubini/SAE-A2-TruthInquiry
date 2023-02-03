@@ -5,6 +5,10 @@ from flask_socketio import SocketIO
 
 from truthinquiry import discord_bot
 
+from sqlalchemy import engine as eg
+
+from flask_sqlalchemy import SQLAlchemy
+
 
 class TruthInquiryApp(flask.Flask):
     """
@@ -23,6 +27,8 @@ class TruthInquiryApp(flask.Flask):
 
         self.config["SECRET_KEY"] = os.getenv("FLASK_SECRET")
 
+        self.setupdb()
+
         self.socketio_app = SocketIO(
             self,
             cors_allowed_origins=(os.getenv("ORIGIN"), "http://127.0.0.1:5000", "http://localhost:5000")
@@ -34,6 +40,22 @@ class TruthInquiryApp(flask.Flask):
             self.discord_bot.start(token)
         else:
             print("No token set. Not starting discord bot")
+    
+    def setupdb(self):
+        db_url = eg.URL.create(
+            "mariadb+pymysql",
+            username=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_DBNAME")
+        )
+
+        self.config["SQLALCHEMY_DATABASE_URI"] = db_url
+
+        self.db = SQLAlchemy(self)
+
+
 
 APP = TruthInquiryApp()
 
