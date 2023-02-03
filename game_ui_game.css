@@ -1,0 +1,379 @@
+:root {
+    --grey-color: #5A5656;
+    --red-color: #BD1E1E;
+}
+
+html {
+    background-color: black;
+    color: white;
+}
+
+.game_app {
+    margin: 0;
+}
+
+.current_background {
+    background-position: center;
+    background-size: cover;
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Place the background behind everything */
+    z-index: -9999;
+}
+
+.action_button, .scores, .summary {
+    font-family: "Titan One", sans-serif;
+}
+
+.anwser_title, .emotion_and_culprit_choices_title, .introduction_text, .introduction_title, .interrogation_title, .results_title, .reveal_culprit_title, .score_title, .summary_title {
+    font-family: "Spicy Rice", serif;
+}
+
+.introduction_title, .results_title, .summary_title {
+    font-size: 4em;
+}
+
+.reveal_culprit_explaination, .explain_suspect_emotion_description, .reveal_score, .suspect_emotion_chooser, .suspect_answer, .suspect_picture[alt] {
+    font-family: "Roboto Mono", sans-serif;
+}
+
+.interrogation_title, .reveal_culprit_title, .reveal_score, .results_title, .score_title, .summary_title {
+    margin: 0.25em;
+}
+
+.reveal_culprit_explaination, .question_button, .return_button, .players_list, .reveal_culprit, .scores, .summary, .suspect, .suspect_emotion_chooser {
+    margin: 1em;
+}
+
+.suspect_picture {
+    margin: 1em;
+    height: 15em;
+    width: 15em;
+}
+
+.suspect_picture[alt] {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    font-size: 1em;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Buttons */
+.action_button {
+    border-color: black;
+    border-style: solid;
+    border-width: 0.125em;
+    background-color: var(--red-color);
+    border-radius: var(--button-and-dialog-border-radius);
+    cursor: pointer;
+    font-size: 1.5em;
+    min-width: 10em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    overflow: hidden;
+    text-transform: uppercase;
+    transition: box-shadow 0.5s, transform 0.5s;
+}
+
+.action_button:hover {
+    box-shadow: 10px 10px 0px 0px black;
+    transform: translate(0.1em, 0.1em);
+}
+
+.next_btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    fill: var(--red-color);
+    height: 5em;
+    padding: 0;
+    transform: rotate(180deg);
+    width: 5em;
+}
+
+#emotion_and_culprit_choices_next_btn, #interrogation_next_btn, #interrogation_suspect_previous_btn {
+    position: fixed;
+    left: calc(100% - 6em);
+    top: 1em;
+}
+
+/* Introduction */
+.introduction {
+    padding: 1em;
+    max-width: 50vw;
+}
+
+.introduction_title {
+    color: var(--red-color);
+    font-weight: bold;
+    margin: 0;
+    text-align: left;
+}
+
+.introduction_text {
+    font-size: 2em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+/* Interrogation */
+.interrogation {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.interrogation_title {
+    color: var(--red-color);
+    font-size: 3em;
+    font-weight: bold;
+    max-width: calc(100vw - 2em);
+}
+
+.suspects {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.suspect {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.ask_button {
+    background-color: white;
+    color: black;
+    text-transform: none;
+}
+
+#interrogation_suspect_previous_btn {
+    margin-right: 1em;
+}
+
+.anwser_title {
+    font-size: 2.5em;
+    margin: 0.25em;
+}
+
+.suspect_answer {
+    font-size: 1.375em;
+    font-weight: bold;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* Emotion and culprit choices */
+.culprit_btn {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.culprit_icon {
+    fill: white;
+    height: 1em;
+    width: 1em;
+}
+
+.culprit_btn_text {
+    margin: 0;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+.culprit_btn_checked {
+    background-color: green;
+}
+
+.suspect_emotion_chooser {
+    background-color: var(--grey-color);
+    border: none;
+    border-radius: var(--button-and-dialog-border-radius);
+    color: white;
+    font-size: 1em;
+    padding: 0.5em;
+}
+
+.emotion_and_culprit_choices_title {
+    color: var(--red-color);
+    font-size: 2em;
+    margin: 0.5em;
+    text-align: center;
+}
+
+.question_button {
+    background-color: var(--grey-color);
+    border-radius: 2em;
+    text-transform: none;
+}
+
+.questions_and_image {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.questions_list {
+    align-content: center;
+    align-items: normal;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.question_answer {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Results and scores */
+.results_title {
+    color: var(--red-color);
+    font-weight: bold;
+    font-size: 4.5em;
+    text-align: center;
+}
+
+.summary {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.scores {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    min-width: 15em;
+}
+
+.reveal_and_scores {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.reveal_culprit_title {
+    color: var(--red-color);
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.score_title {
+    color: var(--red-color);
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.reveal_score {
+    align-items: center;
+    color: var(--red-color);
+    display: flex;
+    font-size: 2em;
+    justify-content: center;
+}
+
+.summary_title {
+    color: var(--red-color);
+    display: flex;
+    font-size: 4em;
+    flex-direction: row;
+    text-align: center;
+}
+
+.suspects_list {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1em;
+}
+
+#return_lobby_button {
+    background-color: transparent;
+    border: transparent;
+}
+
+.summary_suspect {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+}
+
+.reveal_culprit_explaination {
+    font-size: 1.25em;
+}
+
+.explain_suspect_emotion_title {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin: 0.5em;
+}
+
+.explain_suspect_emotion_description {
+    font-size: 1.25em;
+    font-weight: normal;
+    margin: 1em;
+}
+
+.player_score {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.player_name_and_score {
+    font-size: 1.5em;
+    font-weight: normal;
+    padding: 0.25em;
+}
+
+.reveal_culprit {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
