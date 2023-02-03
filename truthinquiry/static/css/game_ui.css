@@ -1,36 +1,49 @@
 /* Custom fonts */
 @font-face {
+    font-display: swap;
     font-family: "Spicy Rice";
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
     src: url("../fonts/spicy_rice_v21/spicy_rice_v21.woff2") format("woff2"), url("../fonts/spicy_rice_v21/spicy_rice_v21.woff") format("woff"), url("../fonts/spicy_rice_v21/spicy_rice_v21.ttf") format("truetype");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
+    font-display: swap;
     font-family: "Titan One";
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
     src: url("../fonts/titan_one_v13/titan_one_v13.woff2") format('woff2'), url("../fonts/titan_one_v13/titan_one_v13.woff") format('woff'), url("../fonts/titan_one_v13/titan_one_v13.ttf") format('truetype');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
+    font-display: swap;
     font-family: "Roboto Mono";
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
     src: url("../fonts/roboto_mono_v22/roboto_mono_v22.woff2") format('woff2'), url("../fonts/roboto_mono_v22/roboto_mono_v22.woff") format('woff'), url("../fonts/roboto_mono_v22/roboto_mono_v22.ttf") format('truetype');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Base elements */
+/* Common properties */
 :root {
+    /* Colors */
     color-scheme: dark;
-    --footer-links-height: 2em;
+    --alert-dialog-background-color: #000000DF;
+    --button-links-gray-color: #939393;
+    --dark-theme-background-color: #213C40;
+    --game-black: #000000;
+    --game-blue: #0096FF;
+    --game-green: #008000;
+    --game-grey: #5A5656;
+    --game-red: #BD1E1E;
+    --game-white: #FFFFFF;
+    --light-theme-background-color: #B1EDE8;
+    /* Sizes */
+    --body-margin: 0.375em;
     --button-and-dialog-border-radius: 1em;
+    --footer-links-height: 2em;
 }
   
 html {
@@ -38,17 +51,36 @@ html {
 }
 
 body {
-    --body-margin: 0.375em;
     margin: var(--body-margin);
+}
+
+.action_button {
+    background-color: var(--game-red);
+    border-color: var(--game-black);
+    border-radius: var(--button-and-dialog-border-radius);
+    border-style: solid;
+    border-width: 0.125em;
+    cursor: pointer;
+    overflow: hidden;
+    padding-bottom: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0.5em;
+    transition: box-shadow 0.5s, transform 0.5s;
+}
+
+.alert_dialog, .footer_links {
+    align-content: center;
+    align-items: center;
 }
 
 /* Themes */
 .dark {
-    background-color: #213C40;
+    background-color: var(--dark-theme-background-color);
 }
 
 .light {
-    background-color: #B1EDE8;
+    background-color: var(--light-theme-background-color);
 }
 
 /* Utility classes */
@@ -67,7 +99,7 @@ body {
 
 /* Footer */
 .footer_link {
-    color: white;
+    color: var(--game-white);
     font-family: sans-serif;
     font-size: 1em;
     font-weight: bold;
@@ -76,12 +108,10 @@ body {
 }
 
 .footer_link:hover {
-    color: #939393;
+    color: var(--button-links-gray-color);
 }
 
 .footer_links {
-    align-content: center;
-    align-items: center;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -89,7 +119,7 @@ body {
     justify-content: flex-end;
 }
 
-/* JavaScript browser message */
+/* Unsupported browser messages */
 .unsupported_browser_msg {
     display: none;
 }
@@ -100,19 +130,17 @@ body {
 
 /* Alert dialogs */
 .alert_dialog {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    border-radius: var(--button-and-dialog-border-radius);
     display: none;
-    align-content: center;
-    align-items: center;
     font-family: "Spicy Rice", serif;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
-    border-radius: var(--button-and-dialog-border-radius);
+    left: 50%;
     padding: 2em;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 2;
 }
 
@@ -132,20 +160,12 @@ body {
 }
 
 .alert_dialog_background {
-    background-color: rgba(0, 0, 0, 0.875);
-    position: absolute;
+    background-color: var(--alert-dialog-background-color);
     display: none;
-    top: 0;
-    left: 0;
     height: 100vh;
+    left: 0;
+    position: absolute;
+    top: 0;
     width: 100vw;
     z-index: 1;
-}
-
-.theme_switcher_btn {
-    transition: fill 0.5s;
-}
-
-.theme_switcher_btn:hover {
-   fill: #939393;
 }
