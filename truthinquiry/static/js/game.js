@@ -114,7 +114,7 @@ async function askTypeOneQuestion() {
     show("question_answer");
     document.getElementById("currentNpcPicure").src = "/api/v1//getNpcReaction?npcid="+currentNpc;
     // Sleep for 5 sec
-    await new Promise(r => setTimeout(r, 5000));
+    await new Promise(r => setTimeout(r, 2000));
     document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
     hide("question_answer");
     document.getElementsByClassName("suspect_answer")[0].textContent = "";
