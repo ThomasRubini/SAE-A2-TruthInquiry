@@ -1,6 +1,26 @@
+/* Common properties */
 :root {
     --game-begin-margin: 2em;
     --header-actions-height: 3em;
+}
+
+input, .action_button, .game_mode_item_title {
+    font-family: "Titan One", sans-serif;
+}
+
+.game_begin, .game_mode_item, .game_mode_item_input_text_single_line, .game_mode_items, .game_mode_selection {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.game_begin, .game_mode_item, .game_mode_selection, .game_mode_items {
+    flex-direction: column;
+}
+
+.game_mode_item_input_text_single_line, .game_mode_items {
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 button {
@@ -11,36 +31,30 @@ button {
 }
 
 input {
-    background-color: white;
+    background-color: var(--game-white);
     border: none;
     border-radius: 1em;
-    font-family: "Titan One", sans-serif;
     font-size: 1em;
     padding: 0.5em;
-    color: black;
+    color: var(--game-black);
 }
 
 input::placeholder {
-    color: black;
+    color: var(--game-black);
     opacity: 0.5;
 }
 
 .back_btn {
-    fill: #BD1E1E;
+    fill: var(--game-red);
 }
 
 .game_begin {
-    align-items: center;
-    border-radius: 1.5em;
     background-image: url("../images/start_background.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    display: flex;
-    flex-direction: column;
+    border-radius: 1.5em;
     flex-wrap: wrap;
-    justify-content: center;
-    margin: var(--game-begin-margin);
     /*
     Viewport height - body margin (x2: top + bottom) - header actions height
     - footer links height - game begin margin
@@ -49,13 +63,15 @@ input::placeholder {
         - var(--game-begin-margin) * 2
         - var(--header-actions-height)
         - var(--footer-links-height));
+    justify-content: center;
+    margin: var(--game-begin-margin);
 }
 
 .game_title {
-    color: #BD1E1E;
+    color: var(--game-red);
     font-family: "Spicy Rice", serif;
-    font-weight: bold;
     font-size: 5em;
+    font-weight: bold;
     margin: 0.25em;
     text-align: center;
 }
@@ -66,107 +82,76 @@ input::placeholder {
 
 .header_actions {
     display: flex;
-    justify-content: flex-end;
     height: var(--header-actions-height);
+    justify-content: flex-end;
 }
 
 .action_button {
-    border-color: black;
-    border-style: solid;
-    border-width: 0.125em;
-    background-color: #BD1E1E;
-    border-radius: var(--button-and-dialog-border-radius);
-    cursor: pointer;
-    font-family: "Titan One", sans-serif;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    padding-left: 1em;
-    padding-right: 1em;
     text-transform: uppercase;
-    overflow: hidden;
-    transition: box-shadow 0.5s, transform 0.5s;
 }
 
 .action_button:hover {
+    box-shadow: 10px -10px 25px 0px var(--game-black), -10px 10px 25px 0px var(--game-black);
     transform: translate(0.1em, 0.1em);
-    box-shadow: 10px -10px 25px 0px black, -10px 10px 25px 0px black;
 }
 
 .game_mode_selection {
-    align-items: center;
     background-image: url("../images/start_background.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    display: flex;
-    flex-direction: column;
     flex-wrap: nowrap;
     height: 100vh;
-    justify-content: center;
 }
 
 .game_mode_item {
-    margin: 0.5em;
-    display: flex;
-    flex-direction: column;
     align-content: center;
-    justify-content: center;
-    align-items: center;
+    margin: 0.5em;
 }
 
 .game_mode_item_title {
-    font-family: "Titan One", sans-serif;
     font-size: 2em;
     margin: 0.25em;
 }
 
 .game_mode_item_input_text_single_line {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 0.5em;
     margin-bottom: 0.5em;
-}
-
-.game_mode_items {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    margin-top: 0.5em;
 }
 
 .game_mode_choice_selector {
-    background-color: black;
-    border-color: white;
+    background-color: var(--game-black);
+    border-color: var(--game-white);
     border-style: solid;
     border-radius: 1.5em;
     padding: 1em;
 }
 
 .game_start_failed {
-    color: #BD1E1E;
+    color: var(--game-red);
     font-family: "Roboto Mono", sans-serif;
-    font-size: 1em;
     font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 0.25em;
     margin-left: 0.5em;
-    margin-top: 0.25em;
     margin-right: 0.5em;
+    margin-top: 0.25em;
 }
 
-.theme_switcher {
-    fill: white;
+.theme_switcher_btn {
+    fill: var(--game-white);
+    transition: fill 0.5s;
+}
+
+.theme_switcher_btn:hover {
+    fill: var(--button-links-gray);
 }
 
 #back_button {
-    position: absolute;
     left: 0;
+    position: absolute;
     top: 0;
 }
 
