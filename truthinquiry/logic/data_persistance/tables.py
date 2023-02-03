@@ -70,6 +70,7 @@ class Npc(db.Model):
     __tablename__ = "T_NPC"
     NPC_ID = db.Column(db.Integer, primary_key=True)
     NAME_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
+    LOCALE = db.relationship("Locale")
 
     def __init__(self, NPC_ID, NAME_LID):
         self.NPC_ID = NPC_ID
@@ -83,6 +84,11 @@ class Trait(db.Model):
     __tablename__ = "T_TRAIT"
     TRAIT_ID = db.Column(db.Integer, primary_key=True)
     NAME_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
+    DESC_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
+
+    Name = db.relationship("Locale",foreign_keys=[NAME_LID])
+    Desc = db.relationship("Locale",foreign_keys=[DESC_LID])
+
 
     def __init__(self, TRAIT_ID, NAME_LID):
         self.TRAIT_ID = TRAIT_ID
@@ -97,8 +103,6 @@ class Reaction(db.db.Model):
     REACTION_ID = db.Column(db.Integer, primary_key=True)
     NPC_ID = db.Column(db.Integer, db.ForeignKey("T_NPC.NPC_ID"), primary_key=True)
     TRAIT_ID = db.Column(db.Integer, db.ForeignKey("T_TRAIT.TRAIT_ID"), primary_key=True)
-    DESC_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
-    LOCALE = db.relationship("Locale")
     NPC = db.relationship("Npc")
     TRAIT = db.relationship("Trait")
 
