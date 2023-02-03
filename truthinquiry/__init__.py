@@ -2,12 +2,10 @@ import os
 
 import flask
 from flask_socketio import SocketIO
+from sqlalchemy import engine as eg
+from flask_sqlalchemy import SQLAlchemy
 
 from truthinquiry import discord_bot
-
-from sqlalchemy import engine as eg
-
-from flask_sqlalchemy import SQLAlchemy
 
 
 class TruthInquiryApp(flask.Flask):
