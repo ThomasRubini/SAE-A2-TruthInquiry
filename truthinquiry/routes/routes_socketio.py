@@ -2,7 +2,7 @@ import socketio
 
 from flask_socketio import join_room
 
-from truthinquiry import APP
+from truthinquiry.app import APP
 from truthinquiry.logic import game_logic
 
 

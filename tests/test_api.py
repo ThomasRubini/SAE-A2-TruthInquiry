@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 # Load dotenv file
 load_dotenv()
 
-from truthinquiry import APP
+from truthinquiry.app import APP
 test_app = APP.test_client()
 
 class TestException(Exception):

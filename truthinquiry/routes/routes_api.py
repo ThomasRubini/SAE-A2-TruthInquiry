@@ -1,7 +1,7 @@
 import json
 import flask
 
-from truthinquiry import APP
+from truthinquiry.app import APP
 from truthinquiry.logic import game_logic
 
 
