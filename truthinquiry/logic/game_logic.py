@@ -2,9 +2,10 @@ import string
 import random
 from typing import Union
 
-from truthinquiry.logic.data_persistance.data_access import *
-from truthinquiry import APP
+from truthinquiry.ext.database import *
+from truthinquiry.ext.database import dbutils
 
+games_list = {}
 
 def random_string(length: int) -> str:
     """
@@ -81,9 +82,9 @@ class Game:
             npcs[npc_id] = {}
             npcs[npc_id]["name"] = self.gamedata["npcs"][npc_id]["name"]
             trait_id = self.reaction_table[npc_id]
-            trait = get_trait_from_trait_id(trait_id)
-            npcs[npc_id]["reaction"] = get_text_from_lid("FR", trait.NAME_LID)
-            npcs[npc_id]["description"] = get_reaction_description("FR", npc_id, trait.TRAIT_ID)
+            trait = dbutils.get_trait_from_trait_id(trait_id)
+            npcs[npc_id]["reaction"] = dbutils.get_text_from_lid("FR", trait.NAME_LID)
+            npcs[npc_id]["description"] = dbutils.get_reaction_description("FR", npc_id, trait.TRAIT_ID)
         player_results = data["player"] = {}
         for member in self.members:
             player_results[member.username] = member.results
@@ -179,7 +180,7 @@ def create_game(owner: str) -> Game:
     game.owner = owner
     game.members.append(Member(owner))
     game.game_id = random_string(6)
-    APP.games_list[game.game_id] = game
+    games_list[game.game_id] = game
     return game
 
 
@@ -190,8 +191,8 @@ def get_game(game_id: str) -> Union[Game, None]:
     :param game_id: the id of the game to search
     :return: the Game object or None if not found
     """
-    if game_id in APP.games_list:
-        return APP.games_list[game_id]
+    if game_id in games_list:
+        return games_list[game_id]
     else:
         return None
 
@@ -216,7 +217,7 @@ def check_username(username: str) -> bool:
     return True
 
 
-def generate_npc_text(npc: tables.Npc, lang: str) -> dict:
+def generate_npc_text(npc: Npc, lang: str) -> dict:
     """
     Creates the dictionnary of a npc names and dialogs, it searches the npc's pool of answser for both question
     types
@@ -226,9 +227,9 @@ def generate_npc_text(npc: tables.Npc, lang: str) -> dict:
     :return: a dictionnary object containing the npc's name and both answers
     """
     data = {}
-    data["name"] = get_text_from_lid(lang, npc.NAME_LID)
-    data["QA_0"] = get_text_from_lid(lang, get_npc_random_answer(npc, 0).TEXT_LID)
-    data["QA_1"] = get_text_from_lid(lang, get_npc_random_answer(npc, 1).TEXT_LID)
+    data["name"] = dbutils.get_text_from_lid(lang, npc.NAME_LID)
+    data["QA_0"] = dbutils.get_text_from_lid(lang, dbutils.get_npc_random_answer(npc, 0).TEXT_LID)
+    data["QA_1"] = dbutils.get_text_from_lid(lang, dbutils.get_npc_random_answer(npc, 1).TEXT_LID)
     return data
 
 
@@ -246,7 +247,7 @@ def generate_place_data(npc_list: list, places: list, lang: str) -> dict:
     random.shuffle(npc_list)
     for place in places:
         placedata = data[str(place.PLACE_ID)] = {}
-        placedata["name"] = get_text_from_lid(lang, place.NAME_LID)
+        placedata["name"] = dbutils.get_text_from_lid(lang, place.NAME_LID)
         placedata["npcs"] = []
         for _ in npc_list:
             placedata["npcs"].append(npc_list.pop().NPC_ID)
@@ -269,24 +270,24 @@ def generate_game_data(lang: str) -> tuple[dict, dict]:
     reactions_table = {}
     npcs = []
     while len(npcs) != 5:
-        npc = get_random_npc()
+        npc = dbutils.get_random_npc()
         if npc not in npcs:
             npcs.append(npc)
     for npc in npcs:
         data["npcs"][str(npc.NPC_ID)] = generate_npc_text(npc, lang)
-        reactions_table[str(npc.NPC_ID)] = get_npc_random_trait_id(npc)
+        reactions_table[str(npc.NPC_ID)] = dbutils.get_npc_random_trait_id(npc)
 
     places = []
     while len(places) != 3:
-        place = get_random_place()
+        place = dbutils.get_random_place()
         if place not in places:
             places.append(place)
 
     data["rooms"] = generate_place_data(npcs, places, lang)
     data["questions"] = {}
-    data["questions"]["QA_0"] = get_text_from_lid("FR", get_random_question(0).TEXT_LID)
-    data["questions"]["QA_1"] = get_text_from_lid("FR", get_random_question(1).TEXT_LID)
-    data["traits"] = get_traits(lang)
+    data["questions"]["QA_0"] = dbutils.get_text_from_lid("FR", dbutils.get_random_question(0).TEXT_LID)
+    data["questions"]["QA_1"] = dbutils.get_text_from_lid("FR", dbutils.get_random_question(1).TEXT_LID)
+    data["traits"] = dbutils.get_traits(lang)
     return data, reactions_table
 
 
@@ -311,7 +312,7 @@ def get_trait_id_from_string(trait: str) -> int:
     :param text: the text representation of the trait in any lang
     :return: the trait_id linked to this text
     """
-    return get_trait_from_text(trait)
+    return dbutils.get_trait_from_text(trait)
 
 
 def get_npc_image(npc_id: int):

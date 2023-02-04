@@ -1,7 +1,9 @@
 import json
+import json
 import flask
 
-from truthinquiry import APP
+from truthinquiry.ext.discord_bot import discord_bot
+from truthinquiry.ext.socketio import socket_io
 from truthinquiry.logic import game_logic
 
 
@@ -24,7 +26,7 @@ def create_game():
     flask.session["is_owner"] = True
     flask.session["username"] = username
 
-    APP.discord_bot.update_games_presence()
+    discord_bot.update_games_presence()
 
     return response
 
@@ -61,7 +63,7 @@ def join_game():
     flask.session["is_owner"] = False
     flask.session["username"] = username
 
-    APP.socketio_app.emit("playersjoin", [flask.session["username"]], room="game."+game.game_id)
+    socket_io.emit("playersjoin", [flask.session["username"]], room="game."+game.game_id)
 
     return {"error": 0}
 

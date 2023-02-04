@@ -1,6 +1,28 @@
-from truthinquiry import APP
-db = APP.db
+import os
+import random
 
+from sqlalchemy import engine as eg
+from flask_sqlalchemy import SQLAlchemy
+
+class Database(SQLAlchemy):
+    def __init__(self):
+        super().__init__()
+
+    def init_app(self, app):
+
+        db_url = eg.URL.create(
+            "mariadb+pymysql",
+            username=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_DBNAME")
+        )
+        app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+
+        super().init_app(app)
+
+db = Database()
 
 class Locale(db.Model):
     __tablename__ = 'T_LOCALE'
@@ -98,7 +120,7 @@ class Trait(db.Model):
         return f"{self.TRAIT_ID} {self.NAME_LID}"
 
 
-class Reaction(db.db.Model):
+class Reaction(db.Model):
     __tablename__ = "T_REACTION"
     REACTION_ID = db.Column(db.Integer, primary_key=True)
     NPC_ID = db.Column(db.Integer, db.ForeignKey("T_NPC.NPC_ID"), primary_key=True)
@@ -106,11 +128,10 @@ class Reaction(db.db.Model):
     NPC = db.relationship("Npc")
     TRAIT = db.relationship("Trait")
 
-    def __init__(self, REACTION_ID, DESC_LID, NPC_ID, TRAIT_ID):
+    def __init__(self, REACTION_ID, NPC_ID, TRAIT_ID):
         self.REACTION_ID = REACTION_ID
-        self.DESC_LID = DESC_LID
         self.NPC_ID = NPC_ID
         self.TRAIT_ID = TRAIT_ID
 
     def __str__(self) -> str:
-        return f"{self.REACTION_ID} {self.DESC_LID} {self.NPC_ID} {self.TRAIT_ID}"
+        return f"{self.REACTION_ID} {self.NPC_ID} {self.TRAIT_ID}"
