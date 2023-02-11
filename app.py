@@ -2,7 +2,9 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from truthinquiry import APP as app # the variable 'app' is detected by `flask run`
+from truthinquiry import create_app
+
+app = create_app()
 
 if __name__ == "__main__":
     app.run()

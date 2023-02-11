@@ -2,11 +2,11 @@ import socketio
 
 from flask_socketio import join_room
 
-from truthinquiry import APP
 from truthinquiry.logic import game_logic
+from truthinquiry.ext.socketio import socket_io
 
 
-@APP.socketio_app.on('connect')
+@socket_io.on('connect')
 def connect(auth):
     if not (auth and "game_id" in auth):
         raise socketio.exceptions.ConnectionRefusedError("Invalid connection data passed")

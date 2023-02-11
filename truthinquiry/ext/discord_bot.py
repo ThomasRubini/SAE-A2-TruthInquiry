@@ -1,8 +1,9 @@
+import os
 import threading
 import asyncio
 
 import discord
-import truthinquiry
+import truthinquiry.app as app
 
 
 class DiscordBot:
@@ -23,10 +24,10 @@ class DiscordBot:
             print('Discord bot connected !')
             self.event_loop = asyncio.get_event_loop()
 
-            self.__setup__channel__()
+            self.__setup__channel()
             self.update_games_presence()
 
-    def __setup__channel__(self) -> None:
+    def __setup__channel(self) -> None:
         """
         Setup the channel that the bot will send message in
         """
@@ -35,10 +36,18 @@ class DiscordBot:
         else:
             print("Could not find channel #bot")
 
-    def start(self, token):
-        thr = threading.Thread(target=self.bot.run, args=(token,))
-        thr.start()
-        return thr
+    def try_start(self):
+        """
+        Start the discord bot if the environment provides a token, else do nothing
+        """
+        token = os.getenv("DISCORD_BOT_TOKEN")
+        if token:
+            thr = threading.Thread(target=self.bot.run, args=(token,))
+            thr.start()
+            return thr
+        else:
+            print("Token not present ! Discord bot not starting")
+            return None
 
     def API(func):
         """
@@ -56,7 +65,7 @@ class DiscordBot:
         """
         Update the bot's status using the app's current context
         """
-        games_n = len(truthinquiry.APP.games_list)
+        games_n = len(app.APP.games_list)
         activity_name = f"Handling {games_n} game{'' if games_n==1 else 's'} !"
         activity = discord.Activity(name=activity_name, type=discord.ActivityType.watching)
         await self.bot.change_presence(activity=activity)
@@ -70,3 +79,5 @@ class DiscordBot:
             await self.__channel__.send(text)
         else:
             print("channel not defined, not sending discord message")
+
+discord_bot = DiscordBot()
