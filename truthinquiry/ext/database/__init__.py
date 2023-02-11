@@ -19,8 +19,11 @@ class Database(SQLAlchemy):
             database=os.getenv("DB_DBNAME")
         )
         app.config["SQLALCHEMY_DATABASE_URI"] = db_url
-
+        
         super().init_app(app)
+
+        with app.app_context():
+            self.create_all()
 
 db = Database()
 
