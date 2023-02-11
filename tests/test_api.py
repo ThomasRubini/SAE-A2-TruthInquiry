@@ -6,8 +6,9 @@ from dotenv import load_dotenv
 # Load dotenv file
 load_dotenv()
 
-from truthinquiry.app import APP
-test_app = APP.test_client()
+from truthinquiry import create_app
+app = create_app()
+app_client = app.test_client()
 
 class TestException(Exception):
     __test__ = False
@@ -33,7 +34,7 @@ class User:
 
 def create_game(user:User):
     data = {"username":user.username}
-    responseObject = test_app.post("/api/v1/createGame",data=data)
+    responseObject = app_client.post("/api/v1/createGame",data=data)
     if responseObject.status_code != 200:
         raise TestException("status code is not 200")
     content = responseObject.json
@@ -47,7 +48,7 @@ def create_game(user:User):
 
 def join_game(user:User,game_id:str):
     data = {"username":user.username,"game_id":game_id}
-    responseObject = test_app.post("/api/v1/joinGame",data=data)
+    responseObject = app_client.post("/api/v1/joinGame",data=data)
     if responseObject.status_code != 200:
         raise TestException("status code is not 200")
     content = responseObject.json
@@ -58,7 +59,7 @@ def join_game(user:User,game_id:str):
     return True
 
 def start_game(user:User):
-    responseObject = test_app.post("/api/v1/startGame")
+    responseObject = app_client.post("/api/v1/startGame")
     if responseObject.status_code != 200:
         raise TestException("status code is not 200")
     content = responseObject.json
@@ -101,7 +102,7 @@ def test_that_two_person_having_the_same_pseudo_creating_two_games_results_in_tw
     
 
 def test_that_not_sending_a_username_results_in_an_error():
-    responseObject = test_app.post("/api/v1/createGame")
+    responseObject = app_client.post("/api/v1/createGame")
     assert responseObject.status_code == 200
     assert responseObject.json["error"] != 0
 
@@ -150,20 +151,20 @@ def test_that_people_cant_join_if_the_username_is_already_used():
 
 def test_that_people_joining_without_sending_any_data_results_in_an_error():
     game_id = create_game(User("neoxyde"))
-    responseObject = test_app.post("/api/v1/joinGame")
+    responseObject = app_client.post("/api/v1/joinGame")
     assert responseObject.status_code == 200
     assert responseObject.json["error"] != 0
 
 def test_that_people_joining_without_sending_a_game_id_results_in_an_error():
     data={"username":"neomblic"}
-    responseObject = test_app.post("/api/v1/joinGame",data=data)
+    responseObject = app_client.post("/api/v1/joinGame",data=data)
     assert responseObject.status_code == 200
     assert responseObject.json["error"] != 0
 
 def test_that_people_joining_without_sending_an_username_still_results_in_an_error():
     game_id = create_game(User("neonyx"))
     data={"game_id":game_id}
-    responseObject = test_app.post("/api/v1/joinGame",data=data)
+    responseObject = app_client.post("/api/v1/joinGame",data=data)
     assert responseObject.status_code == 200
     assert responseObject.json["error"] != 0
 
