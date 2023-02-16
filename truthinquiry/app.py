@@ -7,7 +7,6 @@ from truthinquiry.ext import discord_bot
 class TruthInquiryApp(flask.Flask):
     """
     Main class of the app
-    A single instance 'APP' of this class will be created and shared across the files
     The class itself is a child class of flask.Flask and has property representing other services
 
     :attr SocketIO socketio_app: the SocketIO service
