@@ -9,6 +9,8 @@ from truthinquiry.logic import game_logic
 
 routes_api = flask.Blueprint("api", __name__)
 
+# API specification is documented in api_doc.yml
+
 @routes_api.route("/createGame", methods=["GET", "POST"])
 def create_game():
     username = flask.request.values.get("username")

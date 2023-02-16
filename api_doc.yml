@@ -1,0 +1,495 @@
+openapi: 3.0.0
+info:
+  title: Truth Inquiry
+  description: "Serious Game sur le theme de la communication non verbale"
+  version: 1.0.0
+  contact:
+    email: contact@simailadjalim.fr
+  license:
+    name: MIT
+    url: https://www.mit.edu/~amini/LICENSE.md
+
+servers:
+  - url: truthInquiry.simailadjalim.fr
+
+# Definition des tags ------------------------
+tags:
+  - name: "pages"
+    description: "Chemins liés à une page web"
+  - name: "api"
+    description: "Chemins liés à l'api interne au serveur"
+
+# Endpoints
+paths:
+  /:
+    get:
+      tags:
+        - pages
+      summary: "Page d'accueil du site web"
+      description: "Page d'accueil du site web, elle contient des liens vers les pages de contacts et de mention legales ainsi que le bouton pour lancer le jeu."
+      operationId: homePage
+      responses:
+        "200":
+          description: "La page d'accueil est retournée au navigateur web"
+          content:
+            text/html: {}
+
+  /solo:
+    get:
+      tags:
+        - pages
+      summary: "Page du jeu lors d'une partie solo"
+      description: "Page de jeu du mode solo, elle contient toute la logique du jeu du moment où le joueur entre son pseudo et le moment ou la partie d'arrete"
+      operationId: singlePage
+      responses:
+        "200":
+          description: "La page de jeu seul est retournée au navigateur web"
+          content:
+            text/html: {}
+
+  /multi:
+    get:
+      tags:
+        - pages
+      summary: "Page du jeu lors d'une partie multijoueurs"
+      description: "Page de jeu du mode multijoueur, elle contient uniquement la logique du jeu pendant la partie multijoueur."
+      operationId: multiPage
+      responses:
+        "200":
+          description: "La page de jeu multijoueur est retournée au navigateur web."
+          content:
+            text/html: {}
+
+  /legal:
+    get:
+      tags:
+        - pages
+      summary: "Page de mentions legales"
+      description: "Page des mentions legales du site web, comme son nom l'indique elle affiche les mentions legales."
+      operationId: mentionLegales
+      responses:
+        "200":
+          description: "La page de mentions legales est retournée au navigateur"
+          content:
+            text/html: {}
+
+  #TODO change
+  /privacy:
+    get:
+      tags:
+        - pages
+      summary: "Page de contact"
+      description: "Page de contact du site web, elle affiche les informations de contact pour contacter les mainteneurs du site web."
+      operationId: contact
+      responses:
+        "200":
+          description: "La page de contact est retournée au navigateur web"
+          content:
+            text/html: {}
+
+  #TODO
+  #/licenses
+
+  /lobby/{game_id}:
+    get:
+      tags:
+        - pages
+      summary: "Page de la room multijoueur"
+      description: "Page representant la salle avant le lancement d'une partie multijoueur, elle affiche tout les joueurs present dans la salle, elle sert aussi a rejoindre la salle pour toute personne possedant le lien."
+      parameters:
+        - in: path
+          name: game_id
+          schema:
+            type: string
+          required: true
+          description: gameId
+
+
+      operationId: invite
+      responses:
+        "200":
+          description: "La page de la salle est retournée au navigateur web."
+          content:
+            text/html: {}
+        "404":
+          description: "La salle n'existe pas ou n'existe plus."
+          content:
+            text/html: {}
+
+  # Api ------------------------
+
+  /api/v1/createGame:
+    post:
+      tags:
+        - api
+      summary: "Demande une nouvelle session de jeu multijoueur au serveur"
+      description: "Cette route crée une salle de jeu multijoueur dans le serveur, elle octroie ensuite les droit de creation de la salle a l'utilisateur dont le pseudo est donné en parametre post et lui retourne l'identifiant de la game"
+      operationId: create_game
+      requestBody:
+        description: "Le pseudo de la personne souhaitant crée une partie"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  $ref: "#/components/schemas/username"
+
+      responses:
+        "200":
+          description: "Retourne un object json contenant le code erreur de la requete, l'identifiant de la partie, ainsi que l'identifiant de la partie. Signifiant donc que la partie existe bien du coté du serveur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/newGameData"
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+
+  /api/v1/joinGame:
+    post:
+      tags:
+        - api
+      summary: "Ajoute l'utilisateur dans une partie en cours"
+      description: "Cette route ajoute dans la partie identifié par l'identifiant de jeu l'utilisateur indentifié par son pseudo"
+      operationId: join_game
+      requestBody:
+        description: "Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie "
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/joinGameData"
+
+      responses:
+        "200":
+          description: "Retourne le code erreur de la requete."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    $ref: "#/components/schemas/error"
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+
+  /api/v1/isOwner:
+    post:
+      tags:
+        - api
+      summary: "Informe si le joueur est le createur de la partie ou non"
+      description : "Cette route sert a determiner si le joueur qui fait la requette est le createur de la partie ou non"
+      operationId: is_owner
+      parameters:
+        - in : cookie
+          name: is_owner
+          description: "Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle"
+          schema:
+              type: boolean
+      responses:
+        "200":
+          description: Retourne le code erreur de la requete ainsi qu'un booleen qui determine le status du joueur
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    $ref: "#/components/schemas/error"
+                  owner:
+                    type: boolean
+                    description: booleen determinant si le joueur est le createur de la partie
+
+  /api/v1/startGame:
+    post:
+      tags:
+        - api
+      summary: "Crée les données necessaire au demarage d'une session de jeu"
+      description: "Cette route crée les données necessaire au bon fonctionnement du jeu, c'est a dire qu'elle choisit les personnages, leurs salles, leurs reactions ainsi que leurs reponses et les stoque dans sa memoire en attendant que les clients les recuperent"
+      operationId: startGame
+      parameters:
+        - in: cookie
+          name: is_owner
+          required: true
+          description: "Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle"
+          schema:
+              type: boolean
+        - in: cookie
+          name: "game_id"
+          required: true
+          description: "Identifiant de la partie a lancer"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Retourne le code erreur de la requete, '0' signifiant que les données ont correctement été generées"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    $ref: "#/components/schemas/error"
+
+  /api/v1/getGameData:
+    post:
+      tags:
+        - api
+      summary: "Recupere les données du jeu"
+      description: "Cette route recupere les données necessaire au bon fonctionnement du jeu, c'est a dire les personnages a afficher, leurs textes, leurs reactions ainsi que leurs reponses"
+      operationId: getGame
+      parameters:
+        - in: cookie
+          name: "game_id"
+          required: true
+          description: "Identifiant de la partie a lancer"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Retourne le code erreur de la requete, et les données du jeu s'il n'y a pas eu d'erreur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/gameData"
+
+  /api/v1/getGameMembers:
+    post:
+      tags:
+        - api
+      summary: "retourne les membre de la partie"
+      description: "Cette route retourne sous la forme d'une liste les nom des membres de la partie."
+      operationId: getMembers
+      parameters:
+        - in : cookie
+          name: game_id
+          required: true
+          description: Identifiant de la partie
+          schema:
+            type : string
+      responses:
+        "200":
+          description: "liste des pseudos des membres de la partie"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  "error":
+                    $ref: "#/components/schemas/error"
+                  "members":
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/hasJoined:
+    post:
+      tags:
+        - api
+      summary: Informe si le joueur est dans une partie
+      description: "Cette route sert a determiner si le joueur qui fait la requette est dans la partie"
+      operationId: has_joined
+      parameters:
+        - in : cookie
+          name: game_id
+          description: "identifiant de la game"
+          schema:
+              type: string
+      responses:
+        "200":
+          description: "Retourne le code d'erreur ainsi qu'un booleen determinant si le joueur est dans la partie"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  "error":
+                    $ref: "#/components/schemas/error"
+                  "joined":
+                    type: boolean
+  
+  /api/v1/getNpcImage:
+    post:
+      tags:
+        - "api"
+      summary: retourne l'image d'un personnage sans reactions
+      description: "Cette route retourne l'image neutre du personnage demmandé identifié par son identifiants"
+      operationId: get_npc_image
+      requestBody:
+        description: "identifiant du personnage dont on veut recupere l'image"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                npcid:
+                  type: integer
+      responses:
+        "200":
+          description: "image"
+          content:
+            image/png:
+              schema:
+                type: string
+
+  /api/v1/getNpcReaction:
+    post:
+      tags:
+        - api
+      summary: "Recupere une reaction donnée pour un personage du jeu dans une partie"
+      description: "Cette route retoune l'image correspondant a la reaction que le joueur doit deviner"
+      operationId: get_npc_reaction
+      requestBody:
+        description: "identifiant du personnage dont on veut recupere l'image"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                npcid:
+                  type: integer
+      responses:
+        "200":
+          description: "image"
+          content:
+            image/png:
+              schema:
+                type: string
+  #/api/v1/gameProgress
+  #/api/v1/submitAnwers
+
+      
+components: #----------------------------------
+  schemas:
+    error:
+      type: integer
+      description: "error de la requette"
+      enum:
+        - 0
+        - 1
+
+    game_id:
+      type: string
+      description: "id de la room multijoueur"        
+
+    username:
+      type: string
+      description: "pseudo du joueur"
+
+
+    npc:
+      type: object
+      description: "personnage a interroger dans la partie"
+      properties:
+        "QA_0" :
+          type: string
+          description: reponse a la question "oû ce personnage etait ?"
+        "QA_1" :
+          type: string
+          description: reponse a la question "avec qui ce personnage etait ?"
+        name:
+          type: string
+          description: "nom du personnage"
+
+    salle:
+      type: object
+      description: "object representant une salle virtuelle pour l'intrigue textuelle du jeu"
+      properties:
+        name:
+          type: string
+          description: nom de la salle virtuelle
+        npcs:
+          type: array
+          description: array contenant les identifiants des personnage present dans la salle, cet array contient toujours deux identifiants sauf dans le cas du coupable ou il est seul.
+          items:
+            type: string
+    salle_:
+      type: object
+      description: "object representant une salle virtuelle pour l'intrigue textuelle du jeu"
+      properties:
+        name:
+          type: string
+          description: nom de la salle virtuelle
+        npcs:
+          type: array
+          description: array contenant les identifiants des personnage present dans la salle, cet array contient toujours deux identifiants sauf dans le cas du coupable ou il est seul.
+          items:
+            type: 
+              integer
+    #____________________________#
+
+    game:
+      type: object
+      description: "données du jeu"
+      properties:
+        npcs:
+          type: object
+          description: "liste des personnages choisis par le serveur de maniere aleatoire, ainsi que leur texte de dialogue"
+          properties:
+            "npc_id_0":
+              $ref: "#/components/schemas/npc"
+            "npc_id_1":
+              $ref: "#/components/schemas/npc"
+            "npc_id_2":
+              $ref: "#/components/schemas/npc"
+            "npc_id_3":
+              $ref: "#/components/schemas/npc"
+            "npc_id_4":
+              $ref: "#/components/schemas/npc"
+        questions:
+          type: object
+          description: "les questions identifiés par leur type, choisis aleatoirement par le serveur"
+          properties:
+            "QA_0":
+              type: string
+              description: question de type "oû etait le personnage ?"
+            "QA_1":
+              type: string
+              description: question de type "avec qui etait le personnage ?"
+        rooms:
+          type: object
+          description: "object contenant les salle virtuelle de la partie indentifiées par leur identifiants"
+          properties:
+            "room_id_0":
+             $ref: "#/components/schemas/salle"
+            "room_id_1":
+             $ref: "#/components/schemas/salle"
+            "room_id_2":
+             $ref: "#/components/schemas/salle_"
+        traits:
+          type : array
+          description: "liste des traits disponible pour cette session de jeu"
+          items:
+            type: string
+
+    newGameData:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/error"
+        game_id:
+          $ref: "#/components/schemas/game_id"
+        
+
+    joinGameData:
+      type: object
+      properties:
+        game_id:
+          $ref: "#/components/schemas/game_id"
+        username:
+          $ref: "#/components/schemas/username"
+
+    gameData:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/error"
+        gameData:
+          $ref: "#/components/schemas/game"
+
+
