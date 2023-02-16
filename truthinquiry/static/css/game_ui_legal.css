@@ -1,40 +1,34 @@
+/* Common properties */
 html {
-    background-color: black;
-}
-
-body {
+    background-color: var(--game-black);
+    color: var(--game-white);
     font-family: "Roboto Mono", "sans-serif";
 }
 
+/* Legal links and texts */
+.legal_text_description, .legal_text_last_update, .legal_text_title {
+    margin: 0;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
 .legal_link {
-    color: #0096FF;
+    color: var(--game-blue);
 }
 
 .legal_text_title {
     font-family: "Spicy Rice", sans-serif;
     font-size: 2.5em;
     text-align: center;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
 }
 
 .legal_text_last_update {
     font-family: "Titan One", serif;
     font-size: 1.5em;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
 }
 
 .legal_text_description {
     font-size: 1.25em;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
 }
 
 .legal_text_unordered_list {
