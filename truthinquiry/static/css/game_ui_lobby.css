@@ -1,47 +1,73 @@
 /* Global properties */
 html {
-    background-color: black;
-    color: white;
+    background-color: var(--game-black);
+    color: var(--game-white);
 }
 
-:root {
-    --button-background-color: #FF0000;
-}
-
-.multi_player_mode_choice_title, .multi_player_mode_waiting_for_host, .player_name, .players_title, .rounds_count_title, .room_code_text_title, .room_title {
+.action_button, .multi_player_mode_choice_title, .multi_player_mode_waiting_for_host, .player_name, .players_title, .rounds_count_title, .room_code_text_title, .room_title, #game_username, #rounds_count {
     font-family: "Titan One", sans-serif;
-    margin-bottom: 0.5em;
-    margin-top: 0.5em;
+}
+
+.game_start_failed, .multi_player_challenge_mode_invalid_input, .player_names {
+    font-family: "Roboto Mono", sans-serif;
+}
+
+.game_start_failed, .multi_player_challenge_mode_invalid_input, .room_code, .room_title {
+    color: var(--game-red);
+}
+
+.join_room_view, .multi_player_mode_choice, .multi_player_mode_choice_number, .players_title, .room_code_text, .room_view_container {
+    align-items: center;
+    display: flex;
+}
+
+.join_room_view, .multi_player_mode_choice, .player_name, .players_title, .room_code_text {
+    justify-content: center;
+}
+
+.join_room_view, .multi_player_mode_choice, .room_code_text {
+    flex-wrap: nowrap;
 }
 
 .join_room_view, .room_view {
     height: calc(100vh - var(--body-margin) * 2);
 }
 
+.multi_player_mode_choice, .join_room_view, .players_title, .room_code_text {
+    flex-direction: column;
+}
+
+.multi_player_mode_choice, .multi_player_mode_waiting_for_host {
+    text-align: center;
+}
+
+.multi_player_mode_choice_number, .room_view_container {
+    flex-direction: row;
+}
+
+.multi_player_mode_choice_title, .multi_player_mode_waiting_for_host, .player_name, .players_title, .rounds_count_title, .room_code_text_title, .room_title {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+.players_title, .room_view_container {
+    flex-wrap: wrap;
+}
+
+#game_username, #rounds_count {
+    border: none;
+}
+
 /* Action buttons */
 .action_button {
-    border-color: black;
-    border-style: solid;
-    border-width: 0.125em;
-    background-color: var(--button-background-color);
-    border-radius: var(--button-and-dialog-border-radius);
-    color: white;
-    cursor: pointer;
-    font-family: "Titan One", sans-serif;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    padding-left: 1em;
-    padding-right: 1em;
     text-transform: uppercase;
-    overflow: hidden;
-    transition: box-shadow 0.5s, transform 0.5s;
 }
 
 .action_button:hover {
     transform: translate(0.1em, 0.1em);
-    box-shadow: 10px 10px 0px 0px black;
+    box-shadow: 10px 10px 0px 0px var(--game-black);
 }
 
 .multi_player_mode_choice .action_button, .room_code_text .action_button {
@@ -50,34 +76,20 @@ html {
 }
 
 /* Room view major elements */
-.room_title {
-    color: var(--button-background-color);
-    font-family: "Spicy Rice", sans-serif;
-    font-weight: bold;
-    font-size: 4em;
-    margin: 0.25em;
+.room_view_container {
+    justify-content: space-around;
 }
 
-.room_view_container {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
+.room_title {
+    font-family: "Spicy Rice", sans-serif;
+    font-size: 4em;
+    font-weight: bold;
+    margin: 0.25em;
 }
 
 /* Room code */
 .room_code {
-    color: var(--button-background-color);
     text-decoration: none;
-}
-
-.room_code_text {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
 }
 
 .room_code_text_title {
@@ -86,36 +98,32 @@ html {
 }
 
 #invite_friends_button {
+    background-color: var(--game-grey);
+    border-radius: 0.5em;
     font-size: 1em;
     text-transform: none;
-    background-color: #c2c0c0;
-    border-radius: 0.5em;
 }
 
 #invite_friends_button:hover {
+    box-shadow: 10px 10px 0px 0px var(--game-black);
     transform: translate(0.1em, 0.1em);
-    box-shadow: 10px 10px 0px 0px black;
 }
 
 /* Waiting for host */
 .multi_player_mode_waiting_for_host {
     font-size: 2.5em;
     max-width: 20em;
-    text-align: center;
 }
 
 /* Multi-player mode choice */
-.multi_player_mode_choices {
-    padding: 1em;
+.multi_player_challenge_mode_invalid_input {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0.5em;
 }
 
-.multi_player_mode_choice {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+.multi_player_mode_choice_number {
+    margin: 0.75em;
 }
 
 .multi_player_mode_choice_title {
@@ -123,54 +131,36 @@ html {
     margin: 0.5em;
 }
 
-.multi_player_mode_choice_number {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    margin: 0.75em;
-}
-
-.multi_player_challenge_mode_invalid_input {
-    color: var(--button-background-color);
-    font-family: "Roboto Mono", sans-serif;
-    font-size: 1em;
-    font-weight: bold;
-    margin: 0.5em;
+.multi_player_mode_choices {
+    padding: 1em;
 }
 
 /* Rounds count */
-#rounds_count {
-    background-color: white;
-    border: none;
-    border-radius: 0.5em;
-    color: black;
-    font-family: "Titan One", sans-serif;
-    font-size: 1em;
-    padding: 0.5em;
-    width: 2.5em;
-}
-
 .rounds_count_title {
     font-size: 1.375em;
     margin: 0.5em;
 }
 
+#rounds_count {
+    background-color: var(--game-white);
+    border-radius: 0.5em;
+    color: var(--game-black);
+    font-size: 1em;
+    padding: 0.5em;
+    width: 2.5em;
+}
+
 /* Players list */
-.players_title {
-    align-content: center;
-    align-items: center;
-    display: flex;
-    font-size: 3em;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 1em;
+.player_name {
+    color: var(--game-white);
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
 }
 
 .player_names {
-    border: 0.25em white solid;
+    border: 0.25em var(--game-white) solid;
     border-radius: 0.75em;
-    font-family: "Roboto Mono", sans-serif;
     font-size: 1.25em;
     max-height: 12em;
     min-width: 25em;
@@ -178,29 +168,17 @@ html {
     padding: 0.25em;
 }
 
-.player_name {
-    font-size: 1.5em;
-    margin-bottom: 0.5em;
-    margin-top: 0.5em;
-    text-align: center;
-    color: white;
+.players_title {
+    align-content: center;
+    font-size: 3em;
+    margin: 1em;
 }
 
 /* Game join view */
-.join_room_view {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-}
-
 #game_username {
-    background-color: white;
-    border: none;
+    background-color: var(--game-white);
     border-radius: 0.375em;
-    color: black;
-    font-family: "Titan One", sans-serif;
+    color: var(--game-black);
     font-size: 1.25em;
     margin: 0.5em;
     padding: 0.5em;
@@ -213,8 +191,6 @@ html {
 
 /* Game start failure */
 .game_start_failed {
-    color: var(--button-background-color);
-    font-family: "Roboto Mono", sans-serif;
-    font-weight: bold;
     font-size: 1em;
+    font-weight: bold;
 }
