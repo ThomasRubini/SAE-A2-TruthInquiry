@@ -10,7 +10,7 @@ from truthinquiry.ext.database import db
 from truthinquiry.ext.socketio import socket_io
 from truthinquiry.ext.discord_bot import discord_bot
 
-from truthinquiry.routes import routes_api, routes_ui, routes_socketio
+from truthinquiry.routes import routes_api, routes_ui, routes_socketio, handlers
 
 def register_extensions(app):
     db.init_app(app)
@@ -30,5 +30,7 @@ def create_app():
     register_extensions(app)
     
     register_routes(app)
+
+    handlers.register_handlers(app)
 
     return app
