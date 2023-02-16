@@ -691,7 +691,7 @@
     var defs = {}
             defs["error"] = {
   "type" : "integer",
-  "description" : "error de la requette",
+  "description" : "request error code",
   "enum" : [ 0, 1 ]
 };
             defs["game"] = {
@@ -708,13 +708,13 @@
     },
     "traits" : {
       "type" : "array",
-      "description" : "liste des traits disponible pour cette session de jeu",
+      "description" : "List of available traits on in this game session",
       "items" : {
         "type" : "string"
       }
     }
   },
-  "description" : "données du jeu"
+  "description" : "Main game data, should be queried once"
 };
             defs["gameData"] = {
   "type" : "object",
@@ -729,7 +729,7 @@
 };
             defs["game_id"] = {
   "type" : "string",
-  "description" : "id de la room multijoueur"
+  "description" : "ID of the game"
 };
             defs["game_npcs"] = {
   "type" : "object",
@@ -750,21 +750,21 @@
       "$ref" : "#/components/schemas/npc"
     }
   },
-  "description" : "liste des personnages choisis par le serveur de maniere aleatoire, ainsi que leur texte de dialogue"
+  "description" : "List of the randomly chosen npc, with their answer for each type of questions"
 };
             defs["game_questions"] = {
   "type" : "object",
   "properties" : {
     "QA_0" : {
       "type" : "string",
-      "description" : "question de type \"oû etait le personnage ?\""
+      "description" : "'Where?' type question"
     },
     "QA_1" : {
       "type" : "string",
-      "description" : "question de type \"avec qui etait le personnage ?\""
+      "description" : "'With who?' type question"
     }
   },
-  "description" : "les questions identifiés par leur type, choisis aleatoirement par le serveur"
+  "description" : "Question identified by their type, randomly chosen by the server"
 };
             defs["game_rooms"] = {
   "type" : "object",
@@ -776,10 +776,10 @@
       "$ref" : "#/components/schemas/salle"
     },
     "room_id_2" : {
-      "$ref" : "#/components/schemas/salle_"
+      "$ref" : "#/components/schemas/salle"
     }
   },
-  "description" : "object contenant les salle virtuelle de la partie indentifiées par leur identifiants"
+  "description" : "object storing the virtual rooms that holds the npcs"
 };
             defs["inline_response_200"] = {
   "type" : "object",
@@ -797,7 +797,7 @@
     },
     "owner" : {
       "type" : "boolean",
-      "description" : "booleen determinant si le joueur est le createur de la partie"
+      "description" : "boolean determining if the palyer is the owner of the gzame"
     }
   }
 };
@@ -853,56 +853,39 @@
   "properties" : {
     "QA_0" : {
       "type" : "string",
-      "description" : "reponse a la question \"oû ce personnage etait ?\""
+      "description" : "'Where?' type answer"
     },
     "QA_1" : {
       "type" : "string",
-      "description" : "reponse a la question \"avec qui ce personnage etait ?\""
+      "description" : "'With who?' type answer"
     },
     "name" : {
       "type" : "string",
-      "description" : "nom du personnage"
+      "description" : "npc name"
     }
   },
-  "description" : "personnage a interroger dans la partie"
+  "description" : "npc to interogate in the game"
 };
             defs["salle"] = {
   "type" : "object",
   "properties" : {
     "name" : {
       "type" : "string",
-      "description" : "nom de la salle virtuelle"
+      "description" : "virtual room name"
     },
     "npcs" : {
       "type" : "array",
-      "description" : "array contenant les identifiants des personnage present dans la salle, cet array contient toujours deux identifiants sauf dans le cas du coupable ou il est seul.",
+      "description" : "array of the npc_id present in the room, should always be at the number of two, execept for the bulgar who was alone in the room",
       "items" : {
         "type" : "string"
       }
     }
   },
-  "description" : "object representant une salle virtuelle pour l'intrigue textuelle du jeu"
-};
-            defs["salle_"] = {
-  "type" : "object",
-  "properties" : {
-    "name" : {
-      "type" : "string",
-      "description" : "nom de la salle virtuelle"
-    },
-    "npcs" : {
-      "type" : "array",
-      "description" : "array contenant les identifiants des personnage present dans la salle, cet array contient toujours deux identifiants sauf dans le cas du coupable ou il est seul.",
-      "items" : {
-        "type" : "integer"
-      }
-    }
-  },
-  "description" : "object representant une salle virtuelle pour l'intrigue textuelle du jeu"
+  "description" : "object representing a single room the the game story"
 };
             defs["username"] = {
   "type" : "string",
-  "description" : "pseudo du joueur"
+  "description" : "player username"
 };
             defs["v1_createGame_body"] = {
   "type" : "object",
@@ -915,7 +898,7 @@
             defs["v1_getNpcImage_body"] = {
   "type" : "object",
   "properties" : {
-    "npcid" : {
+    "image_id" : {
       "type" : "integer"
     }
   }
@@ -979,6 +962,9 @@
                     <li data-group="Pages" data-name="invite" class="">
                       <a href="#api-Pages-invite">invite</a>
                     </li>
+                    <li data-group="Pages" data-name="mentionLegales" class="">
+                      <a href="#api-Pages-mentionLegales">mentionLegales</a>
+                    </li>
                     <li data-group="Pages" data-name="multiPage" class="">
                       <a href="#api-Pages-multiPage">multiPage</a>
                     </li>
@@ -1010,12 +996,12 @@
                       <article id="api-Api-createGame-0" data-group="User" data-name="createGame" data-version="0">
                         <div class="pull-left">
                           <h1>createGame</h1>
-                          <p>Demande une nouvelle session de jeu multijoueur au serveur</p>
+                          <p>Create a game session</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route crée une salle de jeu multijoueur dans le serveur, elle octroie ensuite les droit de creation de la salle a l&#x27;utilisateur dont le pseudo est donné en parametre post et lui retourne l&#x27;identifiant de la game</p>
+                        <p class="marked">This endpoint create a game in the server, the username passed as parametter is set as the game owner</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/createGame</span></code></pre>
@@ -1057,7 +1043,7 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        V1_createGame_body body = ; // V1_createGame_body | Le pseudo de la personne souhaitant crée une partie
+        V1_createGame_body body = ; // V1_createGame_body | username to set as game owner
         try {
             newGameData result = apiInstance.createGame(body);
             System.out.println(result);
@@ -1076,7 +1062,7 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        V1_createGame_body body = ; // V1_createGame_body | Le pseudo de la personne souhaitant crée une partie
+        V1_createGame_body body = ; // V1_createGame_body | username to set as game owner
         try {
             newGameData result = apiInstance.createGame(body);
             System.out.println(result);
@@ -1092,11 +1078,11 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-createGame-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">V1_createGame_body *body = ; // Le pseudo de la personne souhaitant crée une partie
+                              <pre class="prettyprint"><code class="language-cpp">V1_createGame_body *body = ; // username to set as game owner
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// Demande une nouvelle session de jeu multijoueur au serveur
+// Create a game session
 [apiInstance createGameWith:body
               completionHandler: ^(newGameData output, NSError* error) {
                             if (output) {
@@ -1113,7 +1099,7 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var body = ; // {{V1_createGame_body}} Le pseudo de la personne souhaitant crée une partie
+var body = ; // {{V1_createGame_body}} username to set as game owner
 
 var callback = function(error, data, response) {
   if (error) {
@@ -1144,11 +1130,11 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var body = new V1_createGame_body(); // V1_createGame_body | Le pseudo de la personne souhaitant crée une partie
+            var body = new V1_createGame_body(); // V1_createGame_body | username to set as game owner
 
             try
             {
-                // Demande une nouvelle session de jeu multijoueur au serveur
+                // Create a game session
                 newGameData result = apiInstance.createGame(body);
                 Debug.WriteLine(result);
             }
@@ -1167,7 +1153,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$body = ; // V1_createGame_body | Le pseudo de la personne souhaitant crée une partie
+$body = ; // V1_createGame_body | username to set as game owner
 
 try {
     $result = $api_instance->createGame($body);
@@ -1184,7 +1170,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $body = WWW::SwaggerClient::Object::V1_createGame_body->new(); # V1_createGame_body | Le pseudo de la personne souhaitant crée une partie
+my $body = WWW::SwaggerClient::Object::V1_createGame_body->new(); # V1_createGame_body | username to set as game owner
 
 eval { 
     my $result = $api_instance->createGame(body => $body);
@@ -1204,10 +1190,10 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-body =  # V1_createGame_body | Le pseudo de la personne souhaitant crée une partie
+body =  # V1_createGame_body | username to set as game owner
 
 try: 
-    # Demande une nouvelle session de jeu multijoueur au serveur
+    # Create a game session
     api_response = api_instance.create_game(body)
     pprint(api_response)
 except ApiException as e:
@@ -1232,7 +1218,7 @@ except ApiException as e:
                                 <script>
                                 $(document).ready(function() {
                                   var schemaWrapper = {
-  "description" : "Le pseudo de la personne souhaitant crée une partie",
+  "description" : "username to set as game owner",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -1267,7 +1253,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Retourne un object json contenant le code erreur de la requete, l&#x27;identifiant de la partie, ainsi que l&#x27;identifiant de la partie. Signifiant donc que la partie existe bien du coté du serveur </h3>
+                            <h3> Status: 200 - Returns a object, with the error code, and a game_id. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -1282,7 +1268,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Retourne un object json contenant le code erreur de la requete, l'identifiant de la partie, ainsi que l'identifiant de la partie. Signifiant donc que la partie existe bien du coté du serveur",
+  "description" : "Returns a object, with the error code, and a game_id.",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -1327,12 +1313,12 @@ except ApiException as e:
                       <article id="api-Api-getGame-0" data-group="User" data-name="getGame" data-version="0">
                         <div class="pull-left">
                           <h1>getGame</h1>
-                          <p>Recupere les données du jeu</p>
+                          <p>get game data</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route recupere les données necessaire au bon fonctionnement du jeu, c&#x27;est a dire les personnages a afficher, leurs textes, leurs reactions ainsi que leurs reponses</p>
+                        <p class="marked">Guess the game from the cookie and returns general game data necessary to the client to work properly</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/getGameData</span></code></pre>
@@ -1373,9 +1359,9 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        String gameId = gameId_example; // String | Identifiant de la partie a lancer
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            gameData result = apiInstance.getGame(gameId);
+            gameData result = apiInstance.getGame(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#getGame");
@@ -1392,9 +1378,9 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        String gameId = gameId_example; // String | Identifiant de la partie a lancer
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            gameData result = apiInstance.getGame(gameId);
+            gameData result = apiInstance.getGame(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#getGame");
@@ -1408,12 +1394,12 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-getGame-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *gameId = gameId_example; // Identifiant de la partie a lancer
+                              <pre class="prettyprint"><code class="language-cpp">Object *session = ; // Local session, holds data used to authentificate the user and the games they belong.
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// Recupere les données du jeu
-[apiInstance getGameWith:gameId
+// get game data
+[apiInstance getGameWith:session
               completionHandler: ^(gameData output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -1429,7 +1415,7 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var gameId = gameId_example; // {{String}} Identifiant de la partie a lancer
+var session = ; // {{Object}} Local session, holds data used to authentificate the user and the games they belong.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -1438,7 +1424,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getGame(gameId, callback);
+api.getGame(session, callback);
 </code></pre>
                             </div>
 
@@ -1460,12 +1446,12 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var gameId = gameId_example;  // String | Identifiant de la partie a lancer
+            var session = new Object(); // Object | Local session, holds data used to authentificate the user and the games they belong.
 
             try
             {
-                // Recupere les données du jeu
-                gameData result = apiInstance.getGame(gameId);
+                // get game data
+                gameData result = apiInstance.getGame(session);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1483,10 +1469,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$gameId = gameId_example; // String | Identifiant de la partie a lancer
+$session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try {
-    $result = $api_instance->getGame($gameId);
+    $result = $api_instance->getGame($session);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ApiApi->getGame: ', $e->getMessage(), PHP_EOL;
@@ -1500,10 +1486,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $gameId = gameId_example; # String | Identifiant de la partie a lancer
+my $session = ; # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 eval { 
-    my $result = $api_instance->getGame(gameId => $gameId);
+    my $result = $api_instance->getGame(session => $session);
     print Dumper($result);
 };
 if ($@) {
@@ -1520,11 +1506,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-gameId = gameId_example # String | Identifiant de la partie a lancer
+session =  # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try: 
-    # Recupere les données du jeu
-    api_response = api_instance.get_game(gameId)
+    # get game data
+    api_response = api_instance.get_game(session)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ApiApi->getGame: %s\n" % e)</code></pre>
@@ -1539,7 +1525,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Retourne le code erreur de la requete, et les données du jeu s&#x27;il n&#x27;y a pas eu d&#x27;erreur </h3>
+                            <h3> Status: 200 - returns a object with the error code. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -1554,7 +1540,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Retourne le code erreur de la requete, et les données du jeu s'il n'y a pas eu d'erreur",
+  "description" : "returns a object with the error code.",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -1594,12 +1580,12 @@ except ApiException as e:
                       <article id="api-Api-getMembers-0" data-group="User" data-name="getMembers" data-version="0">
                         <div class="pull-left">
                           <h1>getMembers</h1>
-                          <p>retourne les membre de la partie</p>
+                          <p>Get game members</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route retourne sous la forme d&#x27;une liste les nom des membres de la partie.</p>
+                        <p class="marked">Guess the game from the cookie and returns the members of that game</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/getGameMembers</span></code></pre>
@@ -1640,9 +1626,9 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        String gameId = gameId_example; // String | Identifiant de la partie
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            inline_response_200_2 result = apiInstance.getMembers(gameId);
+            inline_response_200_2 result = apiInstance.getMembers(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#getMembers");
@@ -1659,9 +1645,9 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        String gameId = gameId_example; // String | Identifiant de la partie
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            inline_response_200_2 result = apiInstance.getMembers(gameId);
+            inline_response_200_2 result = apiInstance.getMembers(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#getMembers");
@@ -1675,12 +1661,12 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-getMembers-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *gameId = gameId_example; // Identifiant de la partie
+                              <pre class="prettyprint"><code class="language-cpp">Object *session = ; // Local session, holds data used to authentificate the user and the games they belong.
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// retourne les membre de la partie
-[apiInstance getMembersWith:gameId
+// Get game members
+[apiInstance getMembersWith:session
               completionHandler: ^(inline_response_200_2 output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -1696,7 +1682,7 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var gameId = gameId_example; // {{String}} Identifiant de la partie
+var session = ; // {{Object}} Local session, holds data used to authentificate the user and the games they belong.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -1705,7 +1691,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getMembers(gameId, callback);
+api.getMembers(session, callback);
 </code></pre>
                             </div>
 
@@ -1727,12 +1713,12 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var gameId = gameId_example;  // String | Identifiant de la partie
+            var session = new Object(); // Object | Local session, holds data used to authentificate the user and the games they belong.
 
             try
             {
-                // retourne les membre de la partie
-                inline_response_200_2 result = apiInstance.getMembers(gameId);
+                // Get game members
+                inline_response_200_2 result = apiInstance.getMembers(session);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1750,10 +1736,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$gameId = gameId_example; // String | Identifiant de la partie
+$session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try {
-    $result = $api_instance->getMembers($gameId);
+    $result = $api_instance->getMembers($session);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ApiApi->getMembers: ', $e->getMessage(), PHP_EOL;
@@ -1767,10 +1753,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $gameId = gameId_example; # String | Identifiant de la partie
+my $session = ; # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 eval { 
-    my $result = $api_instance->getMembers(gameId => $gameId);
+    my $result = $api_instance->getMembers(session => $session);
     print Dumper($result);
 };
 if ($@) {
@@ -1787,11 +1773,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-gameId = gameId_example # String | Identifiant de la partie
+session =  # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try: 
-    # retourne les membre de la partie
-    api_response = api_instance.get_members(gameId)
+    # Get game members
+    api_response = api_instance.get_members(session)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ApiApi->getMembers: %s\n" % e)</code></pre>
@@ -1806,7 +1792,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - liste des pseudos des membres de la partie </h3>
+                            <h3> Status: 200 - List of members in the game </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -1821,7 +1807,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "liste des pseudos des membres de la partie",
+  "description" : "List of members in the game",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -1861,12 +1847,13 @@ except ApiException as e:
                       <article id="api-Api-getNpcImage-0" data-group="User" data-name="getNpcImage" data-version="0">
                         <div class="pull-left">
                           <h1>getNpcImage</h1>
-                          <p>retourne l&#x27;image d&#x27;un personnage sans reactions</p>
+                          <p>Get an image from its ID</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route retourne l&#x27;image neutre du personnage demmandé identifié par son identifiants</p>
+                        <p class="marked">This endpoint is used to show NPC images in the result page. The image id is provided by the server upon finishing the game. a static ID is needed because the server delete information related to the game after finishing it
+</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/getNpcImage</span></code></pre>
@@ -1908,7 +1895,7 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        V1_getNpcImage_body body = ; // V1_getNpcImage_body | identifiant du personnage dont on veut recupere l'image
+        V1_getNpcImage_body body = ; // V1_getNpcImage_body | image_id we want the image of
         try {
             'String' result = apiInstance.getNpcImage(body);
             System.out.println(result);
@@ -1927,7 +1914,7 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        V1_getNpcImage_body body = ; // V1_getNpcImage_body | identifiant du personnage dont on veut recupere l'image
+        V1_getNpcImage_body body = ; // V1_getNpcImage_body | image_id we want the image of
         try {
             'String' result = apiInstance.getNpcImage(body);
             System.out.println(result);
@@ -1943,11 +1930,11 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-getNpcImage-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">V1_getNpcImage_body *body = ; // identifiant du personnage dont on veut recupere l'image
+                              <pre class="prettyprint"><code class="language-cpp">V1_getNpcImage_body *body = ; // image_id we want the image of
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// retourne l'image d'un personnage sans reactions
+// Get an image from its ID
 [apiInstance getNpcImageWith:body
               completionHandler: ^('String' output, NSError* error) {
                             if (output) {
@@ -1964,7 +1951,7 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var body = ; // {{V1_getNpcImage_body}} identifiant du personnage dont on veut recupere l'image
+var body = ; // {{V1_getNpcImage_body}} image_id we want the image of
 
 var callback = function(error, data, response) {
   if (error) {
@@ -1995,11 +1982,11 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var body = new V1_getNpcImage_body(); // V1_getNpcImage_body | identifiant du personnage dont on veut recupere l'image
+            var body = new V1_getNpcImage_body(); // V1_getNpcImage_body | image_id we want the image of
 
             try
             {
-                // retourne l'image d'un personnage sans reactions
+                // Get an image from its ID
                 'String' result = apiInstance.getNpcImage(body);
                 Debug.WriteLine(result);
             }
@@ -2018,7 +2005,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$body = ; // V1_getNpcImage_body | identifiant du personnage dont on veut recupere l'image
+$body = ; // V1_getNpcImage_body | image_id we want the image of
 
 try {
     $result = $api_instance->getNpcImage($body);
@@ -2035,7 +2022,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $body = WWW::SwaggerClient::Object::V1_getNpcImage_body->new(); # V1_getNpcImage_body | identifiant du personnage dont on veut recupere l'image
+my $body = WWW::SwaggerClient::Object::V1_getNpcImage_body->new(); # V1_getNpcImage_body | image_id we want the image of
 
 eval { 
     my $result = $api_instance->getNpcImage(body => $body);
@@ -2055,10 +2042,10 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-body =  # V1_getNpcImage_body | identifiant du personnage dont on veut recupere l'image
+body =  # V1_getNpcImage_body | image_id we want the image of
 
 try: 
-    # retourne l'image d'un personnage sans reactions
+    # Get an image from its ID
     api_response = api_instance.get_npc_image(body)
     pprint(api_response)
 except ApiException as e:
@@ -2083,7 +2070,7 @@ except ApiException as e:
                                 <script>
                                 $(document).ready(function() {
                                   var schemaWrapper = {
-  "description" : "identifiant du personnage dont on veut recupere l'image",
+  "description" : "image_id we want the image of",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -2174,12 +2161,12 @@ except ApiException as e:
                       <article id="api-Api-getNpcReaction-0" data-group="User" data-name="getNpcReaction" data-version="0">
                         <div class="pull-left">
                           <h1>getNpcReaction</h1>
-                          <p>Recupere une reaction donnée pour un personage du jeu dans une partie</p>
+                          <p>Get an image corresponding to the reaction of a NPC in this game</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route retoune l&#x27;image correspondant a la reaction que le joueur doit deviner</p>
+                        <p class="marked">This endpoint is used during the game to get a random image corresponding to the assigned reaction of a NPC. The image may change every request</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/getNpcReaction</span></code></pre>
@@ -2221,9 +2208,10 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        V1_getNpcReaction_body body = ; // V1_getNpcReaction_body | identifiant du personnage dont on veut recupere l'image
+        V1_getNpcReaction_body body = ; // V1_getNpcReaction_body | ID of the NPC we want to get the image of
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            'String' result = apiInstance.getNpcReaction(body);
+            'String' result = apiInstance.getNpcReaction(body, session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#getNpcReaction");
@@ -2240,9 +2228,10 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        V1_getNpcReaction_body body = ; // V1_getNpcReaction_body | identifiant du personnage dont on veut recupere l'image
+        V1_getNpcReaction_body body = ; // V1_getNpcReaction_body | ID of the NPC we want to get the image of
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            'String' result = apiInstance.getNpcReaction(body);
+            'String' result = apiInstance.getNpcReaction(body, session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#getNpcReaction");
@@ -2256,12 +2245,14 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-getNpcReaction-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">V1_getNpcReaction_body *body = ; // identifiant du personnage dont on veut recupere l'image
+                              <pre class="prettyprint"><code class="language-cpp">V1_getNpcReaction_body *body = ; // ID of the NPC we want to get the image of
+Object *session = ; // Local session, holds data used to authentificate the user and the games they belong.
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// Recupere une reaction donnée pour un personage du jeu dans une partie
+// Get an image corresponding to the reaction of a NPC in this game
 [apiInstance getNpcReactionWith:body
+    session:session
               completionHandler: ^('String' output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2277,7 +2268,8 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var body = ; // {{V1_getNpcReaction_body}} identifiant du personnage dont on veut recupere l'image
+var body = ; // {{V1_getNpcReaction_body}} ID of the NPC we want to get the image of
+var session = ; // {{Object}} Local session, holds data used to authentificate the user and the games they belong.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -2286,7 +2278,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getNpcReaction(body, callback);
+api.getNpcReaction(bodysession, callback);
 </code></pre>
                             </div>
 
@@ -2308,12 +2300,13 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var body = new V1_getNpcReaction_body(); // V1_getNpcReaction_body | identifiant du personnage dont on veut recupere l'image
+            var body = new V1_getNpcReaction_body(); // V1_getNpcReaction_body | ID of the NPC we want to get the image of
+            var session = new Object(); // Object | Local session, holds data used to authentificate the user and the games they belong.
 
             try
             {
-                // Recupere une reaction donnée pour un personage du jeu dans une partie
-                'String' result = apiInstance.getNpcReaction(body);
+                // Get an image corresponding to the reaction of a NPC in this game
+                'String' result = apiInstance.getNpcReaction(body, session);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2331,10 +2324,11 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$body = ; // V1_getNpcReaction_body | identifiant du personnage dont on veut recupere l'image
+$body = ; // V1_getNpcReaction_body | ID of the NPC we want to get the image of
+$session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try {
-    $result = $api_instance->getNpcReaction($body);
+    $result = $api_instance->getNpcReaction($body, $session);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ApiApi->getNpcReaction: ', $e->getMessage(), PHP_EOL;
@@ -2348,10 +2342,11 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $body = WWW::SwaggerClient::Object::V1_getNpcReaction_body->new(); # V1_getNpcReaction_body | identifiant du personnage dont on veut recupere l'image
+my $body = WWW::SwaggerClient::Object::V1_getNpcReaction_body->new(); # V1_getNpcReaction_body | ID of the NPC we want to get the image of
+my $session = ; # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 eval { 
-    my $result = $api_instance->getNpcReaction(body => $body);
+    my $result = $api_instance->getNpcReaction(body => $body, session => $session);
     print Dumper($result);
 };
 if ($@) {
@@ -2368,11 +2363,12 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-body =  # V1_getNpcReaction_body | identifiant du personnage dont on veut recupere l'image
+body =  # V1_getNpcReaction_body | ID of the NPC we want to get the image of
+session =  # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try: 
-    # Recupere une reaction donnée pour un personage du jeu dans une partie
-    api_response = api_instance.get_npc_reaction(body)
+    # Get an image corresponding to the reaction of a NPC in this game
+    api_response = api_instance.get_npc_reaction(body, session)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ApiApi->getNpcReaction: %s\n" % e)</code></pre>
@@ -2396,7 +2392,7 @@ except ApiException as e:
                                 <script>
                                 $(document).ready(function() {
                                   var schemaWrapper = {
-  "description" : "identifiant du personnage dont on veut recupere l'image",
+  "description" : "ID of the NPC we want to get the image of",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -2487,12 +2483,12 @@ except ApiException as e:
                       <article id="api-Api-hasJoined-0" data-group="User" data-name="hasJoined" data-version="0">
                         <div class="pull-left">
                           <h1>hasJoined</h1>
-                          <p>Informe si le joueur est dans une partie</p>
+                          <p>Check if the player is in a given game</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route sert a determiner si le joueur qui fait la requette est dans la partie</p>
+                        <p class="marked">Checks the cookie to see if the client is currently in a given game</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/hasJoined</span></code></pre>
@@ -2533,9 +2529,9 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        String gameId = gameId_example; // String | identifiant de la game
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            inline_response_200_3 result = apiInstance.hasJoined(gameId);
+            inline_response_200_3 result = apiInstance.hasJoined(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#hasJoined");
@@ -2552,9 +2548,9 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        String gameId = gameId_example; // String | identifiant de la game
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            inline_response_200_3 result = apiInstance.hasJoined(gameId);
+            inline_response_200_3 result = apiInstance.hasJoined(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#hasJoined");
@@ -2568,12 +2564,12 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-hasJoined-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *gameId = gameId_example; // identifiant de la game (optional)
+                              <pre class="prettyprint"><code class="language-cpp">Object *session = ; // Local session, holds data used to authentificate the user and the games they belong.
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// Informe si le joueur est dans une partie
-[apiInstance hasJoinedWith:gameId
+// Check if the player is in a given game
+[apiInstance hasJoinedWith:session
               completionHandler: ^(inline_response_200_3 output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2589,9 +2585,8 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var opts = { 
-  'gameId': gameId_example // {{String}} identifiant de la game
-};
+var session = ; // {{Object}} Local session, holds data used to authentificate the user and the games they belong.
+
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -2599,7 +2594,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.hasJoined(opts, callback);
+api.hasJoined(session, callback);
 </code></pre>
                             </div>
 
@@ -2621,12 +2616,12 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var gameId = gameId_example;  // String | identifiant de la game (optional) 
+            var session = new Object(); // Object | Local session, holds data used to authentificate the user and the games they belong.
 
             try
             {
-                // Informe si le joueur est dans une partie
-                inline_response_200_3 result = apiInstance.hasJoined(gameId);
+                // Check if the player is in a given game
+                inline_response_200_3 result = apiInstance.hasJoined(session);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2644,10 +2639,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$gameId = gameId_example; // String | identifiant de la game
+$session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try {
-    $result = $api_instance->hasJoined($gameId);
+    $result = $api_instance->hasJoined($session);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ApiApi->hasJoined: ', $e->getMessage(), PHP_EOL;
@@ -2661,10 +2656,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $gameId = gameId_example; # String | identifiant de la game
+my $session = ; # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 eval { 
-    my $result = $api_instance->hasJoined(gameId => $gameId);
+    my $result = $api_instance->hasJoined(session => $session);
     print Dumper($result);
 };
 if ($@) {
@@ -2681,11 +2676,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-gameId = gameId_example # String | identifiant de la game (optional)
+session =  # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try: 
-    # Informe si le joueur est dans une partie
-    api_response = api_instance.has_joined(gameId=gameId)
+    # Check if the player is in a given game
+    api_response = api_instance.has_joined(session)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ApiApi->hasJoined: %s\n" % e)</code></pre>
@@ -2700,7 +2695,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Retourne le code d&#x27;erreur ainsi qu&#x27;un booleen determinant si le joueur est dans la partie </h3>
+                            <h3> Status: 200 - Returns error code and a boolean determining if the player is in the game </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -2715,7 +2710,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Retourne le code d'erreur ainsi qu'un booleen determinant si le joueur est dans la partie",
+  "description" : "Returns error code and a boolean determining if the player is in the game",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -2755,12 +2750,12 @@ except ApiException as e:
                       <article id="api-Api-isOwner-0" data-group="User" data-name="isOwner" data-version="0">
                         <div class="pull-left">
                           <h1>isOwner</h1>
-                          <p>Informe si le joueur est le createur de la partie ou non</p>
+                          <p>ask if the user is the game owner</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route sert a determiner si le joueur qui fait la requette est le createur de la partie ou non</p>
+                        <p class="marked">This endpoint it used to know if the username stored in the cookie is the owner of the game</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/isOwner</span></code></pre>
@@ -2801,9 +2796,9 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        Boolean isOwner = true; // Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            inline_response_200_1 result = apiInstance.isOwner(isOwner);
+            inline_response_200_1 result = apiInstance.isOwner(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#isOwner");
@@ -2820,9 +2815,9 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        Boolean isOwner = true; // Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            inline_response_200_1 result = apiInstance.isOwner(isOwner);
+            inline_response_200_1 result = apiInstance.isOwner(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#isOwner");
@@ -2836,12 +2831,12 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-isOwner-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Boolean *isOwner = true; // Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle (optional)
+                              <pre class="prettyprint"><code class="language-cpp">Object *session = ; // Local session, holds data used to authentificate the user and the games they belong.
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// Informe si le joueur est le createur de la partie ou non
-[apiInstance isOwnerWith:isOwner
+// ask if the user is the game owner
+[apiInstance isOwnerWith:session
               completionHandler: ^(inline_response_200_1 output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2857,9 +2852,8 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var opts = { 
-  'isOwner': true // {{Boolean}} Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-};
+var session = ; // {{Object}} Local session, holds data used to authentificate the user and the games they belong.
+
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -2867,7 +2861,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.isOwner(opts, callback);
+api.isOwner(session, callback);
 </code></pre>
                             </div>
 
@@ -2889,12 +2883,12 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var isOwner = true;  // Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle (optional) 
+            var session = new Object(); // Object | Local session, holds data used to authentificate the user and the games they belong.
 
             try
             {
-                // Informe si le joueur est le createur de la partie ou non
-                inline_response_200_1 result = apiInstance.isOwner(isOwner);
+                // ask if the user is the game owner
+                inline_response_200_1 result = apiInstance.isOwner(session);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2912,10 +2906,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$isOwner = true; // Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
+$session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try {
-    $result = $api_instance->isOwner($isOwner);
+    $result = $api_instance->isOwner($session);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ApiApi->isOwner: ', $e->getMessage(), PHP_EOL;
@@ -2929,10 +2923,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $isOwner = true; # Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
+my $session = ; # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 eval { 
-    my $result = $api_instance->isOwner(isOwner => $isOwner);
+    my $result = $api_instance->isOwner(session => $session);
     print Dumper($result);
 };
 if ($@) {
@@ -2949,11 +2943,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-isOwner = true # Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle (optional)
+session =  # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try: 
-    # Informe si le joueur est le createur de la partie ou non
-    api_response = api_instance.is_owner(isOwner=isOwner)
+    # ask if the user is the game owner
+    api_response = api_instance.is_owner(session)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ApiApi->isOwner: %s\n" % e)</code></pre>
@@ -2968,7 +2962,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Retourne le code erreur de la requete ainsi qu&#x27;un booleen qui determine le status du joueur </h3>
+                            <h3> Status: 200 - returns an object with the error code. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -2983,7 +2977,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Retourne le code erreur de la requete ainsi qu'un booleen qui determine le status du joueur",
+  "description" : "returns an object with the error code.",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -3023,12 +3017,12 @@ except ApiException as e:
                       <article id="api-Api-joinGame-0" data-group="User" data-name="joinGame" data-version="0">
                         <div class="pull-left">
                           <h1>joinGame</h1>
-                          <p>Ajoute l&#x27;utilisateur dans une partie en cours</p>
+                          <p>Adds user to an existing game</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route ajoute dans la partie identifié par l&#x27;identifiant de jeu l&#x27;utilisateur indentifié par son pseudo</p>
+                        <p class="marked">This endpoint adds the username passed as parameter to the game identified by its game_id also passed as the parametter</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/joinGame</span></code></pre>
@@ -3070,7 +3064,7 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        JoinGameData body = ; // JoinGameData | Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie 
+        JoinGameData body = ; // JoinGameData | object with a game_id and a username
         try {
             inline_response_200 result = apiInstance.joinGame(body);
             System.out.println(result);
@@ -3089,7 +3083,7 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        JoinGameData body = ; // JoinGameData | Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie 
+        JoinGameData body = ; // JoinGameData | object with a game_id and a username
         try {
             inline_response_200 result = apiInstance.joinGame(body);
             System.out.println(result);
@@ -3105,11 +3099,11 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-joinGame-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">JoinGameData *body = ; // Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie 
+                              <pre class="prettyprint"><code class="language-cpp">JoinGameData *body = ; // object with a game_id and a username
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// Ajoute l'utilisateur dans une partie en cours
+// Adds user to an existing game
 [apiInstance joinGameWith:body
               completionHandler: ^(inline_response_200 output, NSError* error) {
                             if (output) {
@@ -3126,7 +3120,7 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var body = ; // {{JoinGameData}} Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie 
+var body = ; // {{JoinGameData}} object with a game_id and a username
 
 var callback = function(error, data, response) {
   if (error) {
@@ -3157,11 +3151,11 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var body = new JoinGameData(); // JoinGameData | Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie 
+            var body = new JoinGameData(); // JoinGameData | object with a game_id and a username
 
             try
             {
-                // Ajoute l'utilisateur dans une partie en cours
+                // Adds user to an existing game
                 inline_response_200 result = apiInstance.joinGame(body);
                 Debug.WriteLine(result);
             }
@@ -3180,7 +3174,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$body = ; // JoinGameData | Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie 
+$body = ; // JoinGameData | object with a game_id and a username
 
 try {
     $result = $api_instance->joinGame($body);
@@ -3197,7 +3191,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $body = WWW::SwaggerClient::Object::JoinGameData->new(); # JoinGameData | Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie 
+my $body = WWW::SwaggerClient::Object::JoinGameData->new(); # JoinGameData | object with a game_id and a username
 
 eval { 
     my $result = $api_instance->joinGame(body => $body);
@@ -3217,10 +3211,10 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-body =  # JoinGameData | Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie 
+body =  # JoinGameData | object with a game_id and a username
 
 try: 
-    # Ajoute l'utilisateur dans une partie en cours
+    # Adds user to an existing game
     api_response = api_instance.join_game(body)
     pprint(api_response)
 except ApiException as e:
@@ -3245,7 +3239,7 @@ except ApiException as e:
                                 <script>
                                 $(document).ready(function() {
                                   var schemaWrapper = {
-  "description" : "Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie ",
+  "description" : "object with a game_id and a username",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -3280,7 +3274,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Retourne le code erreur de la requete. </h3>
+                            <h3> Status: 200 - returns a object with the error code. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -3295,7 +3289,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Retourne le code erreur de la requete.",
+  "description" : "returns a object with the error code.",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -3340,12 +3334,12 @@ except ApiException as e:
                       <article id="api-Api-startGame-0" data-group="User" data-name="startGame" data-version="0">
                         <div class="pull-left">
                           <h1>startGame</h1>
-                          <p>Crée les données necessaire au demarage d&#x27;une session de jeu</p>
+                          <p>Start the game</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Cette route crée les données necessaire au bon fonctionnement du jeu, c&#x27;est a dire qu&#x27;elle choisit les personnages, leurs salles, leurs reactions ainsi que leurs reponses et les stoque dans sa memoire en attendant que les clients les recuperent</p>
+                        <p class="marked">Starts the game and generate necessary data</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/startGame</span></code></pre>
@@ -3386,10 +3380,9 @@ public class ApiApiExample {
     public static void main(String[] args) {
         
         ApiApi apiInstance = new ApiApi();
-        Boolean isOwner = true; // Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-        String gameId = gameId_example; // String | Identifiant de la partie a lancer
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            inline_response_200 result = apiInstance.startGame(isOwner, gameId);
+            inline_response_200 result = apiInstance.startGame(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#startGame");
@@ -3406,10 +3399,9 @@ public class ApiApiExample {
 
     public static void main(String[] args) {
         ApiApi apiInstance = new ApiApi();
-        Boolean isOwner = true; // Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-        String gameId = gameId_example; // String | Identifiant de la partie a lancer
+        Object session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
         try {
-            inline_response_200 result = apiInstance.startGame(isOwner, gameId);
+            inline_response_200 result = apiInstance.startGame(session);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ApiApi#startGame");
@@ -3423,14 +3415,12 @@ public class ApiApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Api-startGame-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Boolean *isOwner = true; // Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-String *gameId = gameId_example; // Identifiant de la partie a lancer
+                              <pre class="prettyprint"><code class="language-cpp">Object *session = ; // Local session, holds data used to authentificate the user and the games they belong.
 
 ApiApi *apiInstance = [[ApiApi alloc] init];
 
-// Crée les données necessaire au demarage d'une session de jeu
-[apiInstance startGameWith:isOwner
-    gameId:gameId
+// Start the game
+[apiInstance startGameWith:session
               completionHandler: ^(inline_response_200 output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -3446,8 +3436,7 @@ ApiApi *apiInstance = [[ApiApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
 
 var api = new TruthInquiry.ApiApi()
-var isOwner = true; // {{Boolean}} Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-var gameId = gameId_example; // {{String}} Identifiant de la partie a lancer
+var session = ; // {{Object}} Local session, holds data used to authentificate the user and the games they belong.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -3456,7 +3445,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.startGame(isOwner, gameId, callback);
+api.startGame(session, callback);
 </code></pre>
                             </div>
 
@@ -3478,13 +3467,12 @@ namespace Example
         {
 
             var apiInstance = new ApiApi();
-            var isOwner = true;  // Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-            var gameId = gameId_example;  // String | Identifiant de la partie a lancer
+            var session = new Object(); // Object | Local session, holds data used to authentificate the user and the games they belong.
 
             try
             {
-                // Crée les données necessaire au demarage d'une session de jeu
-                inline_response_200 result = apiInstance.startGame(isOwner, gameId);
+                // Start the game
+                inline_response_200 result = apiInstance.startGame(session);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -3502,11 +3490,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiApiApi();
-$isOwner = true; // Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-$gameId = gameId_example; // String | Identifiant de la partie a lancer
+$session = ; // Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try {
-    $result = $api_instance->startGame($isOwner, $gameId);
+    $result = $api_instance->startGame($session);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ApiApi->startGame: ', $e->getMessage(), PHP_EOL;
@@ -3520,11 +3507,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ApiApi;
 
 my $api_instance = WWW::SwaggerClient::ApiApi->new();
-my $isOwner = true; # Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-my $gameId = gameId_example; # String | Identifiant de la partie a lancer
+my $session = ; # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 eval { 
-    my $result = $api_instance->startGame(isOwner => $isOwner, gameId => $gameId);
+    my $result = $api_instance->startGame(session => $session);
     print Dumper($result);
 };
 if ($@) {
@@ -3541,12 +3527,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ApiApi()
-isOwner = true # Boolean | Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle
-gameId = gameId_example # String | Identifiant de la partie a lancer
+session =  # Object | Local session, holds data used to authentificate the user and the games they belong.
 
 try: 
-    # Crée les données necessaire au demarage d'une session de jeu
-    api_response = api_instance.start_game(isOwner, gameId)
+    # Start the game
+    api_response = api_instance.start_game(session)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ApiApi->startGame: %s\n" % e)</code></pre>
@@ -3561,7 +3546,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Retourne le code erreur de la requete, &#x27;0&#x27; signifiant que les données ont correctement été generées </h3>
+                            <h3> Status: 200 - returns a object with the error code. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -3576,7 +3561,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Retourne le code erreur de la requete, '0' signifiant que les données ont correctement été generées",
+  "description" : "returns a object with the error code.",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -3619,12 +3604,12 @@ except ApiException as e:
                       <article id="api-Pages-homePage-0" data-group="User" data-name="homePage" data-version="0">
                         <div class="pull-left">
                           <h1>homePage</h1>
-                          <p>Page d&#x27;accueil du site web</p>
+                          <p>Main page</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Page d&#x27;accueil du site web, elle contient des liens vers les pages de contacts et de mention legales ainsi que le bouton pour lancer le jeu.</p>
+                        <p class="marked">Home page of the game, it serves as a hub of all other pages : legal mentions, credits and game pages</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/</span></code></pre>
@@ -3699,7 +3684,7 @@ public class PagesApiExample {
                               <pre class="prettyprint"><code class="language-cpp">
 PagesApi *apiInstance = [[PagesApi alloc] init];
 
-// Page d'accueil du site web
+// Main page
 [apiInstance homePageWithCompletionHandler: 
               ^(NSError* error) {
                             if (error) {
@@ -3745,7 +3730,7 @@ namespace Example
 
             try
             {
-                // Page d'accueil du site web
+                // Main page
                 apiInstance.homePage();
             }
             catch (Exception e)
@@ -3798,7 +3783,7 @@ from pprint import pprint
 api_instance = swagger_client.PagesApi()
 
 try: 
-    # Page d'accueil du site web
+    # Main page
     api_instance.home_page()
 except ApiException as e:
     print("Exception when calling PagesApi->homePage: %s\n" % e)</code></pre>
@@ -3813,7 +3798,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - La page d&#x27;accueil est retournée au navigateur web </h3>
+                            <h3> Status: 200 - return the home page of the game </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
@@ -3828,12 +3813,12 @@ except ApiException as e:
                       <article id="api-Pages-invite-0" data-group="User" data-name="invite" data-version="0">
                         <div class="pull-left">
                           <h1>invite</h1>
-                          <p>Page de la room multijoueur</p>
+                          <p>multiplayer lobby room</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Page representant la salle avant le lancement d&#x27;une partie multijoueur, elle affiche tout les joueurs present dans la salle, elle sert aussi a rejoindre la salle pour toute personne possedant le lien.</p>
+                        <p class="marked">The multiplayer lobby room is shown before a multiplayer game starts, is shows the current member of the game, it is reacheable by the game id shown in the page and in the url</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/lobby/{game_id}</span></code></pre>
@@ -3911,7 +3896,7 @@ public class PagesApiExample {
 
 PagesApi *apiInstance = [[PagesApi alloc] init];
 
-// Page de la room multijoueur
+// multiplayer lobby room
 [apiInstance inviteWith:gameId
               completionHandler: ^(NSError* error) {
                             if (error) {
@@ -3960,7 +3945,7 @@ namespace Example
 
             try
             {
-                // Page de la room multijoueur
+                // multiplayer lobby room
                 apiInstance.invite(gameId);
             }
             catch (Exception e)
@@ -4016,7 +4001,7 @@ api_instance = swagger_client.PagesApi()
 gameId = gameId_example # String | gameId
 
 try: 
-    # Page de la room multijoueur
+    # multiplayer lobby room
     api_instance.invite(gameId)
 except ApiException as e:
     print("Exception when calling PagesApi->invite: %s\n" % e)</code></pre>
@@ -4060,7 +4045,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - La page de la salle est retournée au navigateur web. </h3>
+                            <h3> Status: 200 - return the lobby page. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
@@ -4068,7 +4053,216 @@ except ApiException as e:
                             <div class="tab-content" style='margin-bottom: 10px;'>
                             </div>
 
-                            <h3> Status: 404 - La salle n&#x27;existe pas ou n&#x27;existe plus. </h3>
+                            <h3> Status: 404 - This does not exist or does not exist anymore </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Pages-mentionLegales">
+                      <article id="api-Pages-mentionLegales-0" data-group="User" data-name="mentionLegales" data-version="0">
+                        <div class="pull-left">
+                          <h1>mentionLegales</h1>
+                          <p>legal mention page</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">The legal mention page, holds the legal mentions such as where is hosted the website and who made it</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/legal</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Pages-mentionLegales-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Pages-mentionLegales-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Pages-mentionLegales-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Pages-mentionLegales-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Pages-mentionLegales-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Pages-mentionLegales-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Pages-mentionLegales-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Pages-mentionLegales-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Pages-mentionLegales-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Pages-mentionLegales-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Pages-mentionLegales-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Pages-mentionLegales-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: text/html"\
+"truthInquiry.simailadjalim.fr/legal"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Pages-mentionLegales-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.PagesApi;
+
+import java.io.File;
+import java.util.*;
+
+public class PagesApiExample {
+
+    public static void main(String[] args) {
+        
+        PagesApi apiInstance = new PagesApi();
+        try {
+            apiInstance.mentionLegales();
+        } catch (ApiException e) {
+            System.err.println("Exception when calling PagesApi#mentionLegales");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Pages-mentionLegales-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.PagesApi;
+
+public class PagesApiExample {
+
+    public static void main(String[] args) {
+        PagesApi apiInstance = new PagesApi();
+        try {
+            apiInstance.mentionLegales();
+        } catch (ApiException e) {
+            System.err.println("Exception when calling PagesApi#mentionLegales");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Pages-mentionLegales-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Pages-mentionLegales-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+PagesApi *apiInstance = [[PagesApi alloc] init];
+
+// legal mention page
+[apiInstance mentionLegalesWithCompletionHandler: 
+              ^(NSError* error) {
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Pages-mentionLegales-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var TruthInquiry = require('truth_inquiry');
+
+var api = new TruthInquiry.PagesApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.mentionLegales(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Pages-mentionLegales-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Pages-mentionLegales-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class mentionLegalesExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new PagesApi();
+
+            try
+            {
+                // legal mention page
+                apiInstance.mentionLegales();
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling PagesApi.mentionLegales: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Pages-mentionLegales-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiPagesApi();
+
+try {
+    $api_instance->mentionLegales();
+} catch (Exception $e) {
+    echo 'Exception when calling PagesApi->mentionLegales: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Pages-mentionLegales-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::PagesApi;
+
+my $api_instance = WWW::SwaggerClient::PagesApi->new();
+
+eval { 
+    $api_instance->mentionLegales();
+};
+if ($@) {
+    warn "Exception when calling PagesApi->mentionLegales: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Pages-mentionLegales-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.PagesApi()
+
+try: 
+    # legal mention page
+    api_instance.mention_legales()
+except ApiException as e:
+    print("Exception when calling PagesApi->mentionLegales: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - returns the legal mention page </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
@@ -4083,12 +4277,12 @@ except ApiException as e:
                       <article id="api-Pages-multiPage-0" data-group="User" data-name="multiPage" data-version="0">
                         <div class="pull-left">
                           <h1>multiPage</h1>
-                          <p>Page du jeu lors d&#x27;une partie multijoueurs</p>
+                          <p>multiplayer game page</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Page de jeu du mode multijoueur, elle contient uniquement la logique du jeu pendant la partie multijoueur.</p>
+                        <p class="marked">Multi player game page, it holds all of the game logic from the game creator starting the game to its end</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/multi</span></code></pre>
@@ -4163,7 +4357,7 @@ public class PagesApiExample {
                               <pre class="prettyprint"><code class="language-cpp">
 PagesApi *apiInstance = [[PagesApi alloc] init];
 
-// Page du jeu lors d'une partie multijoueurs
+// multiplayer game page
 [apiInstance multiPageWithCompletionHandler: 
               ^(NSError* error) {
                             if (error) {
@@ -4209,7 +4403,7 @@ namespace Example
 
             try
             {
-                // Page du jeu lors d'une partie multijoueurs
+                // multiplayer game page
                 apiInstance.multiPage();
             }
             catch (Exception e)
@@ -4262,7 +4456,7 @@ from pprint import pprint
 api_instance = swagger_client.PagesApi()
 
 try: 
-    # Page du jeu lors d'une partie multijoueurs
+    # multiplayer game page
     api_instance.multi_page()
 except ApiException as e:
     print("Exception when calling PagesApi->multiPage: %s\n" % e)</code></pre>
@@ -4277,7 +4471,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - La page de jeu multijoueur est retournée au navigateur web. </h3>
+                            <h3> Status: 200 - returns the game page </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
@@ -4292,12 +4486,12 @@ except ApiException as e:
                       <article id="api-Pages-singlePage-0" data-group="User" data-name="singlePage" data-version="0">
                         <div class="pull-left">
                           <h1>singlePage</h1>
-                          <p>Page du jeu lors d&#x27;une partie solo</p>
+                          <p>solo game page</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Page de jeu du mode solo, elle contient toute la logique du jeu du moment où le joueur entre son pseudo et le moment ou la partie d&#x27;arrete</p>
+                        <p class="marked">Sigle player game page, it holds all of the game logic from the player entering their username to the end of the game</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/solo</span></code></pre>
@@ -4372,7 +4566,7 @@ public class PagesApiExample {
                               <pre class="prettyprint"><code class="language-cpp">
 PagesApi *apiInstance = [[PagesApi alloc] init];
 
-// Page du jeu lors d'une partie solo
+// solo game page
 [apiInstance singlePageWithCompletionHandler: 
               ^(NSError* error) {
                             if (error) {
@@ -4418,7 +4612,7 @@ namespace Example
 
             try
             {
-                // Page du jeu lors d'une partie solo
+                // solo game page
                 apiInstance.singlePage();
             }
             catch (Exception e)
@@ -4471,7 +4665,7 @@ from pprint import pprint
 api_instance = swagger_client.PagesApi()
 
 try: 
-    # Page du jeu lors d'une partie solo
+    # solo game page
     api_instance.single_page()
 except ApiException as e:
     print("Exception when calling PagesApi->singlePage: %s\n" % e)</code></pre>
@@ -4486,7 +4680,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - La page de jeu seul est retournée au navigateur web </h3>
+                            <h3> Status: 200 - returns the game page </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
