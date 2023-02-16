@@ -87,7 +87,7 @@ def get_reaction_description(lang, npc_id, trait_id) -> str:
     :trait_id: the trait associated to the reaction to get the description from
     :return: the description in the given language
     """
-    desc_lid = db.session.query(Reaction).filter_by(NPC_ID=npc_id,TRAIT_ID=trait_id).one().DESC_LID
+    desc_lid = db.session.query(Trait).filter_by(TRAIT_ID=trait_id).one().DESC_LID
     return get_text_from_lid(lang, desc_lid)
 
 def get_traits(lang: str) -> list:
