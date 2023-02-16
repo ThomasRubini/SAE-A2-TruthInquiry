@@ -102,7 +102,7 @@ def start_game():
         return {"error": 1, "msg": "this game is already started"}
     game.generate_data()
     game.has_started = True
-    APP.socketio_app.emit("gamestart", {}, room="game."+game.game_id)
+    socket_io.emit("gamestart", {}, room="game."+game.game_id)
     return {"error": 0}
 
 @routes_api.route("/getGameData", methods=["GET", "POST"])
@@ -168,7 +168,7 @@ def game_progress():
     username = flask.session["username"]
     game.get_member(username).progress += 1
 
-    APP.socketio_app.emit("gameprogress", [flask.session["username"]], room="game."+game.game_id)
+    socket_io.emit("gameprogress", [flask.session["username"]], room="game."+game.game_id)
 
     return {"error": 0}
 
@@ -200,7 +200,7 @@ def check_anwser():
     member.results = results
     if game.has_finished():
         json_game_results = game.generate_game_results()
-        APP.socketio_app.emit("gamefinished", json_game_results, room="game."+game.game_id)
+        socket_io.emit("gamefinished", json_game_results, room="game."+game.game_id)
         del game
     response = {"error": 0}
     return response
