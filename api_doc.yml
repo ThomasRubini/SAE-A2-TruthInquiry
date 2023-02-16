@@ -15,9 +15,9 @@ servers:
 # Definition des tags ------------------------
 tags:
   - name: "pages"
-    description: "Chemins liés à une page web"
+    description: "Pages endpoints"
   - name: "api"
-    description: "Chemins liés à l'api interne au serveur"
+    description: "Api endpoints"
 
 # Endpoints
 paths:
@@ -25,12 +25,12 @@ paths:
     get:
       tags:
         - pages
-      summary: "Page d'accueil du site web"
-      description: "Page d'accueil du site web, elle contient des liens vers les pages de contacts et de mention legales ainsi que le bouton pour lancer le jeu."
+      summary: "Main page"
+      description: "Home page of the game, it serves as a hub of all other pages : legal mentions, credits and game pages"
       operationId: homePage
       responses:
         "200":
-          description: "La page d'accueil est retournée au navigateur web"
+          description: "return the home page of the game"
           content:
             text/html: {}
 
@@ -38,12 +38,12 @@ paths:
     get:
       tags:
         - pages
-      summary: "Page du jeu lors d'une partie solo"
-      description: "Page de jeu du mode solo, elle contient toute la logique du jeu du moment où le joueur entre son pseudo et le moment ou la partie d'arrete"
+      summary: "solo game page"
+      description: "Sigle player game page, it holds all of the game logic from the player entering their username to the end of the game"
       operationId: singlePage
       responses:
         "200":
-          description: "La page de jeu seul est retournée au navigateur web"
+          description: "returns the game page"
           content:
             text/html: {}
 
@@ -51,12 +51,12 @@ paths:
     get:
       tags:
         - pages
-      summary: "Page du jeu lors d'une partie multijoueurs"
-      description: "Page de jeu du mode multijoueur, elle contient uniquement la logique du jeu pendant la partie multijoueur."
+      summary: "multiplayer game page"
+      description: "Multi player game page, it holds all of the game logic from the game creator starting the game to its end"
       operationId: multiPage
       responses:
         "200":
-          description: "La page de jeu multijoueur est retournée au navigateur web."
+          description: "returns the game page"
           content:
             text/html: {}
 
@@ -64,38 +64,21 @@ paths:
     get:
       tags:
         - pages
-      summary: "Page de mentions legales"
-      description: "Page des mentions legales du site web, comme son nom l'indique elle affiche les mentions legales."
+      summary: "legal mention page"
+      description: "The legal mention page, holds the legal mentions such as where is hosted the website and who made it"
       operationId: mentionLegales
       responses:
         "200":
-          description: "La page de mentions legales est retournée au navigateur"
+          description: "returns the legal mention page"
           content:
             text/html: {}
-
-  #TODO change
-  /privacy:
-    get:
-      tags:
-        - pages
-      summary: "Page de contact"
-      description: "Page de contact du site web, elle affiche les informations de contact pour contacter les mainteneurs du site web."
-      operationId: contact
-      responses:
-        "200":
-          description: "La page de contact est retournée au navigateur web"
-          content:
-            text/html: {}
-
-  #TODO
-  #/licenses
 
   /lobby/{game_id}:
     get:
       tags:
         - pages
-      summary: "Page de la room multijoueur"
-      description: "Page representant la salle avant le lancement d'une partie multijoueur, elle affiche tout les joueurs present dans la salle, elle sert aussi a rejoindre la salle pour toute personne possedant le lien."
+      summary: "multiplayer lobby room"
+      description: "The multiplayer lobby room is shown before a multiplayer game starts, is shows the current member of the game, it is reacheable by the game id shown in the page and in the url"
       parameters:
         - in: path
           name: game_id
@@ -108,11 +91,11 @@ paths:
       operationId: invite
       responses:
         "200":
-          description: "La page de la salle est retournée au navigateur web."
+          description: "return the lobby page."
           content:
             text/html: {}
         "404":
-          description: "La salle n'existe pas ou n'existe plus."
+          description: "This does not exist or does not exist anymore"
           content:
             text/html: {}
 
@@ -122,11 +105,11 @@ paths:
     post:
       tags:
         - api
-      summary: "Demande une nouvelle session de jeu multijoueur au serveur"
-      description: "Cette route crée une salle de jeu multijoueur dans le serveur, elle octroie ensuite les droit de creation de la salle a l'utilisateur dont le pseudo est donné en parametre post et lui retourne l'identifiant de la game"
+      summary: "Create a game session"
+      description: "This endpoint create a game in the server, the username passed as parametter is set as the game owner"
       operationId: create_game
       requestBody:
-        description: "Le pseudo de la personne souhaitant crée une partie"
+        description: "username to set as game owner"
         required: true
         content:
           application/json:
@@ -138,7 +121,7 @@ paths:
 
       responses:
         "200":
-          description: "Retourne un object json contenant le code erreur de la requete, l'identifiant de la partie, ainsi que l'identifiant de la partie. Signifiant donc que la partie existe bien du coté du serveur"
+          description: "Returns a object, with the error code, and a game_id."
           content:
             application/json:
               schema:
@@ -151,11 +134,11 @@ paths:
     post:
       tags:
         - api
-      summary: "Ajoute l'utilisateur dans une partie en cours"
-      description: "Cette route ajoute dans la partie identifié par l'identifiant de jeu l'utilisateur indentifié par son pseudo"
+      summary: "Adds user to an existing game"
+      description: "This endpoint adds the username passed as parameter to the game identified by its game_id also passed as the parametter"
       operationId: join_game
       requestBody:
-        description: "Un objet json contenant l'identifiant de la partie (game_id) ainsi que le pseudo (username) de l'utilisateur souhaitant rejoindre la partie "
+        description: "object with a game_id and a username"
         required: true
         content:
           application/json:
@@ -164,7 +147,7 @@ paths:
 
       responses:
         "200":
-          description: "Retourne le code erreur de la requete."
+          description: "returns a object with the error code."
           content:
             application/json:
               schema:
@@ -180,18 +163,19 @@ paths:
     post:
       tags:
         - api
-      summary: "Informe si le joueur est le createur de la partie ou non"
-      description : "Cette route sert a determiner si le joueur qui fait la requette est le createur de la partie ou non"
+      summary: "ask if the user is the game owner"
+      description : "This endpoint it used to know if the username stored in the cookie is the owner of the game"
       operationId: is_owner
       parameters:
-        - in : cookie
-          name: is_owner
-          description: "Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle"
+        - in: cookie
+          name: session
+          description: Local session, holds data used to authentificate the user and the games they belong.
+          required: true
           schema:
-              type: boolean
+              type: object
       responses:
         "200":
-          description: Retourne le code erreur de la requete ainsi qu'un booleen qui determine le status du joueur
+          description: "returns an object with the error code."
           content:
             application/json:
               schema:
@@ -201,31 +185,26 @@ paths:
                     $ref: "#/components/schemas/error"
                   owner:
                     type: boolean
-                    description: booleen determinant si le joueur est le createur de la partie
+                    description: "boolean determining if the palyer is the owner of the gzame"
 
   /api/v1/startGame:
     post:
       tags:
         - api
-      summary: "Crée les données necessaire au demarage d'une session de jeu"
-      description: "Cette route crée les données necessaire au bon fonctionnement du jeu, c'est a dire qu'elle choisit les personnages, leurs salles, leurs reactions ainsi que leurs reponses et les stoque dans sa memoire en attendant que les clients les recuperent"
+      summary: "Start the game"
+      description: "Starts the game and generate necessary data"
       operationId: startGame
       parameters:
         - in: cookie
-          name: is_owner
+          name: session
+          description: Local session, holds data used to authentificate the user and the games they belong.
           required: true
-          description: "Booleen attribué par le serveur determinant si le joueur actuel est celui qui a crée la salle"
           schema:
-              type: boolean
-        - in: cookie
-          name: "game_id"
-          required: true
-          description: "Identifiant de la partie a lancer"
-          schema:
-            type: string
+              type: object
+
       responses:
         "200":
-          description: "Retourne le code erreur de la requete, '0' signifiant que les données ont correctement été generées"
+          description: "returns a object with the error code."
           content:
             application/json:
               schema:
@@ -238,19 +217,19 @@ paths:
     post:
       tags:
         - api
-      summary: "Recupere les données du jeu"
-      description: "Cette route recupere les données necessaire au bon fonctionnement du jeu, c'est a dire les personnages a afficher, leurs textes, leurs reactions ainsi que leurs reponses"
+      summary: "get game data"
+      description: "Guess the game from the cookie and returns general game data necessary to the client to work properly"
       operationId: getGame
       parameters:
         - in: cookie
-          name: "game_id"
+          name: session
+          description: Local session, holds data used to authentificate the user and the games they belong.
           required: true
-          description: "Identifiant de la partie a lancer"
           schema:
-            type: string
+              type: object
       responses:
         "200":
-          description: "Retourne le code erreur de la requete, et les données du jeu s'il n'y a pas eu d'erreur"
+          description: "returns a object with the error code."
           content:
             application/json:
               schema:
@@ -260,19 +239,19 @@ paths:
     post:
       tags:
         - api
-      summary: "retourne les membre de la partie"
-      description: "Cette route retourne sous la forme d'une liste les nom des membres de la partie."
+      summary: "Get game members"
+      description: "Guess the game from the cookie and returns the members of that game"
       operationId: getMembers
       parameters:
-        - in : cookie
-          name: game_id
+        - in: cookie
+          name: session
+          description: Local session, holds data used to authentificate the user and the games they belong.
           required: true
-          description: Identifiant de la partie
           schema:
-            type : string
+              type: object
       responses:
         "200":
-          description: "liste des pseudos des membres de la partie"
+          description: "List of members in the game"
           content:
             application/json:
               schema:
@@ -289,18 +268,19 @@ paths:
     post:
       tags:
         - api
-      summary: Informe si le joueur est dans une partie
-      description: "Cette route sert a determiner si le joueur qui fait la requette est dans la partie"
+      summary: "Check if the player is in a given game"
+      description: "Checks the cookie to see if the client is currently in a given game"
       operationId: has_joined
       parameters:
-        - in : cookie
-          name: game_id
-          description: "identifiant de la game"
+        - in: cookie
+          name: session
+          description: Local session, holds data used to authentificate the user and the games they belong.
+          required: true
           schema:
-              type: string
+              type: object
       responses:
         "200":
-          description: "Retourne le code d'erreur ainsi qu'un booleen determinant si le joueur est dans la partie"
+          description: "Returns error code and a boolean determining if the player is in the game"
           content:
             application/json:
               schema:
@@ -312,21 +292,23 @@ paths:
                     type: boolean
   
   /api/v1/getNpcImage:
-    post:
+    post: 
       tags:
         - "api"
-      summary: retourne l'image d'un personnage sans reactions
-      description: "Cette route retourne l'image neutre du personnage demmandé identifié par son identifiants"
+      summary: Get an image from its ID
+      description: >
+        This endpoint is used to show NPC images in the result page. The image id is provided by the server upon
+        finishing the game. a static ID is needed because the server delete information related to the game after finishing it
       operationId: get_npc_image
       requestBody:
-        description: "identifiant du personnage dont on veut recupere l'image"
+        description: "image_id we want the image of"
         required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                npcid:
+                image_id:
                   type: integer
       responses:
         "200":
@@ -340,11 +322,18 @@ paths:
     post:
       tags:
         - api
-      summary: "Recupere une reaction donnée pour un personage du jeu dans une partie"
-      description: "Cette route retoune l'image correspondant a la reaction que le joueur doit deviner"
+      summary: "Get an image corresponding to the reaction of a NPC in this game"
+      description: "This endpoint is used during the game to get a random image corresponding to the assigned reaction of a NPC. The image may change every request"
       operationId: get_npc_reaction
+      parameters:
+        - in: cookie
+          name: session
+          description: Local session, holds data used to authentificate the user and the games they belong.
+          required: true
+          schema:
+              type: object
       requestBody:
-        description: "identifiant du personnage dont on veut recupere l'image"
+        description: "ID of the NPC we want to get the image of"
         required: true
         content:
           application/json:
@@ -368,68 +357,54 @@ components: #----------------------------------
   schemas:
     error:
       type: integer
-      description: "error de la requette"
+      description: "request error code"
       enum:
         - 0
         - 1
 
     game_id:
       type: string
-      description: "id de la room multijoueur"        
+      description: "ID of the game"
 
     username:
       type: string
-      description: "pseudo du joueur"
-
+      description: "player username"
 
     npc:
       type: object
-      description: "personnage a interroger dans la partie"
+      description: "npc to interogate in the game"
       properties:
         "QA_0" :
           type: string
-          description: reponse a la question "oû ce personnage etait ?"
+          description: "'Where?' type answer"
         "QA_1" :
           type: string
-          description: reponse a la question "avec qui ce personnage etait ?"
+          description: "'With who?' type answer"
         name:
           type: string
-          description: "nom du personnage"
+          description: "npc name"
 
     salle:
       type: object
-      description: "object representant une salle virtuelle pour l'intrigue textuelle du jeu"
+      description: "object representing a single room the the game story"
       properties:
         name:
           type: string
-          description: nom de la salle virtuelle
+          description: virtual room name
         npcs:
           type: array
-          description: array contenant les identifiants des personnage present dans la salle, cet array contient toujours deux identifiants sauf dans le cas du coupable ou il est seul.
+          description: array of the npc_id present in the room, should always be at the number of two, execept for the bulgar who was alone in the room
           items:
             type: string
-    salle_:
-      type: object
-      description: "object representant une salle virtuelle pour l'intrigue textuelle du jeu"
-      properties:
-        name:
-          type: string
-          description: nom de la salle virtuelle
-        npcs:
-          type: array
-          description: array contenant les identifiants des personnage present dans la salle, cet array contient toujours deux identifiants sauf dans le cas du coupable ou il est seul.
-          items:
-            type: 
-              integer
     #____________________________#
 
     game:
       type: object
-      description: "données du jeu"
+      description: "Main game data, should be queried once"
       properties:
         npcs:
           type: object
-          description: "liste des personnages choisis par le serveur de maniere aleatoire, ainsi que leur texte de dialogue"
+          description: "List of the randomly chosen npc, with their answer for each type of questions"
           properties:
             "npc_id_0":
               $ref: "#/components/schemas/npc"
@@ -443,27 +418,27 @@ components: #----------------------------------
               $ref: "#/components/schemas/npc"
         questions:
           type: object
-          description: "les questions identifiés par leur type, choisis aleatoirement par le serveur"
+          description: "Question identified by their type, randomly chosen by the server"
           properties:
             "QA_0":
               type: string
-              description: question de type "oû etait le personnage ?"
+              description: "'Where?' type question"
             "QA_1":
               type: string
-              description: question de type "avec qui etait le personnage ?"
+              description: "'With who?' type question"
         rooms:
           type: object
-          description: "object contenant les salle virtuelle de la partie indentifiées par leur identifiants"
+          description: "object storing the virtual rooms that holds the npcs"
           properties:
             "room_id_0":
              $ref: "#/components/schemas/salle"
             "room_id_1":
              $ref: "#/components/schemas/salle"
             "room_id_2":
-             $ref: "#/components/schemas/salle_"
+             $ref: "#/components/schemas/salle"
         traits:
           type : array
-          description: "liste des traits disponible pour cette session de jeu"
+          description: "List of available traits on in this game session"
           items:
             type: string
 
