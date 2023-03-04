@@ -11,7 +11,7 @@
  * </p>
  */
 function detectIEBrowsers() {
-    let browserName = window.navigator.userAgent;
+    const browserName = window.navigator.userAgent;
     if (browserName.indexOf("MSIE") != -1 || browserName.indexOf("Trident") != -1) {
         showUnsupportedBrowserMessage("Il semblerait que vous utilisez Internet Explorer, un navigateur non supporté. Veuillez utiliser un autre navigateur récent tel que Firefox.");
     }
@@ -43,10 +43,10 @@ function checkWebSocketAvailability() {
 function createTemporaryCookieThenDeleteIt() {
     try {
         // Create a temporary cookie
-        document.cookie = "cookietest=1; path=/";
-        let cookieTestResult = document.cookie.indexOf("cookietest=") !== -1;
+        document.cookie = "cookietest=1; SameSite=Strict; Path=/";
+        const cookieTestResult = document.cookie.indexOf("cookietest=") !== -1;
         // Delete the temporary cookie
-        document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/";
+        document.cookie = "cookietest=1; SameSite=Strict; Expires=Thu, 01-Jan-1970 00:00:01 GMT; Path=/";
         return cookieTestResult;
     } catch (e) {
         return false;
@@ -80,7 +80,7 @@ function checkCookiesAvailability() {
  */
 function showUnsupportedBrowserMessage(messageText) {
     showAlertDialog(document.getElementById("unsupported_browser_dialog"));
-    let unsupportedBrowserMessageElement = document.getElementsByClassName("unsupported_browser_msg")[0];
+    const unsupportedBrowserMessageElement = document.querySelector(".unsupported_browser_msg");
     unsupportedBrowserMessageElement.textContent = messageText;
     unsupportedBrowserMessageElement.classList.add("unsupported_show");
 }
@@ -97,7 +97,25 @@ function showUnsupportedBrowserMessage(messageText) {
  */
 function showAlertDialog(element) {
     element.classList.add("alert_dialog_show");
-    document.getElementsByClassName("alert_dialog_background")[0].style.display = "block";
+    document.querySelector(".alert_dialog_background").style.display = "block";
+}
+
+/**
+ * Show the first element with the given CSS class, by removing the hidden CSS class on it.
+ *
+ * @param {String} className the CSS class on which showing the first element found
+ */
+function showFirstClassElement(className) {
+    document.querySelector("." + className).classList.remove("hidden");
+}
+
+/**
+ * Hide the first element with the given CSS class, by adding the hidden CSS class on it.
+ *
+ * @param {String} className the CSS class on which hiding the first element found
+ */
+function hideFirstClassElement(className) {
+    document.querySelector("." + className).classList.add("hidden");
 }
 
 // Execution of main functions
