@@ -66,7 +66,7 @@ class Place(db.Model):
 
 class Question(db.Model):
     """
-    Stores questions asked by NPCs
+    Stores questions asked by players
     """
 
     __tablename__ = "T_QUESTION"
