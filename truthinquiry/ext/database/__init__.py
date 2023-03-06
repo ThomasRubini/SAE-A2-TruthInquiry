@@ -28,10 +28,14 @@ class Database(SQLAlchemy):
 db = Database()
 
 class Locale(db.Model):
+    """
+    Stores the different texts needed by the other tables in multiple languages
+    """
+
     __tablename__ = 'T_LOCALE'
-    TEXT_ID = db.Column(db.Integer, primary_key=True)
-    LANG = db.Column(db.VARCHAR(2), primary_key=True)
-    TEXT = db.Column(db.Text)
+    TEXT_ID = db.Column(db.Integer, primary_key=True, comment="ID of this text (the other tables references to this with *_LID columns)")
+    LANG = db.Column(db.VARCHAR(2), primary_key=True, comment="lang ID of the text value in this row, e.g FR, EN, ES")
+    TEXT = db.Column(db.Text, comment="Actual text stored for that text ID and lang")
 
     def __init__(self, TEXT_ID, LANG, TEXT):
         self.TEXT_ID = TEXT_ID
@@ -43,9 +47,13 @@ class Locale(db.Model):
 
 
 class Place(db.Model):
+    """
+    Store litteral places, could be a room in the manor or near it
+    """
+
     __tablename__ = 'T_PLACE'
-    PLACE_ID = db.Column(db.Integer, primary_key=True)
-    NAME_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
+    PLACE_ID = db.Column(db.Integer, primary_key=True, comment="ID of this place")
+    NAME_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"), comment="Place name")
     LOCALE = db.relationship("Locale")
 
     def __init__(self, PLACE_ID, NAME_LID):
@@ -57,10 +65,14 @@ class Place(db.Model):
 
 
 class Question(db.Model):
+    """
+    Stores questions asked by players
+    """
+
     __tablename__ = "T_QUESTION"
-    QUESTION_ID = db.Column(db.Integer, primary_key=True)
-    QUESTION_TYPE = db.Column(db.Integer)
-    TEXT_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
+    QUESTION_ID = db.Column(db.Integer, primary_key=True, comment="ID of this question")
+    QUESTION_TYPE = db.Column(db.Integer, comment="Question type ID, e.g 'when..', 'where..'")
+    TEXT_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"), comment="Question text")
     LOCALE = db.relationship("Locale")
 
     def __init__(self, QUESTION_ID, QUESTION_TYPE, TEXT_LID):
@@ -73,11 +85,16 @@ class Question(db.Model):
 
 
 class Answer(db.Model):
+    """
+    Stores answers given by NPCs
+    They are relative to the question type ID, and NPC ID
+    """
+
     __tablename__ = "T_ANSWER"
-    ANSWER_ID = db.Column(db.Integer, primary_key=True)
-    QA_TYPE = db.Column(db.Integer)
-    NPC_ID = db.Column(db.Integer, db.ForeignKey("T_NPC.NPC_ID"))
-    TEXT_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
+    ANSWER_ID = db.Column(db.Integer, primary_key=True, comment="ID of this answer")
+    QA_TYPE = db.Column(db.Integer, comment="Question type ID")
+    NPC_ID = db.Column(db.Integer, db.ForeignKey("T_NPC.NPC_ID"), comment="ID of the NPC that will say this answer")
+    TEXT_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"), comment="Text of the answer")
     LOCALE = db.relationship("Locale")
     NPC = db.relationship("Npc")
 
@@ -92,9 +109,13 @@ class Answer(db.Model):
 
 
 class Npc(db.Model):
+    """
+    Store Npcs
+    """
+
     __tablename__ = "T_NPC"
-    NPC_ID = db.Column(db.Integer, primary_key=True)
-    NAME_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
+    NPC_ID = db.Column(db.Integer, primary_key=True, comment="ID of this Npc")
+    NAME_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"), comment="Name of this Npc")
     LOCALE = db.relationship("Locale")
 
     def __init__(self, NPC_ID, NAME_LID):
@@ -106,10 +127,13 @@ class Npc(db.Model):
 
 
 class Trait(db.Model):
+    """
+    Store reaction types, e.g 'happy', 'sad', without relation with NPCs
+    """
     __tablename__ = "T_TRAIT"
-    TRAIT_ID = db.Column(db.Integer, primary_key=True)
-    NAME_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
-    DESC_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"))
+    TRAIT_ID = db.Column(db.Integer, primary_key=True, comment="ID of this trait")
+    NAME_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"), comment="Name of this trait")
+    DESC_LID = db.Column(db.Integer, db.ForeignKey("T_LOCALE.TEXT_ID"), comment="Description of this trait")
 
     Name = db.relationship("Locale",foreign_keys=[NAME_LID])
     Desc = db.relationship("Locale",foreign_keys=[DESC_LID])
@@ -124,10 +148,13 @@ class Trait(db.Model):
 
 
 class Reaction(db.Model):
+    """
+    Relation between a NPC and a Trait
+    """
     __tablename__ = "T_REACTION"
-    REACTION_ID = db.Column(db.Integer, primary_key=True)
-    NPC_ID = db.Column(db.Integer, db.ForeignKey("T_NPC.NPC_ID"), primary_key=True)
-    TRAIT_ID = db.Column(db.Integer, db.ForeignKey("T_TRAIT.TRAIT_ID"), primary_key=True)
+    REACTION_ID = db.Column(db.Integer, primary_key=True, comment="ID of this reaction")
+    NPC_ID = db.Column(db.Integer, db.ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="Name of the NPC that will have this reaction")
+    TRAIT_ID = db.Column(db.Integer, db.ForeignKey("T_TRAIT.TRAIT_ID"), primary_key=True, comment="ID of the trait of this reaction")
     NPC = db.relationship("Npc")
     TRAIT = db.relationship("Trait")
 
