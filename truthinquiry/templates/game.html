@@ -80,7 +80,7 @@
                 </div>
                 <div class="reveal_culprit">
                     <h2 class="reveal_culprit_title">Le coupable était ...</h2>
-                    <img class="suspect_picture" id="culprit" src="/static/images/suspect_example.png" alt="Example" draggable="false">
+                    <img class="suspect_picture" id="culprit" draggable="false">
                 </div>
             </div>
             <div class="summary">
@@ -115,19 +115,6 @@
                 </div>
             </div>
         </noscript>
-        <!-- buttons to clone in js-->
-        <button class="ask_button action_button hidden" id="interogationButton">Interroger</button>
-        <!-- Add culprit_btn_checked class when a choice is checked -->
-        <!-- Only one button can be checked at a time, so when one is checked, the previous one, if applicable, is unchecked -->
-        <button class="culprit_btn action_button hidden", id="culpritButton">
-            <svg class="culprit_checked_icon hidden culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
-                <path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"></path>
-            </svg>
-            <svg class="culprit_unchecked_icon culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
-                <path d="M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z">
-            </svg>
-            <p class="culprit_btn_text">Couplable</p>
-        </button>
         <script src="/static/js/socket.io_v4.4.1/socket.io.min.js"></script>
         <script src="/static/js/api.js"></script>
         <script src="/static/js/game_common.js"></script>
