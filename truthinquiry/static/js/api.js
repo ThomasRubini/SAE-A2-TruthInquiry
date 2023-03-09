@@ -1,3 +1,11 @@
+/**
+ * Make a request to the given endpoint of the API with the given body.
+ *
+ * @param {String} endpoint the endpoint on which make an API request
+ * @param {Object} body     an object to send in the API request (this object can be omitted)
+ * @returns a Promise, which resolves when the server can be reached and responds without an error
+ * and rejects otherwise
+ */
 async function makeAPIRequest(endpoint, body) {
     return new Promise((resolve, reject) => {
         const fetchOptions = {
@@ -7,7 +15,6 @@ async function makeAPIRequest(endpoint, body) {
 
         fetch("/api/v1/" + endpoint, fetchOptions).then(response => {
             const responseCode = response.status;
-            console.log(responseCode);
             if (responseCode >= 500) {
                 reject("Error " + responseCode + " when fetching " + endpoint);
                 alert("Une réponse invalide du serveur a été obtenue, veuillez réessayer ultérieurement.");
