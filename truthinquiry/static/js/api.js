@@ -22,12 +22,12 @@ async function makeAPIRequest(endpoint, body) {
             }
 
             response.json().then(jsonResponse => {
-                if (jsonResponse["error"] === 0) {
-                    resolve(jsonResponse);
-                } else {
+                if (typeof(jsonResponse["error"]) === 'number' && jsonResponse["error"] !== 0) {
                     const message = jsonResponse["msg"];
                     alert("Erreur du serveur : " + message);
                     reject(endpoint + ": " + message);
+                } else {
+                    resolve(jsonResponse);
                 }
             });
         }).catch((e) => {
