@@ -1,77 +1,94 @@
-const intro_image_path = "/static/images/entrée-manoir.png";
-const interrogation_image_path = "/static/images/salle-interrogation.png";
-const results_image_path = "/static/images/salle-resultats.png";
+const INTRO_IMAGE_PATH = "/static/images/entrée-manoir.png";
+const INTERROGATION_IMAGE_PATH = "/static/images/salle-interrogation.png";
+const RESULTS_IMAGE_PATH = "/static/images/salle-resultats.png";
+const NPC_REACTION_PATH = "/api/v1/getNpcReaction?npcid=";
+const NPC_IMAGE_PATH = "/api/v1/getNpcImage?npcid=";
 
-var npcs_ids = [];
-var gamedata = {};
-var currentNpc = null;
-var username = null;
+let npcsIds = [];
+let gameData = {};
+let currentNpc = null;
+let username = null;
 
-function show(className) {
-    document.getElementsByClassName(className)[0].classList.remove("hidden");
-}
-
-function hide(className) {
-    document.getElementsByClassName(className)[0].classList.add("hidden");
-}
-
+/*
+ * Set the current game background to the first element with the current_background CSS class.
+ */
 function setGameBackground(backgroundPath) {
-    document.getElementsByClassName("current_background")[0].style.backgroundImage = 'url("' + backgroundPath +'")';
+    document.querySelector(".current_background").style.backgroundImage = 'url("' + backgroundPath + '")';
 }
 
-function setListenerToIntroductionNextBtn() {
-    document.getElementById("introduction_next_btn").addEventListener("click", showInterogationViewFromIntroduction);
+/**
+ * Set listeners to introduction and interrogation navigation buttons.
+ */
+function setIntroductionAndInterrogationListeners() {
+    document.getElementById("introduction_next_btn")
+        .addEventListener("click", showInterrogationViewFromIntroduction);
+    document.getElementById("interrogation_suspect_previous_btn")
+        .addEventListener("click", goBackToInterrogation);
+    document.getElementById("interrogation_next_btn")
+        .addEventListener("click", showEmotionAndCulpritChoicesView);
 }
 
-function setListenerToInterrogationSuspectPreviousBtn() {
-    document.getElementById("interrogation_suspect_previous_btn").addEventListener("click", goBackToInterogation);
-}
-
-function setListenerToInterrogationNextBtn() {
-    document.getElementById("interrogation_next_btn").addEventListener("click", showEmotionAndCulpritChoicesView);
-}
-
+/**
+ * Set listeners to questions buttons.
+ */
 function setQuestionButtonsListeners() {
-    document.getElementById("QA_0").addEventListener("click", askTypeZeroQuestion);
-    document.getElementById("QA_1").addEventListener("click", askTypeOneQuestion);
+    document.getElementById("QA_0")
+        .addEventListener("click", askTypeZeroQuestion);
+    document.getElementById("QA_1")
+        .addEventListener("click", askTypeOneQuestion);
 }
 
-function removeQuestionButtonsListeners() {
-    document.getElementById("QA_0").removeEventListener("click", askTypeZeroQuestion);
-    document.getElementById("QA_1").removeEventListener("click", askTypeOneQuestion);
+/**
+ * Unset listeners to questions buttons.
+ */
+function unsetQuestionButtonsListeners() {
+    document.getElementById("QA_0")
+        .removeEventListener("click", askTypeZeroQuestion);
+    document.getElementById("QA_1")
+        .removeEventListener("click", askTypeOneQuestion);
 }
 
-function goBackToInterogation() {
-    hide("interrogation_suspect");
-    show("interrogation");
+/**
+ * Go back to interrogation view, by hiding the interrogation suspect view.
+ */
+function goBackToInterrogation() {
+    hideFirstClassElement("interrogation_suspect");
+    showFirstClassElement("interrogation");
 }
 
-function showInterogationViewFromIntroduction() {
-    hide("introduction");
-    show("interrogation");
-    setGameBackground(interrogation_image_path);
+/**
+ * Show the interrogation view from the introduction one and hide the interrogation one.
+ */
+function showInterrogationViewFromIntroduction() {
+    hideFirstClassElement("introduction");
+    showFirstClassElement("interrogation");
+    setGameBackground(INTERROGATION_IMAGE_PATH);
 }
 
+/**
+ * Show the emotion and culprit choices view and hide the interrogation one.
+ */
 function showEmotionAndCulpritChoicesView() {
-    hide("interrogation");
-    show("emotion_and_culprit_choices");
+    hideFirstClassElement("interrogation");
+    showFirstClassElement("emotion_and_culprit_choices");
 }
 
 function getNpcLocationAndPartner(npcid) {
-    data = {};
-    npcid = parseInt(npcid);
+    const data = {};
+    const npcidInt = parseInt(npcid);
 
-    for (const room in gamedata["rooms"]) {
-        if (gamedata["rooms"][room]["npcs"].includes(npcid)) {
-            data["room"] = gamedata["rooms"][room]["name"];
+    for (const room in gameData["rooms"]) {
+        if (gameData["rooms"][room]["npcs"].includes(npcidInt)) {
+            data["room"] = gameData["rooms"][room]["name"];
 
-            if (gamedata["rooms"][room]["npcs"].length === 1) {
+            if (gameData["rooms"][room]["npcs"].length === 1) {
                 do {
-                    const random = Math.floor(Math.random() * npcs_ids.length);
-                    data["partner"] = npcs_ids[random];
-                } while (data["partner"] === npcid);
+                    const random = Math.floor(Math.random() * npcsIds.length);
+                    data["partner"] = npcsIds[random];
+                } while (data["partner"] === npcidInt);
             } else {
-                data["partner"] = gamedata["rooms"][room]["npcs"][gamedata["rooms"][room]["npcs"][1] === npcid ? 0 : 1];
+                data["partner"] = gameData["rooms"][room]["npcs"]
+                    [gameData["rooms"][room]["npcs"][1] === npcidInt ? 0 : 1];
             }
         }
     }
@@ -81,21 +98,24 @@ function getNpcLocationAndPartner(npcid) {
 
 function disableCulpritButtons(culprit_choices_element, selected_suspect) {
     let childrenCulpritChoicesElement = culprit_choices_element.children;
+
     for (let index = 0; index < childrenCulpritChoicesElement.length; index++) {
         let child = childrenCulpritChoicesElement[index];
+
         if (selected_suspect != child) {
-            child.getElementsByClassName("culprit_btn")[0].classList.add("hidden");
+            child.querySelector(".culprit_btn").classList.add("hidden");
         } else {
-            child.getElementsByClassName("culprit_unchecked_icon")[0].classList.add("hidden");
-            child.getElementsByClassName("culprit_checked_icon")[0].classList.remove("hidden");
-            child.getElementsByClassName("culprit_btn")[0].classList.add("culprit_btn_checked");
+            child.querySelector(".culprit_unchecked_icon").classList.add("hidden");
+            child.querySelector(".culprit_checked_icon").classList.remove("hidden");
+            child.querySelector(".culprit_btn").classList.add("culprit_btn_checked");
         }
     }
 }
 
 function getCulprit() {
-    culprit = null;
-    Object.values(gamedata["rooms"]).forEach(element => {
+    let culprit = null;
+
+    Object.values(gameData["rooms"]).forEach(element => {
         if (element['npcs'].length === 1) {
             culprit = element['npcs'][0];
             return;  
@@ -106,198 +126,223 @@ function getCulprit() {
 }
 
 async function askTypeOneQuestion() {
-    removeQuestionButtonsListeners();
-    partnerId = getNpcLocationAndPartner(currentNpc)["partner"];
-    anwser = gamedata["npcs"][currentNpc]["QA_1"];
-    anwser = anwser.replace("{NPC}",gamedata["npcs"][partnerId]["name"]);
-    document.getElementsByClassName("suspect_answer")[0].textContent = anwser;
-    show("question_answer");
-    document.getElementById("currentNpcPicure").src = "/api/v1//getNpcReaction?npcid="+currentNpc;
-    // Sleep for 5 sec
-    await new Promise(r => setTimeout(r, 2000));
-    document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
-    hide("question_answer");
-    document.getElementsByClassName("suspect_answer")[0].textContent = "";
-    setQuestionButtonsListeners();
+    askQuestion(npcLocationAndPartner => gameData["npcs"][currentNpc]["QA_1"].replace(
+        "{NPC}", gameData["npcs"][npcLocationAndPartner["partner"]]["name"]));
 }
 
-
 async function askTypeZeroQuestion() {
-    removeQuestionButtonsListeners();
-    room = getNpcLocationAndPartner(currentNpc)["room"];
-    anwser = gamedata["npcs"][currentNpc]["QA_0"];
-    anwser = anwser.replace("{SALLE}",room);
-    document.getElementsByClassName("suspect_answer")[0].textContent = anwser;
-    show("question_answer");
-    document.getElementById("currentNpcPicure").src = "/api/v1//getNpcReaction?npcid="+currentNpc;
-    // Sleep for 5 sec
-    await new Promise(r => setTimeout(r, 5000));
-    document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+currentNpc;
-    hide("question_answer");
-    document.getElementsByClassName("suspect_answer")[0].textContent = "";
+    askQuestion(npcLocationAndPartner => gameData["npcs"][currentNpc]["QA_0"].replace(
+        "{SALLE}", npcLocationAndPartner["room"]));
+}
+
+async function askQuestion(buildAnswer) {
+    unsetQuestionButtonsListeners();
+
+    document.querySelector(".suspect_answer").textContent = buildAnswer(
+        getNpcLocationAndPartner(currentNpc));
+
+    showFirstClassElement("question_answer");
+
+    document.getElementById("currentNpcPicure").src = NPC_REACTION_PATH + currentNpc;
+
+    //TODO: change this code which produces strange behaviors
+    // Sleep for 4 sec
+    await new Promise(r => setTimeout(r, 4000));
+
+    document.getElementById("currentNpcPicure").src = NPC_REACTION_PATH + currentNpc;
+    hideFirstClassElement("question_answer");
+
+    document.querySelector(".suspect_answer").textContent = "";
+
     setQuestionButtonsListeners();
 }
 
 async function sendAnswers() {
-    selects = document.getElementsByClassName("suspect_emotion_chooser");
-    let playerResponses = {};
-    for (let index = 0; index < selects.length; index++) {
-        select = selects[index];
+    const selections = document.getElementsByClassName("suspect_emotion_chooser");
+
+    const playerResponses = {};
+
+    for (let index = 0; index < selections.length; index++) {
+        select = selections[index];
         playerResponses[select.id] = select.value;
     }
 
-    data = {};
+    const data = {};
     data["responses"] = JSON.stringify(playerResponses);
     return await makeAPIRequest("submitAnswers", data);
 }
 
 function renderAnswerSelectionPanel() {
-    npcs_ids.forEach(element => {
-        let suspect = document.createElement("div");
+    npcsIds.forEach(element => {
+        const suspect = document.createElement("div");
         suspect.classList.add("suspect");
 
-        suspect_emotion_chooser = document.createElement("select");
-        suspect_emotion_chooser.classList.add("suspect_emotion_chooser")
-        suspect_emotion_chooser.setAttribute("id", element);
-        gamedata["traits"].forEach(trait =>{
-            let option = document.createElement("option");
+        const suspectEmotionChooser = document.createElement("select");
+        suspectEmotionChooser.classList.add("suspect_emotion_chooser")
+        suspectEmotionChooser.setAttribute("id", element);
+
+        gameData["traits"].forEach(trait => {
+            const option = document.createElement("option");
             option.value = trait;
             option.text = trait;
-            suspect_emotion_chooser.appendChild(option);
+            suspectEmotionChooser.appendChild(option);
         });
 
-        suspect.appendChild(suspect_emotion_chooser);
+        suspect.appendChild(suspectEmotionChooser);
 
-        let img = document.createElement('img');
+        const img = document.createElement('img');
         img.classList.add("suspect_picture");
-        img.src = "/api/v1/getNpcImage?npcid=" + element;
+        img.src = NPC_IMAGE_PATH + element;
         suspect.appendChild(img);
 
-        let button = document.getElementById("culpritButton");
-        let button_clone = button.cloneNode(true);
-        let culprit_choices = document.getElementById("culprits_choices");
+        const button = document.createElement("button");
+        button.classList.add("culprit_btn", "action_button");
+        button.innerHTML = '<svg class="culprit_checked_icon hidden culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"></path></svg><svg class="culprit_unchecked_icon culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><path d="M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z"></svg><p class="culprit_btn_text">Couplable</p>';
 
-        button_clone.addEventListener("click", () => {
-            disableCulpritButtons(culprit_choices, suspect);
+        const culpritChoices = document.getElementById("culprits_choices");
+
+        button.addEventListener("click", () => {
+            disableCulpritButtons(culpritChoices, suspect);
             sendAnswers();
         });
 
-        button_clone.removeAttribute("id");
-        button_clone.classList.remove("hidden");
-        suspect.appendChild(button_clone);
-        culprit_choices.appendChild(suspect);
+        suspect.appendChild(button);
+        culpritChoices.appendChild(suspect);
     });
 }
 
-function renderInterogation() {
-    document.getElementById("QA_0").textContent = gamedata["questions"]["QA_0"],
-    document.getElementById("QA_1").textContent = gamedata["questions"]["QA_1"],
-    npcs_ids.forEach(element => {
-        let suspect = document.createElement("div");
+function renderInterrogation() {
+    document.getElementById("QA_0").textContent = gameData["questions"]["QA_0"];
+    document.getElementById("QA_1").textContent = gameData["questions"]["QA_1"];
+
+    const interrogationSuspects = document.getElementById("interrogation_suspects");
+
+    npcsIds.forEach(element => {
+        const suspect = document.createElement("div");
         suspect.classList.add("suspect");
 
-        let img = document.createElement('img');
+        const img = document.createElement('img');
         img.classList.add("suspect_picture");
-        img.src = "/api/v1/getNpcImage?npcid=" + element;
+        img.src = NPC_IMAGE_PATH + element;
         suspect.appendChild(img);
 
-        let button = document.getElementById("interogationButton");
-        let button_clone = button.cloneNode(true);
-        button_clone.classList.remove("hidden");
-        button_clone.addEventListener("click", () => {
+        const button = document.createElement("button");
+        button.classList.add("ask_button", "action_button");
+        button.textContent = "Interroger";
+        button.addEventListener("click", () => {
             // TODO remove this listener when we know the questions has already been asked;
-            currentNpc = element
-            document.getElementById("currentNpcPicure").src = "/api/v1/getNpcImage?npcid="+element;
-            hide("interrogation");
-            show("interrogation_suspect");
+            currentNpc = element;
+            document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + element;
+            hideFirstClassElement("interrogation");
+            showFirstClassElement("interrogation_suspect");
         });
 
-        suspect.appendChild(button_clone);
-        document.getElementById("interrogation_suspects").appendChild(suspect);
+        suspect.appendChild(button);
+        interrogationSuspects.appendChild(suspect);
     });
 }
 
-function initSock(){
-    socket = io({
+function initSock() {
+    const socket = io({
         auth : {
-            game_id: gamedata["game_id"]
+            game_id: gameData["game_id"]
         }
     });
 
     socket.on("connect", () => {
-        console.log("Connected !")
-    })
+        console.log("Connected to the server!");
+    });
 
     //TODO Send and receive userprogress when they have sent their responses
-    socket.on("gameprogress", (username) => {
+    socket.on("gameprogress", username => {
         console.log(username);
     });
     
-    socket.on("gamefinished", (finalResults) => {
-        hide("emotion_and_culprit_choices");
-        document.getElementsByClassName("reveal_score")[0].textContent = Object.values(finalResults["player"][username]).filter(x => x == true).length + "/5";
-        for (const player in finalResults["player"]){
+    socket.on("gamefinished", finalResults => {
+        hideFirstClassElement("emotion_and_culprit_choices");
+        document.querySelector(".reveal_score").textContent =
+            Object.values(finalResults["player"][username])
+                .filter(x => x == true).length + " / 5";
+
+        const playerListElement = document.querySelector(".players_list");
+
+        for (const player in finalResults["player"]) {
             if (player === username) {
                 continue;
             }
 
-            let playerNode = document.createElement("h3");
+            const playerNode = document.createElement("h3");
             playerNode.classList.add("player_name_and_score");
 
-            let playerResultArray = Object.values(finalResults["player"][player]);
-            playerNode.textContent = "" + player + " : " + playerResultArray.filter(x => x == true).length;
+            const playerResultArray = Object.values(finalResults["player"][player]);
+            playerNode.textContent = "" + player + " : "
+                + playerResultArray.filter(x => x == true).length;
 
-            document.getElementsByClassName("players_list")[0].appendChild(playerNode);
+            playerListElement.appendChild(playerNode);
         }
 
-        culprit = getCulprit();
-        document.getElementsByClassName("reveal_culprit_title")[0].textContent += " " + gamedata["npcs"][culprit]["name"];
-        document.getElementById("culprit").src = "/api/v1/getNpcImage?npcid="+culprit;
+        const culprit = getCulprit();
+        const culpritName = gameData["npcs"][culprit]["name"];
+        document.querySelector(".reveal_culprit_title").textContent += " " + culpritName;
 
-        show("results_game");
-        setGameBackground(results_image_path);
+        const culpritElement = document.getElementById("culprit");
+        culpritElement.src = NPC_IMAGE_PATH + culprit;
+        culpritElement.setAttribute("alt", "Image du ou de la coupable, " + culpritName);
 
-        npcs_ids.filter(x => x != culprit).forEach(npcid =>{
-            let suspect = document.createElement("div");
-            suspect.classList.add("summary_suspect");
-            let img = document.createElement("img")
-            img.src = "/api/v1/getNpcImage?npcid=" + npcid;
-            suspect.appendChild(img)
+        showFirstClassElement("results_game");
+        setGameBackground(RESULTS_IMAGE_PATH);
 
-            let emotionTitle = document.createElement("h2");
-            emotionTitle.classList.add("explain_suspect_emotion_title");
-            emotionTitle.textContent = "Ce suspect était " + finalResults["npcs"][npcid]["reaction"];
-            suspect.appendChild(emotionTitle);
+        const suspectListElement = document.querySelector(".suspects_list");
 
-            let emotionDesc = document.createElement("p");
-            emotionDesc.classList.add("explain_suspect_emotion_description");
-            emotionDesc.textContent = "Qui se caractérise par " + finalResults["npcs"][npcid]["description"];
-            suspect.appendChild(emotionDesc)
+        npcsIds.filter(x => x != culprit)
+            .forEach(npcid => {
+                const suspect = document.createElement("div");
+                suspect.classList.add("summary_suspect");
 
-            document.getElementsByClassName("suspects_list")[0].appendChild(suspect)
-        })
+                const img = document.createElement("img");
+                img.src = NPC_IMAGE_PATH + npcid;
+                suspect.appendChild(img);
+
+                const emotionTitle = document.createElement("h2");
+                emotionTitle.classList.add("explain_suspect_emotion_title");
+                emotionTitle.textContent = "Ce suspect était "
+                    + finalResults["npcs"][npcid]["reaction"] + ".";
+
+                suspect.appendChild(emotionTitle);
+
+                const emotionDesc = document.createElement("p");
+                emotionDesc.classList.add("explain_suspect_emotion_description");
+                emotionDesc.textContent = "Cette émotion se caractérise par "
+                    + finalResults["npcs"][npcid]["description"];
+                suspect.appendChild(emotionDesc);
+
+                suspectListElement.appendChild(suspect);
+            });
     });
 }
 
 async function setGameData() {
-    data = {};
-    response = await makeAPIRequest("getGameData");
-    gamedata = response["gamedata"];
+    const response = await makeAPIRequest("getGameData");
+    gameData = response["gamedata"];
     username = response["username"];
-    npcs_ids = Object.keys(gamedata["npcs"]).sort((a, b) => 0.5 - Math.random())
+    npcsIds = Object.keys(gameData["npcs"]).sort(() => 0.5 - Math.random());
 }
 
+/**
+ * Initialize the game, by setting the game data, initializing the socket, rendering the answer
+ * selection panel, rendering the interrogation view, setting questions buttons listeners,
+ * setting introduction and interrogation listeners, showing the introduction view and setting the
+ * introduction image as the game background.
+ */
 async function initGame() {
     await setGameData();
     initSock();
     renderAnswerSelectionPanel();
-    renderInterogation();
+    renderInterrogation();
     setQuestionButtonsListeners()
-    setListenerToInterrogationSuspectPreviousBtn()
-    setListenerToIntroductionNextBtn()
-    setListenerToInterrogationNextBtn();
-    show("introduction");
-    setGameBackground(intro_image_path);
+    setIntroductionAndInterrogationListeners();
+    showFirstClassElement("introduction");
+    setGameBackground(INTRO_IMAGE_PATH);
 }
 
 initGame();
