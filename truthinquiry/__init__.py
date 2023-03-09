@@ -6,14 +6,14 @@ from flask_sqlalchemy import SQLAlchemy
 
 from truthinquiry.app import TruthInquiryApp
 
-from truthinquiry.ext.database import db
+from truthinquiry.ext.database import fsa
 from truthinquiry.ext.socketio import socket_io
 from truthinquiry.ext.discord_bot import discord_bot
 
 from truthinquiry.routes import routes_api, routes_ui, routes_socketio, handlers
 
 def register_extensions(app):
-    db.init_app(app)
+    fsa.setup_app_db(app)
 
     socket_io.init_app(app)
 
