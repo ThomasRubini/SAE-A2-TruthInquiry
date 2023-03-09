@@ -2,7 +2,7 @@ import string
 import random
 from typing import Union
 
-from truthinquiry.ext.database import *
+from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database import dbutils
 
 games_list = {}

@@ -1,4 +1,7 @@
-from truthinquiry.ext.database import *
+import random
+
+from truthinquiry.ext.database.models import *
+from truthinquiry.ext.database.fsa import db
 
 def get_text_from_lid(lang: str, lid: int) -> str:
     """
