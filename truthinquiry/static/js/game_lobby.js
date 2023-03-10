@@ -13,26 +13,29 @@ function displayInvalidRoundsCountErrorMessage(invalidRoundsCountMessageElement)
  * Get the room code and display the room code element.
  */
 function displayRoomCode() {
-    let roomCode = getRoomCode();
-    let roomCodeElement = document.getElementsByClassName("room_code")[0];
+    const roomCodeElement = document.querySelector(".room_code");
+    const roomCode = getRoomCode();
+
     roomCodeElement.textContent = roomCode;
     roomCodeElement.setAttribute("href", "/lobby/" + roomCode);
-    document.getElementsByClassName("room_code_text")[0].classList.remove("hidden");
+
+    showFirstClassElement("room_code_text");
 }
 
 /**
  * Display the players list element.
  */
 function displayPlayerList() {
-    response = makeAPIRequest("getGameMembers");
-    response.then((value) =>{
-        player_list = document.getElementsByClassName("player_names")[0];
-        value["members"].forEach(username => {
-            player_list.appendChild(document.createTextNode(username+"\n"));
-        });
+    const response = makeAPIRequest("getGameMembers");
 
+    response.then(value => {
+        const playerList = document.querySelector(".player_names");
+        value["members"].forEach(username => {
+            playerList.appendChild(document.createTextNode(username + "\n"));
+        });
     });
-    document.getElementsByClassName("players_list")[0].classList.remove("hidden");
+
+    showFirstClassElement("players_list");
 }
 
 /**
@@ -40,29 +43,14 @@ function displayPlayerList() {
  * multi_player_mode_choices element.
  */
 function displayMultiPlayerModeChoices() {
-    document.getElementsByClassName("multi_player_mode_choices")[0].classList.remove("hidden");
+    showFirstClassElement("multi_player_mode_choices");
 }
 
 /**
  * Display the room view, by removing the hidden CSS class on the first room_view element.
  */
 function displayRoomView() {
-    document.getElementsByClassName("room_view")[0].classList.remove("hidden");
-}
-
-/**
- * Display the join room view, by removing the hidden CSS class on the first join_room_view
- * element.
- */
-function displayJoinRoomView() {
-    document.getElementsByClassName("join_room_view")[0].classList.remove("hidden");
-}
-
-/**
- * Hide the join room view, by removing the hidden CSS class on the first join_room_view element.
- */
-function hideJoinRoomView() {
-    document.getElementsByClassName("join_room_view")[0].classList.add("hidden");
+    showFirstClassElement("room_view");
 }
 
 /**
@@ -70,8 +58,7 @@ function hideJoinRoomView() {
  * multi_player_mode_waiting_for_host element.
  */
 function displayWaitingForHostMessage() {
-    document.getElementsByClassName("multi_player_mode_waiting_for_host")[0].classList
-        .remove("hidden");
+    showFirstClassElement("multi_player_mode_waiting_for_host");
 }
 
 /**
@@ -85,39 +72,25 @@ function displayWaitingForHostMessage() {
  * @param {boolean} errorMessage the error message to show
  */
 function displayInvalidNickNameErrorMessage(errorMessage) {
-    let gameStartFailedElement = document.getElementsByClassName("game_start_failed")[0];
+    let gameStartFailedElement = document.querySelector(".game_start_failed");
     gameStartFailedElement.textContent = errorMessage;
     gameStartFailedElement.classList.remove("hidden");
 }
 
-/**
- * Hide an error message on the first game_start_failed CSS element.
- *
- * <p>
- * The element will be hidden by removing the hidden CSS class on the element.
- * </p>
- */
-function hideInvalidNickNameErrorMessage() {
-    document.getElementsByClassName("game_start_failed")[0].classList.add("hidden");
-}
-
-/**
- * Hide the invalid rounds count message element, by adding the hidden CSS class.
- *
- * @param {Element} invalidRoundsCountMessageElement the invalid rounds counts message
- */
-function hideInvalidRoundsCountErrorMessage(invalidRoundsCountMessageElement) {
-    invalidRoundsCountMessageElement.classList.add("hidden");
-}
-
 // Start game functions
 
+/**
+ * Start a game in the history mode.
+ */
 function startHistoryGame() {
     makeAPIRequest("startGame");
 }
 
+/**
+ * Start a game in the challenge mode.
+ */
 function startChallengeGame() {
-    let roundsCount = getChallengeModeRoundsCount();
+    const roundsCount = getChallengeModeRoundsCount();
     if (roundsCount == -1) {
         return;
     }
@@ -133,17 +106,20 @@ function joinRoom() {
         return;
     }
 
-    hideInvalidNickNameErrorMessage();
+    hideFirstClassElement("game_start_failed");
     displayWaitingForHostMessage();
-    data = {}
+
+    const data = {};
     data["username"] = document.getElementById("game_username").value;
     data["game_id"] = getRoomCode();
-    response = makeAPIRequest("joinGame",data);
-    response.then((value)=>{
+
+    const response = makeAPIRequest("joinGame", data);
+
+    response.then(() => {
         displayRoomView();
         displayPlayerList();
         initSock();
-        hideJoinRoomView();
+        hideFirstClassElement("join_room_view");
     })
 }
 
@@ -159,12 +135,8 @@ function joinRoom() {
  * </p>
  */
 function copyCode() {
-    // Get the room code from the displayed text to avoid an extra API call
-    let roomCode = getRoomCode();
-    console.log(roomCode);
-    if (roomCode == "") {
-        alert("Veuillez patientez, le code d'équipe est en cours de génération.");
-    }
+    const roomCode = getRoomCode();
+
     copyTextToClipboard(window.location.protocol + "//" + window.location.hostname + ":"
         + window.location.port + "/lobby/"  + roomCode);
 }
@@ -179,8 +151,10 @@ function copyCode() {
  * </p>
  */
 function setListenersToGameButtons() {
-    document.getElementById("multi_player_history_start_button").addEventListener("click", startHistoryGame);
-    document.getElementById("multi_player_challenge_start_button").addEventListener("click", startChallengeGame);
+    document.getElementById("multi_player_history_start_button")
+        .addEventListener("click", startHistoryGame);
+    document.getElementById("multi_player_challenge_start_button")
+        .addEventListener("click", startChallengeGame);
 }
 
 /**
@@ -214,8 +188,10 @@ function setListenerToCopyCodeButton() {
  * </p>
  */
 function unsetListenersToButtons() {
-    document.getElementById("multi_player_history_start_button").removeEventListener("click", startHistoryGame);
-    document.getElementById("multi_player_challenge_start_button").removeEventListener("click", startChallengeGame);
+    document.getElementById("multi_player_history_start_button")
+        .removeEventListener("click", startHistoryGame);
+    document.getElementById("multi_player_challenge_start_button")
+        .removeEventListener("click", startChallengeGame);
 }
 
 /**
@@ -245,12 +221,12 @@ function unsetListenerToCopyCodeButton() {
 // Utility functions
 
 async function isRoomOwner() {
-    response = await makeAPIRequest("isOwner");
+    const response = await makeAPIRequest("isOwner");
     return response["owner"];
 }
 
 async function hasJoinedRoom() {
-    response = await makeAPIRequest("hasJoined");
+    const response = await makeAPIRequest("hasJoined");
     return response["joined"];
 }
 
@@ -262,21 +238,23 @@ async function hasJoinedRoom() {
  * </p>
  *
  * <p>
- * This function uses the Clipboard API. In the case it is not supported by the browser used, a JavaScript alert is shown..
+ * This function uses the Clipboard API. In the case it is not supported by the browser used, a JavaScript alert is shown.
  * </p>
  *
- * @param {string}} textToCopy the text to copy to the clipboard
+ * @param {string} textToCopy the text to copy to the clipboard
  */
 function copyTextToClipboard(textToCopy) {
     if (!navigator.clipboard) {
         alert("Votre navigateur ne supporte pas l'API Clipboard. Veuillez copier le texte en ouvrant le menu contextuel de votre navigateur sur le lien et sélectionner l'option pour copier le lien.");
         return;
     }
-    navigator.clipboard.writeText(textToCopy).then(() => {
-        alert("Lien copié avec succès dans le presse-papiers.");
-    }, () => {
-        alert("Impossible de copier le lien. Vérifiez si vous avez donné la permission d'accès au presse-papiers pour le site de Thruth Inquiry dans les paramètres de votre navigateur.");
-    });
+
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+            alert("Lien copié avec succès dans le presse-papiers.");
+        }, () => {
+            alert("Impossible de copier le lien. Vérifiez si vous avez donné la permission d'accès au presse-papiers pour le site de Thruth Inquiry dans les paramètres de votre navigateur.");
+        });
 }
 
 /**
@@ -308,7 +286,8 @@ function isNickNameInvalid() {
  */
 function getChallengeModeRoundsCount() {
     let roundsCountText = document.getElementById("rounds_count").value;
-    let errorElement = document.getElementsByClassName("multi_player_challenge_mode_invalid_input")[0];
+    let errorElement = document.querySelector(".multi_player_challenge_mode_invalid_input");
+
     if (!/^\d+$/.test(roundsCountText)) {
         displayInvalidRoundsCountErrorMessage(errorElement);
         return -1;
@@ -320,7 +299,7 @@ function getChallengeModeRoundsCount() {
         return -1;
     }
 
-    hideInvalidRoundsCountErrorMessage(errorElement);
+    errorElement.classList.add("hidden");
     return roundsCountNumber;
 }
 
@@ -330,27 +309,27 @@ function getChallengeModeRoundsCount() {
  * @returns the code of the room
  */
 function getRoomCode() {
-    gameid = document.getElementById("game_id").value;
-    return gameid;
+    return document.getElementById("game_id").value;
 }
 
-function initSock(){
-    socket = io({
-        auth:{
-            game_id: gameid
+function initSock() {
+    const socket = io({
+        auth: {
+            game_id: getRoomCode()
         }
     });
 
     socket.on("connect", () => {
-        console.log("Connected !")
+        console.log("Connected to the server!");
     })
 
-    socket.on("gamestart",()=>{
+    socket.on("gamestart", () => {
         window.location.href = "/multi";
     })
-    socket.on("playersjoin", (username) => {
-        player_list = document.getElementsByClassName("player_names")[0];
-        player_list.appendChild(document.createTextNode(username+"\n"));
+
+    socket.on("playersjoin", username => {
+        document.querySelector(".player_names")
+            .appendChild(document.createTextNode(username + "\n"));
     });
 }
 
@@ -359,7 +338,7 @@ function initSock(){
 /**
  * Initialize the lobby page.
  *
- * p>
+ * <p>
  * If the player has joined the room, the room view will be shown. In the case the player is the
  * owner of the room, the room code and the multi player mode choice will be shown and the
  * listeners to the game buttons will be done.
@@ -371,12 +350,10 @@ function initSock(){
  * </p>
  */
 async function initLobby() {
-    
-    gameid = getRoomCode(); 
-
     if (await hasJoinedRoom()) {
         initSock();
         displayRoomView();
+
         if (await isRoomOwner()) {
             displayRoomCode();
             displayMultiPlayerModeChoices();
@@ -388,7 +365,7 @@ async function initLobby() {
 
         displayPlayerList();
     } else {
-        displayJoinRoomView();
+        showFirstClassElement("join_room_view");
         setListenerToJoinRoomButton();
     }
 }
