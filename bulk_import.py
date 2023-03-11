@@ -84,7 +84,7 @@ def bulk_import(data):
         TRAIT_LIST.append(new_trait)
 
     # Npcs
-    npcs = data["npc"]
+    npcs = data["npcs"]
     for npc in npcs.values():
         new_npc = Npc(0, getid())
 
@@ -92,10 +92,13 @@ def bulk_import(data):
         for lang in npc["name"]:
             LID_LIST.append(Locale(new_npc.NAME_LID, lang, npc["name"][lang]))
 
+        # TODO handle reactions
+        """         
         for reaction in npc["reactions"]:
             if reaction in list(trait_names.keys()):
                 new_reaction = Reaction(0,new_npc.NPC_ID, trait_names[reaction])
-                REACTION_LIST.append(new_reaction)
+                REACTION_LIST.append(new_reaction) """
+
         for question_type in npc["answers"]:
             question_type_id = 0 if question_type == "where" else 1
 
@@ -121,32 +124,39 @@ def bulk_import(data):
         print("Locale : "+str(text))
         session.add(text)
         session.commit()
+
     for question in QUESTIONS_LIST:
         print("Question : "+str(question))
         session.add(question)
         session.commit()
+
     for trait in TRAIT_LIST:
         print("Trait : "+ str(trait))
         session.add(trait)
         session.commit()
+
     for npc in NPC_LIST:
         print("Npc : "+ str(npc))
         session.add(npc)
         session.commit()
+
     for reaction in REACTION_LIST:
         print("Reaction : " + str(reaction))
         session.add(reaction)
         session.commit()
+
     for answer in ANSWER_LIST:
         print("Answer : "+ str(answer))
         session.add(answer)
         session.commit()
+
     for room in ROOMS_LIST:
         print("Room : "+str(room))
         session.add(room)
         session.commit()
 
 
-file = open("bulkData.yml", "r")
+
+file = open("bulk_data.yml", "r")
 
 bulk_import(yaml.load(file, yaml.Loader))
