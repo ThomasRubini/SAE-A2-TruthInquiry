@@ -15,13 +15,17 @@ class Locale(Base):
     LANG = Column(VARCHAR(2), comment="lang ID of the text value in this row, e.g FR, EN, ES")
     TEXT = Column(Text, comment="Actual text stored for that text ID and lang")
 
-    def __init__(self, TEXT_ID, LANG, TEXT):
+    def __init__(self, TEXT_ID, LID, LANG, TEXT):
         self.TEXT_ID = TEXT_ID
+        self.LID = LID
         self.LANG = LANG
         self.TEXT = TEXT
 
     def __str__(self):
-        return f"{self.TEXT_ID}  {self.LANG} {self.TEXT}"
+        return f"Locale(TEXT_ID={self.TEXT_ID}, LID={self.LID}, LANG={self.LANG} TEXT={self.TEXT})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Place(Base):
@@ -39,7 +43,10 @@ class Place(Base):
         self.NAME_LID = NAME_LID
 
     def __str__(self):
-        return f"{self.PLACE_ID} {self.NAME_LID}"
+        return f"Place(PLACE_ID={self.PLACE_ID} NAME_LID={self.NAME_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class QuestionType(Base):
@@ -53,11 +60,14 @@ class QuestionType(Base):
     LOCALE = relationship("Locale")
 
     def __init__(self, QUESTION_TYPE_ID, TEXT_LID):
-        self.QUESTION_ID = QUESTION_TYPE_ID
+        self.QUESTION_TYPE_ID = QUESTION_TYPE_ID
         self.TEXT_LID = TEXT_LID
 
     def __str__(self):
-        return f"{self.QUESTION_ID} {self.QUESTION_TYPE_ID}"
+        return f"QuestionType(QUESTION_TYPE_ID={self.QUESTION_TYPE_ID}, TEXT_LID={self.TEXT_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Answer(Base):
@@ -81,7 +91,11 @@ class Answer(Base):
         self.TEXT_LID = TEXT_LID
 
     def __str__(self):
-        return f"{self.ANSWER_ID} {self.QA_TYPE} {self.NPC_ID} {self.TEXT_LID}"
+        return f"Answer(ANSWER_ID={self.ANSWER_ID}, QA_TYPE={self.QA_TYPE}, NPC_ID={self.NPC_ID}, TEXT_LID={self.TEXT_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+        
 
 
 class Npc(Base):
@@ -99,7 +113,10 @@ class Npc(Base):
         self.NAME_LID = NAME_LID
 
     def __str__(self) -> str:
-        return f"{self.NPC_ID} {self.NAME_LID}"
+        return f"Npc(NPC_ID={self.NPC_ID}, NAME_LID={self.NAME_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Trait(Base):
@@ -120,7 +137,10 @@ class Trait(Base):
         self.NAME_LID = NAME_LID
 
     def __str__(self) -> str:
-        return f"{self.TRAIT_ID} {self.NAME_LID}"
+        return f"Trait(TRAIT_ID={self.TRAIT_ID}, NAME_LID={self.NAME_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Reaction(Base):
@@ -140,4 +160,7 @@ class Reaction(Base):
         self.TRAIT_ID = TRAIT_ID
 
     def __str__(self) -> str:
-        return f"{self.REACTION_ID} {self.NPC_ID} {self.TRAIT_ID}"
+        return f"Reaction(REACTION_ID={self.REACTION_ID}, NPC_ID={self.NPC_ID}, TRAIT_ID={self.TRAIT_ID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
