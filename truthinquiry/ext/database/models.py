@@ -42,24 +42,22 @@ class Place(Base):
         return f"{self.PLACE_ID} {self.NAME_LID}"
 
 
-class Question(Base):
+class QuestionType(Base):
     """
-    Stores questions asked by players
+    Stores questions types that can be asked by players, e.g "where", "with tho"
     """
 
-    __tablename__ = "T_QUESTION"
-    QUESTION_ID = Column(Integer, primary_key=True, comment="ID of this question")
-    QUESTION_TYPE = Column(Integer, comment="Question type ID, e.g 'when..', 'where..'")
+    __tablename__ = "T_QUESTION_TYPE"
+    QUESTION_TYPE_ID = Column(Integer, primary_key=True, comment="ID of this question type.")
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Question text")
     LOCALE = relationship("Locale")
 
-    def __init__(self, QUESTION_ID, QUESTION_TYPE, TEXT_LID):
-        self.QUESTION_ID = QUESTION_ID
-        self.QUESTION_TYPE = QUESTION_TYPE
+    def __init__(self, QUESTION_TYPE_ID, TEXT_LID):
+        self.QUESTION_ID = QUESTION_TYPE_ID
         self.TEXT_LID = TEXT_LID
 
     def __str__(self):
-        return f"{self.QUESTION_ID} {self.QUESTION_TYPE} {self.TEXT_LID}"
+        return f"{self.QUESTION_ID} {self.QUESTION_TYPE_ID}"
 
 
 class Answer(Base):
