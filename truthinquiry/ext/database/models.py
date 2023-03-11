@@ -116,9 +116,10 @@ class Trait(Base):
     Desc = relationship("Locale",foreign_keys=[DESC_LID])
 
 
-    def __init__(self, TRAIT_ID, NAME_LID):
+    def __init__(self, TRAIT_ID, NAME_LID, DESC_LID):
         self.TRAIT_ID = TRAIT_ID
         self.NAME_LID = NAME_LID
+        self.DESC_LID = DESC_LID
 
     def __str__(self) -> str:
         return f"{self.TRAIT_ID} {self.NAME_LID}"
