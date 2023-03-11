@@ -4,16 +4,19 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-class Locale(Base):
+class Text(Base):
     """
-    Stores the different texts needed by the other tables in multiple languages
+    Stores the different texts needed by the Locale table in multiple languages
+    A LID and a language may be associated with multiple texts (mostly in the case we need to choose a text at random)
     """
 
-    __tablename__ = 'T_LOCALE'
+    __tablename__ = 'T_TEXT'
+
     TEXT_ID = Column(Integer, primary_key=True, comment="ID of this specific text. These IDs may be recycled in the future and may only be used for a short time period.")
-    LID = Column(Integer, comment="ID of this locale (the other tables references to this with *_LID columns)")
+    LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Reference to the locale that this text provides")
     LANG = Column(VARCHAR(2), comment="lang ID of the text value in this row, e.g FR, EN, ES")
-    TEXT = Column(Text, comment="Actual text stored for that text ID and lang")
+    TEXT = Column(Text, comment="Actual text stored")
+    LOCALE = relationship("Locale")
 
     def __init__(self, TEXT_ID, LID, LANG, TEXT):
         self.TEXT_ID = TEXT_ID
@@ -21,8 +24,29 @@ class Locale(Base):
         self.LANG = LANG
         self.TEXT = TEXT
 
+
     def __str__(self):
-        return f"Locale(TEXT_ID={self.TEXT_ID}, LID={self.LID}, LANG={self.LANG} TEXT={self.TEXT})"
+        return f"Text(TEXT_ID={self.TEXT_ID}, LID={self.LID}, LANG={self.LANG}, TEXT={self.TEXT})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class Locale(Base):
+    """
+    Each row represent a text that is needed by other tables.
+    the 'Text' table will reference these LIDs with the actual text in multiple languages
+    Stores the different texts needed by the other tables
+    """
+
+    __tablename__ = 'T_LOCALE'
+    LID = Column(Integer, primary_key=True, comment="ID of this locale (the other tables references to this with *_LID columns)")
+    
+    def __init__(self, LID):
+        self.LID = LID
+        
+    def __str__(self):
+        return f"Locale(LID={self.LID})"
 
     def __repr__(self) -> str:
         return self.__str__()
