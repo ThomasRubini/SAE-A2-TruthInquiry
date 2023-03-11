@@ -35,7 +35,7 @@ class Place(Base):
 
     __tablename__ = 'T_PLACE'
     PLACE_ID = Column(Integer, primary_key=True, comment="ID of this place")
-    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Place name")
+    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Place name")
     LOCALE = relationship("Locale")
 
     def __init__(self, PLACE_ID, NAME_LID):
@@ -56,7 +56,7 @@ class QuestionType(Base):
 
     __tablename__ = "T_QUESTION_TYPE"
     QUESTION_TYPE_ID = Column(Integer, primary_key=True, comment="ID of this question type.")
-    TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Question text")
+    TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Question text")
     LOCALE = relationship("Locale")
 
     def __init__(self, QUESTION_TYPE_ID, TEXT_LID):
@@ -80,7 +80,7 @@ class Answer(Base):
     ANSWER_ID = Column(Integer, primary_key=True, comment="ID of this answer")
     QA_TYPE = Column(Integer, comment="Question type ID")
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), comment="ID of the NPC that will say this answer")
-    TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Text of the answer")
+    TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Text of the answer")
     LOCALE = relationship("Locale")
     NPC = relationship("Npc")
 
@@ -105,7 +105,7 @@ class Npc(Base):
 
     __tablename__ = "T_NPC"
     NPC_ID = Column(Integer, primary_key=True, comment="ID of this Npc")
-    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Name of this Npc")
+    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this Npc")
     LOCALE = relationship("Locale")
 
     def __init__(self, NPC_ID, NAME_LID):
@@ -125,8 +125,8 @@ class Trait(Base):
     """
     __tablename__ = "T_TRAIT"
     TRAIT_ID = Column(Integer, primary_key=True, comment="ID of this trait")
-    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Name of this trait")
-    DESC_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Description of this trait")
+    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this trait")
+    DESC_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Description of this trait")
 
     Name = relationship("Locale",foreign_keys=[NAME_LID])
     Desc = relationship("Locale",foreign_keys=[DESC_LID])
