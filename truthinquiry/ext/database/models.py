@@ -77,21 +77,19 @@ class Answer(Base):
     """
 
     __tablename__ = "T_ANSWER"
-    ANSWER_ID = Column(Integer, primary_key=True, comment="ID of this answer")
-    QA_TYPE = Column(Integer, comment="Question type ID")
-    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), comment="ID of the NPC that will say this answer")
+    QUESTION_TYPE_ID = Column(Integer, ForeignKey("T_QUESTION_TYPE.QUESTION_TYPE_ID"), primary_key=True, comment="Question type ID")
+    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="ID of the NPC that will say this answer")
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Text of the answer")
     LOCALE = relationship("Locale")
     NPC = relationship("Npc")
 
-    def __init__(self, ANSWER_ID, QA_TYPE, NPC_ID, TEXT_LID):
-        self.ANSWER_ID = ANSWER_ID
-        self.QA_TYPE = QA_TYPE
+    def __init__(self, QUESTION_TYPE_ID, NPC_ID, TEXT_LID):
+        self.QUESTION_TYPE_ID = QUESTION_TYPE_ID
         self.NPC_ID = NPC_ID
         self.TEXT_LID = TEXT_LID
 
     def __str__(self):
-        return f"Answer(ANSWER_ID={self.ANSWER_ID}, QA_TYPE={self.QA_TYPE}, NPC_ID={self.NPC_ID}, TEXT_LID={self.TEXT_LID})"
+        return f"Answer(QUESTION_TYPE_ID={self.QUESTION_TYPE_ID}, NPC_ID={self.NPC_ID}, TEXT_LID={self.TEXT_LID})"
 
     def __repr__(self) -> str:
         return self.__str__()
