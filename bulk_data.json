@@ -1,0 +1,278 @@
+{
+    "rooms": {
+        "1": {
+            "FR": "Le salon"
+        },
+        "2": {
+            "FR": "La salle de r\u00e9ception"
+        },
+        "3": {
+            "FR": "Le hall d'entr\u00e9e"
+        },
+        "4": {
+            "FR": "La cuisine"
+        },
+        "5": {
+            "FR": "La chambre du ma\u00eetre"
+        },
+        "6": {
+            "FR": "Le jardin"
+        }
+    },
+    "questions": {
+        "withwho": {
+            "text": [
+                {
+                    "FR": "Etiez-vous seul au moment des faits ?"
+                },
+                {
+                    "FR": "Quelqu\u2019un peu valider vous alibi pour la soir\u00e9e ?"
+                },
+                {
+                    "FR": "Vous \u00e9tiez accompagn\u00e9 ce soir-l\u00e0 ?"
+                }
+            ]
+        },
+        "where": {
+            "text": [
+                {
+                    "FR": "Ce manoir est plut\u00f4t grand ... vous pouvez me dire o\u00f9 vous \u00e9tiez?"
+                },
+                {
+                    "FR": "Vous \u00e9tiez o\u00f9 au moment des faits?"
+                },
+                {
+                    "FR": "Dans quelle salle \u00e9tiez-vous pendant que le coffre \u00e9tait subtilis\u00e9 ?"
+                }
+            ]
+        }
+    },
+    "traits": {
+        "1": {
+            "name": {
+                "FR": "m\u00e9fiant(e),"
+            },
+            "description": {
+                "FR": "Un maintien rigide des traits du visage, un regard de travers. Une crispation des sourcils et parfois des rides autour de la bouche. Ces caract\u00e9ristiques sont synonymes d'incompr\u00e9hension ou de peur de ce que peut nous annoncer la personne en face."
+            }
+        },
+        "2": {
+            "name": {
+                "FR": "heureux(se),"
+            },
+            "description": {
+                "FR": "Un visage d\u00e9contract\u00e9 et ouvert, les muscles des joues contract\u00e9s qui laissent appara\u00eetre un sourire. On le d\u00e9termine aussi par des yeux pliss\u00e9s en accord avec les sourcils qui marquent la diff\u00e9rence avec un faux sourire o\u00f9 les sourcils ne sont pas contract\u00e9s. Cela montre une complicit\u00e9 avec l'interlocuteur ou un moyen de ne pas laisser para\u00eetre ses r\u00e9elles \u00e9motions."
+            }
+        },
+        "3": {
+            "name": {
+                "FR": "triste"
+            },
+            "description": {
+                "FR": "Des sourcils contract\u00e9s et resserr\u00e9s vers le centre du visage auxquels s'ajoute un regard vide ou fuyant de l'interlocuteur, soit en fermant les yeux soit en \u00e9vitant un contact visuel. Ces caract\u00e9ristiques t\u00e9moignent d'un sentiment puissant ou du fait d'\u00eatre atteint par les propos ou accusations de son interlocuteur."
+            }
+        },
+        "4": {
+            "name": {
+                "FR": "stress\u00e9(e),"
+            },
+            "description": {
+                "FR": "Un visage crisp\u00e9 qui s'accompagne habituellement de sourcils fronc\u00e9s, un regard perdu qui se d\u00e9tourne de celui de son interlocuteur. Cela s'accompagne souvent de mouvements de la t\u00eate et de la bouche en se mordant les l\u00e8vres par exemple. Tout cela traduit une difficult\u00e9 de concentration ou une peur de ce qu'annonce ou peut nous annoncer l'interlocuteur en face."
+            }
+        },
+        "5": {
+            "name": {
+                "FR": "surpris(e),"
+            },
+            "description": {
+                "FR": "G\u00e9n\u00e9ralement par des yeux \u00e9carquill\u00e9s et un haussement des sourcils. Cela peut \u00e9galement se distinguer par une bouche ouverte ou, au contraire, des dents serr\u00e9es et parfois par un rel\u00e2chement du visage. Ces caract\u00e9ristiques correspondent \u00e0 un choc, une incompr\u00e9hension ou encore un \u00e9tonnement de ce que voit ou entend la personne."
+            }
+        }
+    },
+    "npcs": {
+        "1": {
+            "name": {
+                "FR": "Le M\u00e9decin"
+            },
+            "answers": {
+                "where": [
+                    {
+                        "FR": "Il y avait {SALLE} \u00e7a m'a intrigu\u00e9."
+                    },
+                    {
+                        "FR": "{SALLE} avait l'air sympa donc j'y suis all\u00e9."
+                    }
+                ],
+                "withwho": [
+                    {
+                        "FR": "Il me semble qu'il y avait {NPC}."
+                    },
+                    {
+                        "FR": "Je suis pratiquement s\u00fbr que j'\u00e9tais avec {NPC}."
+                    }
+                ]
+            }
+        },
+        "2": {
+            "name": {
+                "FR": "Le Diplomate"
+            },
+            "answers": {
+                "where": [
+                    {
+                        "FR": "Je profitais d'une collation dans {SALLE}."
+                    },
+                    {
+                        "FR": "J'admirais la d\u00e9coration subtile de {SALLE} ... je m'en inspirerais pour chez moi."
+                    }
+                ],
+                "withwho": [
+                    {
+                        "FR": "Je m'instruisais aupr\u00e8s de {NPC}."
+                    },
+                    {
+                        "FR": "Avec {NPC} pour exposer nos diff\u00e9rents points de vus sur divers sujets."
+                    }
+                ]
+            }
+        },
+        "3": {
+            "name": {
+                "FR": "Le Combattant"
+            },
+            "answers": {
+                "where": [
+                    {
+                        "FR": "{SALLE} nous a servi de salle de duel."
+                    },
+                    {
+                        "FR": "J'ai festoill\u00e9 dans {SALLE}."
+                    }
+                ],
+                "withwho": [
+                    {
+                        "FR": "On faisait un bras de fer avec {NPC}."
+                    },
+                    {
+                        "FR": "{NPC} et moi nous sommes engag\u00e9s dans une joute verbale des plus palpitante."
+                    }
+                ]
+            }
+        },
+        "4": {
+            "name": {
+                "FR": "La Duchesse"
+            },
+            "answers": {
+                "where": [
+                    {
+                        "FR": "Pour votre gouverne je me trouvais dans {SALLE}."
+                    },
+                    {
+                        "FR": "Si vous voulez le savoir ... j'\u00e9tais en train de me reposer dans {SALLE}."
+                    }
+                ],
+                "withwho": [
+                    {
+                        "FR": "{NPC} me tenait compagnie."
+                    },
+                    {
+                        "FR": "J'\u00e9tais avec {NPC}."
+                    }
+                ]
+            }
+        },
+        "5": {
+            "name": {
+                "FR": "La Diva"
+            },
+            "answers": {
+                "where": [
+                    {
+                        "FR": "{SALLE} me semblait \u00eatre la plus belle pi\u00e8ce de la maison."
+                    },
+                    {
+                        "FR": "Je buvais un verre dans {SALLE}."
+                    }
+                ],
+                "withwho": [
+                    {
+                        "FR": "Je profitais de la compagnie de {NPC}."
+                    },
+                    {
+                        "FR": "J'\u00e9tais avec {NPC} \u00e0 partager une d\u00e9licieuse conversation ainsi qu'une coupe de champagne."
+                    }
+                ]
+            }
+        },
+        "6": {
+            "name": {
+                "FR": "La Parieuse"
+            },
+            "answers": {
+                "where": [
+                    {
+                        "FR": "J'avais mont\u00e9 une table de jeu dans {SALLE}."
+                    },
+                    {
+                        "FR": "{SALLE} est tout de m\u00eame plus agr\u00e9able une fois chang\u00e9(e), en casino."
+                    }
+                ],
+                "withwho": [
+                    {
+                        "FR": "Vous saviez que {NPC} \u00e9tait incroyable avec des cartes \u00e0 la main ?"
+                    },
+                    {
+                        "FR": "Si vous tenez \u00e0 votre argent ne jouez jamais au poker avec {NPC}."
+                    }
+                ]
+            }
+        },
+        "7": {
+            "name": {
+                "FR": "L'Agent"
+            },
+            "answers": {
+                "where": [
+                    {
+                        "FR": "On pouvait me retrouver dans {SALLE}."
+                    },
+                    {
+                        "FR": "{SALLE}"
+                    }
+                ],
+                "withwho": [
+                    {
+                        "FR": "J'\u00e9tais avec {NPC} au moment des faits."
+                    },
+                    {
+                        "FR": "{NPC}"
+                    }
+                ]
+            }
+        },
+        "8": {
+            "name": {
+                "FR": "La Voyageuse"
+            },
+            "answers": {
+                "where": [
+                    {
+                        "FR": "{SALLE} me semblait un bon endroit pour me poser"
+                    },
+                    {
+                        "FR": "{SALLE} me rappelait mes voyages."
+                    }
+                ],
+                "withwho": [
+                    {
+                        "FR": "Nous organisions notre prochain voyage avec {NPC}."
+                    },
+                    {
+                        "FR": "Avec {NPC} on parlait des lieux que l\u2019on avait visit\u00e9s. C\u2019\u00e9tait tr\u00e8s instructif."
+                    }
+                ]
+            }
+        }
+    }
+}
