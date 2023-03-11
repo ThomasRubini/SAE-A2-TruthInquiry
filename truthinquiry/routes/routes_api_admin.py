@@ -15,9 +15,11 @@ def get_questions():
 
 
     results = db.session.execute(
-        select(QuestionType, Locale)
+        select(QuestionType, Text)
+        .select_from(QuestionType)
         .join(Locale)
-        .filter(Locale.LANG==lang)
+        .join(Text)
+        .filter(Text.LANG==lang)
         .order_by(QuestionType.QUESTION_TYPE_ID)
     )
 
