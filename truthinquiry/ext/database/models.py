@@ -10,8 +10,9 @@ class Locale(Base):
     """
 
     __tablename__ = 'T_LOCALE'
-    TEXT_ID = Column(Integer, primary_key=True, comment="ID of this text (the other tables references to this with *_LID columns)")
-    LANG = Column(VARCHAR(2), primary_key=True, comment="lang ID of the text value in this row, e.g FR, EN, ES")
+    TEXT_ID = Column(Integer, primary_key=True, comment="ID of this specific text. These IDs may be recycled in the future and may only be used for a short time period.")
+    LID = Column(Integer, comment="ID of this locale (the other tables references to this with *_LID columns)")
+    LANG = Column(VARCHAR(2), comment="lang ID of the text value in this row, e.g FR, EN, ES")
     TEXT = Column(Text, comment="Actual text stored for that text ID and lang")
 
     def __init__(self, TEXT_ID, LANG, TEXT):
