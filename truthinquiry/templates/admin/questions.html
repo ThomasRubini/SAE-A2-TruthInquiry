@@ -1,0 +1,53 @@
+<select id="langs" onchange="langChangedEvent()">
+    {%for lang in langs%}
+    <option value="{{lang}}">{{lang}}</option>
+    {%endfor%}
+</select>
+
+<section id="questionsTag">
+
+</section>
+
+<style>
+    .questionTypeTag{
+        border: thin solid red;
+    }
+</style>
+
+<script src="/static/js/api.js"></script>
+<script>
+
+    function save(){
+        console.log("Saving")
+    }
+
+    async function changeLang(newLang){
+        console.log("Changing language to "+newLang);
+        resp = await makeAPIRequest("admin/getQuestions", {"lang": newLang});
+
+        questionsTag.innerHTML = '';
+
+        for(let questionType of resp){
+            
+            let questionTypeTag = document.createElement("section")
+            questionTypeTag.className = 'questionTypeTag';
+            questionsTag.appendChild(questionTypeTag);
+            
+            for(let question of questionType){
+                let questionTag = document.createElement("h1");
+                questionTypeTag.appendChild(questionTag);
+
+                questionTag.innerHTML = question.text;
+            }
+        }
+    }
+
+    function langChangedEvent(){
+        save();
+        changeLang(langs.value)
+    }
+
+    changeLang(langs.value);
+
+
+</script>
