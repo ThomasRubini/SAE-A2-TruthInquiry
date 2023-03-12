@@ -6,24 +6,49 @@
     {%endfor%}
 </select>
 
-<section id="questionsTag">
+<form id="questionsTag">
+</form>
 
-</section>
+<button onclick="saveForm()"> Save changes </button>
 
 <style>
     .questionTypeTag{
         border: thin solid red;
+        margin-top: 20px;
+    }
+    .questionTypeTag input{
+        width: 100%;
     }
 </style>
 
 <script src="/static/js/api.js"></script>
 <script>
 
-    function save(){
-        console.log("Saving")
+    let lang = null;
+
+    function saveForm(){
+        var formData = new FormData(questionsTag);
+        let questionsJson = [];
+
+        for(let questionTypeTag of questionsTag.children){
+            let questionTypeJson = [];
+            questionsJson.push(questionTypeJson);
+
+            for(let questionTag of questionTypeTag.children){
+                questionTypeJson.push({"text": questionTag.value})
+            }
+        }
+
+        if(lang!==null){
+            makeAPIRequest("admin/setQuestions", {"questions": questionsJson, "lang": lang}, {"content": "json"})
+        }
     }
 
+    let lastQueriedData = [];
+
     async function changeLang(newLang){
+        lang = null;
+
         console.log("Changing language to "+newLang);
         resp = await makeAPIRequest("admin/getQuestions", {"lang": newLang});
 
@@ -31,21 +56,25 @@
 
         for(let questionType of resp){
             
-            let questionTypeTag = document.createElement("section")
+            let questionTypeTag = document.createElement("fieldset")
             questionTypeTag.className = 'questionTypeTag';
             questionsTag.appendChild(questionTypeTag);
             
+            let i = 0;
             for(let question of questionType){
-                let questionTag = document.createElement("h1");
+                let questionTag = document.createElement("input");
                 questionTypeTag.appendChild(questionTag);
 
-                questionTag.innerHTML = question.text;
+                questionTag.value = question.text;
+
+                i++;
             }
         }
+
+        lang = newLang;
     }
 
     function langChangedEvent(){
-        save();
         changeLang(langs.value)
     }
 

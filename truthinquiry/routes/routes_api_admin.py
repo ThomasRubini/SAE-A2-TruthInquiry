@@ -34,3 +34,11 @@ def get_questions():
         data[-1].append({"text": locale.TEXT})
     
     return data
+
+@routes_api_admin.route("/setQuestions", methods=["GET", "POST"])
+def set_questions():
+    if not flask.request.json:
+        return {"error": 1, "msg": "no json set"}
+    lang = flask.request.json["lang"]
+    questions = flask.request.json["questions"]
+    return {"error": 0}
