@@ -1,0 +1,84 @@
+<a href="/admin"> go Back </a> <br>
+
+<select id="langs" onchange="langChangedEvent()">
+    {%for lang in langs%}
+    <option value="{{lang}}">{{lang}}</option>
+    {%endfor%}
+</select>
+
+<form id="questionsTag">
+</form>
+
+<button onclick="saveForm()"> Save changes </button>
+
+<style>
+    .questionTypeTag{
+        border: thin solid red;
+        margin-top: 20px;
+    }
+    .questionTypeTag input{
+        width: 100%;
+    }
+</style>
+
+<script src="/static/js/api.js"></script>
+<script>
+
+    let lang = null;
+
+    function saveForm(){
+        var formData = new FormData(questionsTag);
+        let questionsJson = [];
+
+        for(let questionTypeTag of questionsTag.children){
+            let questionTypeJson = [];
+            questionsJson.push(questionTypeJson);
+
+            for(let questionTag of questionTypeTag.children){
+                questionTypeJson.push({"text": questionTag.value})
+            }
+        }
+
+        if(lang!==null){
+            makeAPIRequest("admin/setQuestions", {"questions": questionsJson, "lang": lang}, {"content": "json"})
+        }
+    }
+
+    let lastQueriedData = [];
+
+    async function changeLang(newLang){
+        lang = null;
+
+        console.log("Changing language to "+newLang);
+        resp = await makeAPIRequest("admin/getQuestions", {"lang": newLang});
+
+        questionsTag.innerHTML = '';
+
+        for(let questionType of resp){
+            
+            let questionTypeTag = document.createElement("fieldset")
+            questionTypeTag.className = 'questionTypeTag';
+            questionsTag.appendChild(questionTypeTag);
+            
+            let i = 0;
+            for(let question of questionType){
+                let questionTag = document.createElement("input");
+                questionTypeTag.appendChild(questionTag);
+
+                questionTag.value = question.text;
+
+                i++;
+            }
+        }
+
+        lang = newLang;
+    }
+
+    function langChangedEvent(){
+        changeLang(langs.value)
+    }
+
+    changeLang(langs.value);
+
+
+</script>

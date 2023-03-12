@@ -10,7 +10,7 @@ from truthinquiry.ext.database import fsa
 from truthinquiry.ext.socketio import socket_io
 from truthinquiry.ext.discord_bot import discord_bot
 
-from truthinquiry.routes import routes_api, routes_ui, routes_socketio, handlers
+from truthinquiry.routes import routes_api, routes_ui, routes_socketio, routes_admin, routes_api_admin, handlers
 
 def register_extensions(app):
     fsa.setup_app_db(app)
@@ -22,6 +22,8 @@ def register_extensions(app):
 def register_routes(app):
     app.register_blueprint(routes_api.routes_api, url_prefix="/api/v1")
     app.register_blueprint(routes_ui.routes_ui, url_prefix="/")
+    app.register_blueprint(routes_admin.routes_admin, url_prefix="/admin")
+    app.register_blueprint(routes_api_admin.routes_api_admin, url_prefix="/api/v1/admin")
 
 
 def create_app():

@@ -6,12 +6,22 @@
  * @returns a Promise, which resolves when the server can be reached and responds without an error
  * and rejects otherwise
  */
-async function makeAPIRequest(endpoint, body) {
+async function makeAPIRequest(endpoint, body, options={}) {
+    let fetchOptions = {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json'
+        }
+    };
+
+    if (options["content"] === 'json') {
+        fetchOptions["headers"]["Content-Type"] = 'application/json'
+        fetchOptions["body"] = JSON.stringify(body)
+    } else {
+        fetchOptions["body"] = new URLSearchParams(body);
+    }
+
     return new Promise((resolve, reject) => {
-        const fetchOptions = {
-            method: "POST",
-            body: new URLSearchParams(body)
-        };
 
         fetch("/api/v1/" + endpoint, fetchOptions).then(response => {
             const responseCode = response.status;
@@ -22,12 +32,12 @@ async function makeAPIRequest(endpoint, body) {
             }
 
             response.json().then(jsonResponse => {
-                if (jsonResponse["error"] === 0) {
-                    resolve(jsonResponse);
-                } else {
+                if (typeof(jsonResponse["error"]) === 'number' && jsonResponse["error"] !== 0) {
                     const message = jsonResponse["msg"];
                     alert("Erreur du serveur : " + message);
                     reject(endpoint + ": " + message);
+                } else {
+                    resolve(jsonResponse);
                 }
             });
         }).catch((e) => {
