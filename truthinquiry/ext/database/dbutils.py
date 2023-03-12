@@ -51,14 +51,14 @@ def get_npc_random_answer(npc_id:int, qa_type:int) -> Answer :
     answers = db.session.query(Answer).filter_by(QA_TYPE=qa_type,NPC_ID=npc_id.NPC_ID).all()
     return random.choice(answers)
 
-def get_random_question(qa_type: int) -> Question :
+def get_random_question(qa_type: int) -> QuestionType :
     """
     Returns a random inspector question from a question type
 
     :param qa_type: the type of the question
     :return: a Question object
     """
-    answers = db.session.query(Question).filter_by(QUESTION_TYPE=qa_type).all()
+    answers = db.session.query(QuestionType).filter_by(QUESTION_TYPE_ID=qa_type).all()
     return random.choice(answers)
 
 def get_trait_from_text(text: str) -> int:

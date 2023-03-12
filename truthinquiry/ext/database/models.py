@@ -4,23 +4,52 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-class Locale(Base):
+class Text(Base):
     """
-    Stores the different texts needed by the other tables in multiple languages
+    Stores the different texts needed by the Locale table in multiple languages
+    A LID and a language may be associated with multiple texts (mostly in the case we need to choose a text at random)
     """
 
-    __tablename__ = 'T_LOCALE'
-    TEXT_ID = Column(Integer, primary_key=True, comment="ID of this text (the other tables references to this with *_LID columns)")
-    LANG = Column(VARCHAR(2), primary_key=True, comment="lang ID of the text value in this row, e.g FR, EN, ES")
-    TEXT = Column(Text, comment="Actual text stored for that text ID and lang")
+    __tablename__ = 'T_TEXT'
 
-    def __init__(self, TEXT_ID, LANG, TEXT):
+    TEXT_ID = Column(Integer, primary_key=True, comment="ID of this specific text. These IDs may be recycled in the future and may only be used for a short time period.")
+    LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Reference to the locale that this text provides")
+    LANG = Column(VARCHAR(2), comment="lang ID of the text value in this row, e.g FR, EN, ES")
+    TEXT = Column(Text, comment="Actual text stored")
+    LOCALE = relationship("Locale")
+
+    def __init__(self, TEXT_ID, LID, LANG, TEXT):
         self.TEXT_ID = TEXT_ID
+        self.LID = LID
         self.LANG = LANG
         self.TEXT = TEXT
 
+
     def __str__(self):
-        return f"{self.TEXT_ID}  {self.LANG} {self.TEXT}"
+        return f"Text(TEXT_ID={self.TEXT_ID}, LID={self.LID}, LANG={self.LANG}, TEXT={self.TEXT})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class Locale(Base):
+    """
+    Each row represent a text that is needed by other tables.
+    the 'Text' table will reference these LIDs with the actual text in multiple languages
+    Stores the different texts needed by the other tables
+    """
+
+    __tablename__ = 'T_LOCALE'
+    LID = Column(Integer, primary_key=True, comment="ID of this locale (the other tables references to this with *_LID columns)")
+    
+    def __init__(self, LID):
+        self.LID = LID
+        
+    def __str__(self):
+        return f"Locale(LID={self.LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Place(Base):
@@ -30,7 +59,7 @@ class Place(Base):
 
     __tablename__ = 'T_PLACE'
     PLACE_ID = Column(Integer, primary_key=True, comment="ID of this place")
-    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Place name")
+    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Place name")
     LOCALE = relationship("Locale")
 
     def __init__(self, PLACE_ID, NAME_LID):
@@ -38,27 +67,31 @@ class Place(Base):
         self.NAME_LID = NAME_LID
 
     def __str__(self):
-        return f"{self.PLACE_ID} {self.NAME_LID}"
+        return f"Place(PLACE_ID={self.PLACE_ID} NAME_LID={self.NAME_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
-class Question(Base):
+class QuestionType(Base):
     """
-    Stores questions asked by players
+    Stores questions types that can be asked by players, e.g "where", "with tho"
     """
 
-    __tablename__ = "T_QUESTION"
-    QUESTION_ID = Column(Integer, primary_key=True, comment="ID of this question")
-    QUESTION_TYPE = Column(Integer, comment="Question type ID, e.g 'when..', 'where..'")
-    TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Question text")
+    __tablename__ = "T_QUESTION_TYPE"
+    QUESTION_TYPE_ID = Column(Integer, primary_key=True, comment="ID of this question type.")
+    TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Question text")
     LOCALE = relationship("Locale")
 
-    def __init__(self, QUESTION_ID, QUESTION_TYPE, TEXT_LID):
-        self.QUESTION_ID = QUESTION_ID
-        self.QUESTION_TYPE = QUESTION_TYPE
+    def __init__(self, QUESTION_TYPE_ID, TEXT_LID):
+        self.QUESTION_TYPE_ID = QUESTION_TYPE_ID
         self.TEXT_LID = TEXT_LID
 
     def __str__(self):
-        return f"{self.QUESTION_ID} {self.QUESTION_TYPE} {self.TEXT_LID}"
+        return f"QuestionType(QUESTION_TYPE_ID={self.QUESTION_TYPE_ID}, TEXT_LID={self.TEXT_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Answer(Base):
@@ -68,21 +101,23 @@ class Answer(Base):
     """
 
     __tablename__ = "T_ANSWER"
-    ANSWER_ID = Column(Integer, primary_key=True, comment="ID of this answer")
-    QA_TYPE = Column(Integer, comment="Question type ID")
-    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), comment="ID of the NPC that will say this answer")
-    TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Text of the answer")
+    QUESTION_TYPE_ID = Column(Integer, ForeignKey("T_QUESTION_TYPE.QUESTION_TYPE_ID"), primary_key=True, comment="Question type ID")
+    NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="ID of the NPC that will say this answer")
+    TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Text of the answer")
     LOCALE = relationship("Locale")
     NPC = relationship("Npc")
 
-    def __init__(self, ANSWER_ID, QA_TYPE, NPC_ID, TEXT_LID):
-        self.ANSWER_ID = ANSWER_ID
-        self.QA_TYPE = QA_TYPE
+    def __init__(self, QUESTION_TYPE_ID, NPC_ID, TEXT_LID):
+        self.QUESTION_TYPE_ID = QUESTION_TYPE_ID
         self.NPC_ID = NPC_ID
         self.TEXT_LID = TEXT_LID
 
     def __str__(self):
-        return f"{self.ANSWER_ID} {self.QA_TYPE} {self.NPC_ID} {self.TEXT_LID}"
+        return f"Answer(QUESTION_TYPE_ID={self.QUESTION_TYPE_ID}, NPC_ID={self.NPC_ID}, TEXT_LID={self.TEXT_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+        
 
 
 class Npc(Base):
@@ -92,7 +127,7 @@ class Npc(Base):
 
     __tablename__ = "T_NPC"
     NPC_ID = Column(Integer, primary_key=True, comment="ID of this Npc")
-    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Name of this Npc")
+    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this Npc")
     LOCALE = relationship("Locale")
 
     def __init__(self, NPC_ID, NAME_LID):
@@ -100,7 +135,10 @@ class Npc(Base):
         self.NAME_LID = NAME_LID
 
     def __str__(self) -> str:
-        return f"{self.NPC_ID} {self.NAME_LID}"
+        return f"Npc(NPC_ID={self.NPC_ID}, NAME_LID={self.NAME_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Trait(Base):
@@ -109,8 +147,8 @@ class Trait(Base):
     """
     __tablename__ = "T_TRAIT"
     TRAIT_ID = Column(Integer, primary_key=True, comment="ID of this trait")
-    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Name of this trait")
-    DESC_LID = Column(Integer, ForeignKey("T_LOCALE.TEXT_ID"), comment="Description of this trait")
+    NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this trait")
+    DESC_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Description of this trait")
 
     Name = relationship("Locale",foreign_keys=[NAME_LID])
     Desc = relationship("Locale",foreign_keys=[DESC_LID])
@@ -121,7 +159,10 @@ class Trait(Base):
         self.NAME_LID = NAME_LID
 
     def __str__(self) -> str:
-        return f"{self.TRAIT_ID} {self.NAME_LID}"
+        return f"Trait(TRAIT_ID={self.TRAIT_ID}, NAME_LID={self.NAME_LID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Reaction(Base):
@@ -141,4 +182,7 @@ class Reaction(Base):
         self.TRAIT_ID = TRAIT_ID
 
     def __str__(self) -> str:
-        return f"{self.REACTION_ID} {self.NPC_ID} {self.TRAIT_ID}"
+        return f"Reaction(REACTION_ID={self.REACTION_ID}, NPC_ID={self.NPC_ID}, TRAIT_ID={self.TRAIT_ID})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
