@@ -73,6 +73,11 @@ function showEmotionAndCulpritChoicesView() {
     showFirstClassElement("emotion_and_culprit_choices");
 }
 
+/**
+ * Parse the gamedata object to retreive the room in which the npc passed as parameter is
+ * located and the second npc located in the same room. When the passed npc is alone in the
+ * room, a npc is choosen at random as the returned partener
+ */
 function getNpcLocationAndPartner(npcid) {
     const data = {};
     const npcidInt = parseInt(npcid);
@@ -96,6 +101,11 @@ function getNpcLocationAndPartner(npcid) {
     return data;
 }
 
+/**
+ * Parse the gamedata object to retreive the room in which the npc passed as parameter is
+ * located and the second npc located in the same room. When the passed npc is alone in the
+ * room, a npc is choosen at random as the returned partener
+ */
 function disableCulpritButtons(culprit_choices_element, selected_suspect) {
     let childrenCulpritChoicesElement = culprit_choices_element.children;
 
@@ -112,12 +122,16 @@ function disableCulpritButtons(culprit_choices_element, selected_suspect) {
     }
 }
 
+/**
+ * Return the npc designed as the "culprit" of the crime, the culprit
+ * is determined by being the only npc alone in a room.
+ */
 function getCulprit() {
     let culprit = null;
 
-    Object.values(gameData["rooms"]).forEach(element => {
-        if (element['npcs'].length === 1) {
-            culprit = element['npcs'][0];
+    Object.values(gameData["rooms"]).forEach(room => {
+        if (room['npcs'].length === 1) {
+            culprit = room['npcs'][0];
             return;  
         } 
     });
@@ -125,16 +139,31 @@ function getCulprit() {
     return culprit;
 }
 
-async function askTypeOneQuestion() {
-    askQuestion(npcLocationAndPartner => gameData["npcs"][currentNpc]["QA_1"].replace(
-        "{NPC}", gameData["npcs"][npcLocationAndPartner["partner"]]["name"]));
-}
-
+/**
+ * handler for the function call "askQuestion" for a type_zero question
+ * also known as "Where were you ?"
+ */
 async function askTypeZeroQuestion() {
     askQuestion(npcLocationAndPartner => gameData["npcs"][currentNpc]["QA_0"].replace(
         "{SALLE}", npcLocationAndPartner["room"]));
 }
 
+/**
+ * handler for the function call "askQuestion" for a type_one question
+ * also known as "With who were you with ?"
+ */
+async function askTypeOneQuestion() {
+    askQuestion(npcLocationAndPartner => gameData["npcs"][currentNpc]["QA_1"].replace(
+        "{NPC}", gameData["npcs"][npcLocationAndPartner["partner"]]["name"]));
+}
+
+/**
+ * This function primary goal is to display the answer to the question the player
+ * asked to a npc. 
+ * It parses the gamedata object to retreive the answer of the npc
+ * and fill the variables left in the string accordingly to the type of the question.
+ * Then it fetches the reacion of the npc and diplays it all.
+ */
 async function askQuestion(buildAnswer) {
     unsetQuestionButtonsListeners();
 
@@ -157,6 +186,9 @@ async function askQuestion(buildAnswer) {
     setQuestionButtonsListeners();
 }
 
+/**
+ * This function sends the player's answers to the server
+ */
 async function sendAnswers() {
     const selections = document.getElementsByClassName("suspect_emotion_chooser");
 
@@ -172,6 +204,10 @@ async function sendAnswers() {
     return await makeAPIRequest("submitAnswers", data);
 }
 
+/**
+ * Show the screen in which the player fill the emotion of each npc
+ * then decide on which npc is the culprit.
+ */
 function renderAnswerSelectionPanel() {
     npcsIds.forEach(element => {
         const suspect = document.createElement("div");
@@ -211,6 +247,9 @@ function renderAnswerSelectionPanel() {
     });
 }
 
+/**
+ * Show the screen in which the player asks auestions to the npcs
+ */
 function renderInterrogation() {
     document.getElementById("QA_0").textContent = gameData["questions"]["QA_0"];
     document.getElementById("QA_1").textContent = gameData["questions"]["QA_1"];
@@ -242,6 +281,13 @@ function renderInterrogation() {
     });
 }
 
+
+/**
+ * Initialize the websocket for this page, its primary use is to
+ * show the final page once it receive the event that all player have finished
+ * it parses the payload send by the server containing the other players
+ * nicknames and scores.
+ */
 function initSock() {
     const socket = io({
         auth : {
@@ -320,6 +366,11 @@ function initSock() {
             });
     });
 }
+/** 
+ * This function retreive the initial gamedata of the game
+ * containing all of the needed textual ressources to make
+ * the game playable
+*/
 
 async function setGameData() {
     const response = await makeAPIRequest("getGameData");
