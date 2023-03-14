@@ -84,7 +84,7 @@ class Game:
             trait_id = self.reaction_table[npc_id]
             trait = dbutils.get_trait_from_trait_id(trait_id)
             npcs[npc_id]["reaction"] = dbutils.get_text_from_lid("FR", trait.NAME_LID)
-            npcs[npc_id]["description"] = dbutils.get_reaction_description("FR", npc_id, trait.TRAIT_ID)
+            npcs[npc_id]["description"] = dbutils.get_reaction_description("FR", trait.TRAIT_ID)
         player_results = data["player"] = {}
         for member in self.members:
             player_results[member.username] = member.results
