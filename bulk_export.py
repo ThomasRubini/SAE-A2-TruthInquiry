@@ -28,27 +28,27 @@ def bulk_export():
     data["questions"]["withwho"]["text"] = []
     data["questions"]["where"] = {}
     data["questions"]["where"]["text"] = []
-    for question in session.query(Question).all():
-        question_list = data["questions"]["where"]["text"] if question.QUESTION_TYPE == 0 else data["questions"]["withwho"]["text"]
-        for text in session.query(Locale).filter_by(TEXT_ID=question.TEXT_LID).all():
+    for question in session.query(QuestionType).all():
+        question_list = data["questions"]["where"]["text"] if question.QUESTION_TYPE_ID == 0 else data["questions"]["withwho"]["text"]
+        for text in session.query(Text).filter_by(LID=question.TEXT_LID).all():
             question_list.append({text.LANG : text.TEXT})
     
     traits = data["traits"] = {}
     for trait in session.query(Trait).all():
         current_trait = traits[trait.TRAIT_ID] = {}
         current_trait["name"] = {}
-        for text in session.query(Locale).filter_by(TEXT_ID=trait.NAME_LID):
+        for text in session.query(TEXT).filter_by(LID=trait.NAME_LID):
             current_trait["name"][text.LANG] = text.TEXT
         
         current_trait["description"] = {}
-        for text in session.query(Locale).filter_by(TEXT_ID=trait.DESC_LID):
+        for text in session.query(TEXT).filter_by(LID=trait.DESC_LID):
             current_trait["description"][text.LANG] = text.TEXT
 
     npcs = data["npcs"] = {}
     for npc in session.query(Npc).all():
         current_npc = npcs[npc.NPC_ID] = {}
         current_npc["name"] = {}
-        for text in session.query(Locale).filter_by(TEXT_ID=npc.NAME_LID):
+        for text in session.query(TEXT).filter_by(LID=npc.NAME_LID):
             current_npc["name"][text.LANG] = text.TEXT
         
         #TODO reactions
@@ -57,7 +57,7 @@ def bulk_export():
         current_npc["answers"]["withwho"] = []
         for answer in session.query(Answer).filter_by(NPC_ID=npc.NPC_ID):
             answer_list = current_npc["answers"]["where"] if answer.QA_TYPE == 0 else current_npc["answers"]["withwho"]
-            for text in session.query(Locale).filter_by(TEXT_ID=answer.TEXT_LID):
+            for text in session.query(TEXT).filter_by(LID=answer.TEXT_LID):
                 answer_list.append({text.LANG: text.TEXT})
     return data
 
