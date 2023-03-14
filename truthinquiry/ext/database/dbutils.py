@@ -49,7 +49,7 @@ def get_npc_random_answer(npc_id:int, qa_type:int) -> Answer :
     :param qa_type: the type of the question
     :return: an Answer object
     """
-    answers = db.session.query(Answer).filter_by(QA_TYPE=qa_type,NPC_ID=npc_id.NPC_ID).all()
+    answers = db.session.query(Answer).filter_by(QUESTION_TYPE_ID=qa_type,NPC_ID=npc_id.NPC_ID).all()
     return random.choice(answers)
 
 def get_random_question(qa_type: int) -> QuestionType :

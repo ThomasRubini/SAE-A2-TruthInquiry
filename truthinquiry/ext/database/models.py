@@ -78,7 +78,7 @@ class QuestionType(Base):
     """
 
     __tablename__ = "T_QUESTION_TYPE"
-    QUESTION_TYPE_ID = Column(Integer, primary_key=True, comment="ID of this question type.")
+    QUESTION_TYPE_ID = Column(Integer, default=0, primary_key=True, comment="ID of this question type.")
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Question text")
     LOCALE = relationship("Locale")
 
@@ -100,7 +100,7 @@ class Answer(Base):
     """
 
     __tablename__ = "T_ANSWER"
-    QUESTION_TYPE_ID = Column(Integer, ForeignKey("T_QUESTION_TYPE.QUESTION_TYPE_ID"), primary_key=True, comment="Question type ID")
+    QUESTION_TYPE_ID = Column(Integer,ForeignKey("T_QUESTION_TYPE.QUESTION_TYPE_ID"),primary_key=True, comment="Question type ID")
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="ID of the NPC that will say this answer")
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Text of the answer")
     LOCALE = relationship("Locale")
@@ -125,7 +125,7 @@ class Npc(Base):
     """
 
     __tablename__ = "T_NPC"
-    NPC_ID = Column(Integer, primary_key=True, comment="ID of this Npc")
+    NPC_ID = Column(Integer, autoincrement=True, primary_key=True, comment="ID of this Npc")
     NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this Npc")
     LOCALE = relationship("Locale")
 
@@ -153,15 +153,13 @@ class Trait(Base):
     Desc = relationship("Locale",foreign_keys=[DESC_LID])
 
 
-    def __init__(self, TRAIT_ID, NAME_LID):
+    def __init__(self, TRAIT_ID, NAME_LID, DESC_LID):
         self.TRAIT_ID = TRAIT_ID
         self.NAME_LID = NAME_LID
+        self.DESC_LID = DESC_LID
 
     def __str__(self) -> str:
-        return f"Trait(TRAIT_ID={self.TRAIT_ID}, NAME_LID={self.NAME_LID})"
-
-    def __repr__(self) -> str:
-        return self.__str__()
+        return f"{self.TRAIT_ID} {self.NAME_LID}"
 
 
 class Reaction(Base):
