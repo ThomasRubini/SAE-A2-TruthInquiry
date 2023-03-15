@@ -11,7 +11,8 @@ def get_text_from_lid(lang: str, lid: int) -> str:
     :param lid: the locale id the get the text from
     :return: the text associated to the lang and lid
     """
-    return db.session.query(Locale).filter_by(LANG=lang, TEXT_ID=lid).one().TEXT
+    texts = db.session.query(Text).filter_by(LANG=lang, TEXT_ID=lid).all()
+    return random.choice(texts).TEXT
 
 def get_random_place() -> Place:
     """
@@ -48,7 +49,7 @@ def get_npc_random_answer(npc_id:int, qa_type:int) -> Answer :
     :param qa_type: the type of the question
     :return: an Answer object
     """
-    answers = db.session.query(Answer).filter_by(QA_TYPE=qa_type,NPC_ID=npc_id.NPC_ID).all()
+    answers = db.session.query(Answer).filter_by(QUESTION_TYPE_ID=qa_type,NPC_ID=npc_id.NPC_ID).all()
     return random.choice(answers)
 
 def get_random_question(qa_type: int) -> QuestionType :
@@ -58,9 +59,8 @@ def get_random_question(qa_type: int) -> QuestionType :
     :param qa_type: the type of the question
     :return: a Question object
     """
-    answers = db.session.query(QuestionType).filter_by(QUESTION_TYPE_ID=qa_type).all()
-    return random.choice(answers)
-
+    return db.session.query(QuestionType).filter_by(QUESTION_TYPE_ID=qa_type).one()
+ 
 def get_trait_from_text(text: str) -> int:
     """
     Returns the trait_id from its text value
@@ -68,7 +68,7 @@ def get_trait_from_text(text: str) -> int:
     :param text: the text representation of the trait in any lang
     :return: the trait_id linked to this text
     """
-    trait_lid = db.session.query(Locale).filter_by(TEXT=text).one().TEXT_ID
+    trait_lid = db.session.query(Text).filter_by(TEXT=text).one().TEXT_ID
     return db.session.query(Trait).filter_by(NAME_LID=trait_lid).one().TRAIT_ID
 
 def get_trait_from_trait_id(trait_id: int) -> Trait:
@@ -81,7 +81,7 @@ def get_trait_from_trait_id(trait_id: int) -> Trait:
     trait = db.session.query(Trait).filter_by(TRAIT_ID=trait_id).one()
     return trait
 
-def get_reaction_description(lang, npc_id, trait_id) -> str:
+def get_reaction_description(lang, trait_id) -> str:
     """
     Returns the description of the reaction of a given npc in the language specified by the parametter lang
 
