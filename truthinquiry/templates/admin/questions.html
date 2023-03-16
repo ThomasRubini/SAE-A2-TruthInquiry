@@ -6,7 +6,8 @@
     {%endfor%}
 </select>
 
-<form id="questionsTag">
+
+<form id="questionsTag" action="javascript:void(0);">
 </form>
 
 <button onclick="saveForm()"> Save changes </button>
@@ -24,13 +25,14 @@
 <script src="/static/js/api.js"></script>
 <script>
 
+
     let lang = null;
 
     function saveForm(){
         var formData = new FormData(questionsTag);
         let questionsJson = [];
 
-        for(let questionTypeTag of questionsTag.children){
+        for(let questionTypeTag of questionsTag.querySelectorAll("fieldset")){
             let questionTypeJson = [];
             questionsJson.push(questionTypeJson);
 
@@ -59,16 +61,25 @@
             let questionTypeTag = document.createElement("fieldset")
             questionTypeTag.className = 'questionTypeTag';
             questionsTag.appendChild(questionTypeTag);
-            
-            let i = 0;
-            for(let question of questionType){
+
+
+
+            function addNewInput(value=""){
                 let questionTag = document.createElement("input");
                 questionTypeTag.appendChild(questionTag);
 
-                questionTag.value = question.text;
-
-                i++;
+                questionTag.value = value;
             }
+            
+            for(let question of questionType){
+                addNewInput(question.text);
+            }
+            
+            let addNewTag = document.createElement("input")
+            addNewTag.type = 'button'
+            addNewTag.value = "Add new";
+            addNewTag.onclick = () => addNewInput();
+            questionsTag.appendChild(addNewTag);
         }
 
         lang = newLang;
@@ -79,6 +90,5 @@
     }
 
     changeLang(langs.value);
-
 
 </script>
