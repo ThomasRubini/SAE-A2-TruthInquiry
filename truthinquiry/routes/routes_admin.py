@@ -16,7 +16,9 @@ def get_or_empty(obj, key):
 
 @routes_admin.route("/")
 def index():
-    return flask.render_template("admin/index.html")
+    npcs_objs = db.session.query(Npc).all()
+    npcs_dicts = [{"id": npc_obj.NPC_ID, "name": npc_obj.LOCALE.TEXTS[0].TEXT} for npc_obj in npcs_objs]
+    return flask.render_template("admin/index.html", npcs=npcs_dicts)
 
 @routes_admin.route("/npc/<npc_id>")
 def npc(npc_id):
