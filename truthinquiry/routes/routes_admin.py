@@ -37,4 +37,6 @@ def questions():
 
 @routes_admin.route("/places")
 def places():
-    return flask.render_template("admin/places.html")
+    places_objs = db.session.query(Place).all()
+    places_dicts = [{"id": place_obj.PLACE_ID, "name": place_obj.LOCALE.TEXTS[0].TEXT} for place_obj in places_objs]
+    return flask.render_template("admin/places.html", places=places_dicts)

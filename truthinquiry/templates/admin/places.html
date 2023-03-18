@@ -1,1 +1,8 @@
 <a href="/admin"> go Back </a> <br>
+
+
+<section>    
+{%for place in places%}
+<input name="{{place['id']}}" value="{{place['name']}}">
+{%endfor%}
+</section>
