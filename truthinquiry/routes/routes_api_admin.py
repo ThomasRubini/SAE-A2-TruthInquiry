@@ -108,7 +108,7 @@ def set_traits():
     # delete
     for db_trait in db_traits:
         if db_trait not in modified_db_traits:
-            db.session.remove()
+            db.session.delete(db_trait)
 
     db.session.commit()
 
