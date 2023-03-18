@@ -40,3 +40,9 @@ def places():
     places_objs = db.session.query(Place).all()
     places_dicts = [{"id": place_obj.PLACE_ID, "name": place_obj.LOCALE.TEXTS[0].TEXT} for place_obj in places_objs]
     return flask.render_template("admin/places.html", places=places_dicts)
+
+@routes_admin.route("/traits")
+def traits():
+    traits_objs = db.session.query(Trait).all()
+    traits_dicts = [{"id": trait_obj.TRAIT_ID, "name": trait_obj.Name.TEXTS[0].TEXT, "desc": trait_obj.Desc.TEXTS[0].TEXT} for trait_obj in traits_objs]
+    return flask.render_template("admin/traits.html", traits=traits_dicts)

@@ -1,0 +1,14 @@
+<a href="/admin"> go Back </a> <br>
+
+<section>    
+    {%for trait in traits%}
+    <section id="{{trait['id']}}">
+        <p> Name: </p>
+        <input value="{{trait['name']}}">
+        <p> Description: </p>
+        <input value="{{trait['desc']}}">
+    </section>
+    {%endfor%}
+</section>
+
+<p>Images are viewable in the npc views</p>

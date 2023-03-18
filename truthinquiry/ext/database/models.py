@@ -159,7 +159,10 @@ class Trait(Base):
         self.DESC_LID = DESC_LID
 
     def __str__(self) -> str:
-        return f"{self.TRAIT_ID} {self.NAME_LID}"
+        return f"Trait(TRAIT_ID={self.TRAIT_ID}, NAME_LID={self.NAME_LID}, DESC_LID={self.DESC_LID})"
+        
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Reaction(Base):
