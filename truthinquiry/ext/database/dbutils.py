@@ -11,7 +11,7 @@ def get_text_from_lid(lang: str, lid: int) -> str:
     :param lid: the locale id the get the text from
     :return: the text associated to the lang and lid
     """
-    texts = db.session.query(Text).filter_by(LANG=lang, TEXT_ID=lid).all()
+    texts = db.session.query(Text).filter_by(LANG=lang, LID=lid).all()
     return random.choice(texts).TEXT
 
 def get_random_place() -> Place:
@@ -68,7 +68,7 @@ def get_trait_from_text(text: str) -> int:
     :param text: the text representation of the trait in any lang
     :return: the trait_id linked to this text
     """
-    trait_lid = db.session.query(Text).filter_by(TEXT=text).one().TEXT_ID
+    trait_lid = db.session.query(Text).filter_by(TEXT=text).one().LID
     return db.session.query(Trait).filter_by(NAME_LID=trait_lid).one().TRAIT_ID
 
 def get_trait_from_trait_id(trait_id: int) -> Trait:
