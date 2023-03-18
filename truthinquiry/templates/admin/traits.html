@@ -1,14 +1,26 @@
 <a href="/admin"> go Back </a> <br>
 
-<section>    
+<section id="traits">
     {%for trait in traits%}
     <section id="{{trait['id']}}">
         <p> Name: </p>
-        <input value="{{trait['name']}}">
+        <input class="name_input" value="{{trait['name']}}">
         <p> Description: </p>
-        <input value="{{trait['desc']}}">
+        <input class="desc_input" value="{{trait['desc']}}">
     </section>
     {%endfor%}
 </section>
+<button onclick="addNewInput()">Add new</button>
 
 <p>Images are viewable in the npc views</p>
+
+<script>
+
+function addNewInput(){    
+    let newTrait = traits.lastElementChild.cloneNode(true);
+    newTrait.querySelector(".name_input").value = "";
+    newTrait.querySelector(".desc_input").value = "";
+    traits.appendChild(newTrait);
+}
+
+</script>
