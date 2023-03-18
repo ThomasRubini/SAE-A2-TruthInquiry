@@ -1,1 +1,19 @@
 <a href="/admin"> go Back </a> <br>
+
+<section>
+    <span>Npc name: </span> <input value="{{ npc.get('name') or ''}}">
+    <img href="{{npc.get('img')}}">
+</section>
+
+<section>
+    <p>Answers:</p>
+    {%for answer_type in npc.get("answers") or []%}
+    <section>    
+        {%for answer in answer_type%}
+        <input value="{{answer}}">
+        {%endfor%}
+    </section>
+    {%endfor%}
+
+</section>
+

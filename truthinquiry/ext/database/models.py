@@ -15,7 +15,7 @@ class Text(Base):
     LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Reference to the locale that this text provides")
     LANG = Column(VARCHAR(2), comment="lang ID of the text value in this row, e.g FR, EN, ES")
     TEXT = Column(Text, comment="Actual text stored")
-    LOCALE = relationship("Locale")
+    LOCALE = relationship("Locale", backref='TEXTS')
 
     def __init__(self, TEXT_ID, LID, LANG, TEXT):
         self.TEXT_ID = TEXT_ID
@@ -104,7 +104,7 @@ class Answer(Base):
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="ID of the NPC that will say this answer")
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Text of the answer")
     LOCALE = relationship("Locale")
-    NPC = relationship("Npc")
+    NPC = relationship("Npc", backref="ANSWERS")
 
     def __init__(self, QUESTION_TYPE_ID, NPC_ID, TEXT_LID):
         self.QUESTION_TYPE_ID = QUESTION_TYPE_ID
