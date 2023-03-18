@@ -5,15 +5,6 @@ from truthinquiry.ext.database.fsa import db
 
 routes_admin = flask.Blueprint("admin", __name__)
 
-def get_or_empty(obj, key):
-    if obj == None:
-        return ""
-    else:
-        return getattr(obj, key)
-
-
-
-
 @routes_admin.route("/")
 def index():
     npcs_objs = db.session.query(Npc).all()
