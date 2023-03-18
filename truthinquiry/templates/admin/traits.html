@@ -7,6 +7,7 @@
         <input class="name_input" value="{{trait['name']}}">
         <p> Description: </p>
         <input class="desc_input" value="{{trait['desc']}}">
+        <button onclick="deleteTrait(this)">Delete trait</button>
     </section>
     {%endfor%}
 </section>
@@ -24,6 +25,11 @@ function addNewInput(){
     newTrait.querySelector(".name_input").value = "";
     newTrait.querySelector(".desc_input").value = "";
     traits.appendChild(newTrait);
+}
+
+function deleteTrait(buttonNode){
+    let traitNode = buttonNode.parentNode;
+    traitNode.parentNode.removeChild(traitNode);
 }
 
 function saveForm(){
