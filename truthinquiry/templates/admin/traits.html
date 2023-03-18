@@ -18,6 +18,7 @@
 
 function addNewInput(){    
     let newTrait = traits.lastElementChild.cloneNode(true);
+    newTrait.id = "";
     newTrait.querySelector(".name_input").value = "";
     newTrait.querySelector(".desc_input").value = "";
     traits.appendChild(newTrait);
