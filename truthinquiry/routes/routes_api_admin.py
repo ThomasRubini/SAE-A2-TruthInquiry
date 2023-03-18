@@ -113,3 +113,41 @@ def set_traits():
     db.session.commit()
 
     return {"error": 0}
+
+@routes_api_admin.route("/setPlaces", methods=["GET", "POST"])
+def set_places():
+    input_lang = flask.request.json["lang"]
+    input_places = flask.request.json["places"]
+
+
+    db_places = db.session.query(Place).all()
+    
+    modified_db_places = []
+    for input_place in input_places:
+        if input_place["id"]:
+            # modify
+            db_place = list(filter(lambda db_place: db_place.PLACE_ID == int(input_place["id"]), db_places))[0]
+            
+            db.session.delete(db_place.LOCALE.TEXTS[0])
+            
+            db_place.LOCALE.TEXTS = [Text(None, None, input_lang, input_place["name"])]
+            
+            db.session.add(db_place)
+            modified_db_places.append(db_place)
+        else:
+            # add
+            new_place = Place(None, None)
+            
+            new_place.LOCALE = Locale(None)
+            new_place.LOCALE.TEXTS = [Text(None, None, input_lang, input_place["name"])]
+            
+            db.session.add(new_place)
+
+    # delete
+    for db_place in db_places:
+        if db_place not in modified_db_places:
+            db.session.delete(db_place)
+
+    db.session.commit()
+
+    return {"error": 0}
