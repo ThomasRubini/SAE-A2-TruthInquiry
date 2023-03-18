@@ -11,17 +11,31 @@
     {%endfor%}
 </section>
 <button onclick="addNewInput()">Add new</button>
+<button onclick="saveForm()">Save changes</button>
 
 <p>Images are viewable in the npc views</p>
 
+<script src="/static/js/api.js"></script>
 <script>
 
-function addNewInput(){    
+function addNewInput(){
     let newTrait = traits.lastElementChild.cloneNode(true);
     newTrait.id = "";
     newTrait.querySelector(".name_input").value = "";
     newTrait.querySelector(".desc_input").value = "";
     traits.appendChild(newTrait);
+}
+
+function saveForm(){
+    let data = [];
+    for(let section of traits.querySelectorAll("section")){
+        let trait = {};
+        trait["id"] = section.id
+        trait["name"] = section.querySelector(".name_input").value
+        trait["desc"] = section.querySelector(".desc_input").value
+        data.push(trait);
+    }
+    makeAPIRequest("admin/setTraits", {"traits": data, "lang": "FR"}, {"content": "json"})
 }
 
 </script>

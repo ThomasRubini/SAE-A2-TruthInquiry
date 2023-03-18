@@ -71,3 +71,45 @@ def set_questions():
     db.session.commit()
 
     return {"error": 0}
+
+@routes_api_admin.route("/setTraits", methods=["GET", "POST"])
+def set_traits():
+    input_lang = flask.request.json["lang"]
+    input_traits = flask.request.json["traits"]
+
+
+    db_traits = db.session.query(Trait).all()
+    
+    modified_db_traits = []
+    for input_trait in input_traits:
+        if input_trait["id"]:
+            # modify
+            db_trait = list(filter(lambda db_trait: db_trait.TRAIT_ID == int(input_trait["id"]), db_traits))[0]
+            
+            db.session.delete(db_trait.Name.TEXTS[0])
+            db.session.delete(db_trait.Desc.TEXTS[0])
+            db_trait.Name.TEXTS = [Text(None, None, input_lang, input_trait["name"])]
+            db_trait.Desc.TEXTS = [Text(None, None, input_lang, input_trait["desc"])]
+            
+            db.session.add(db_trait)
+            modified_db_traits.append(db_trait)
+        else:
+            # add
+            new_trait = Trait(None, None, None)
+            
+            new_trait.Name = Locale(None)
+            new_trait.Desc = Locale(None)
+
+            new_trait.Name.TEXTS.append(Text(None, None, input_lang, input_trait["name"]))
+            new_trait.Desc.TEXTS.append(Text(None, None, input_lang, input_trait["desc"]))
+            
+            db.session.add(new_trait)
+
+    # delete
+    for db_trait in db_traits:
+        if db_trait not in modified_db_traits:
+            db.session.remove()
+
+    db.session.commit()
+
+    return {"error": 0}
