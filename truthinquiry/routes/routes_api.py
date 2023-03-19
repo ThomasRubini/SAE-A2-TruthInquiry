@@ -124,7 +124,7 @@ def get_data():
 
 @routes_api.route("/getNpcImage", methods=["GET", "POST"])
 def get_npc_image():
-    npc_id = flask.request.values.get("npcid")
+    npc_id = int(flask.request.values.get("npcid"))
     if npc_id is None:
         return {"error": 1, "msg": "no npc was given"}
     image = game_logic.get_npc_image(npc_id)
