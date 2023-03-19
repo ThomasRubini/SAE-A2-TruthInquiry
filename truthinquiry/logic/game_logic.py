@@ -134,7 +134,7 @@ class Game:
         """
         print(self.reaction_table)
         if npc_id not in self.reaction_table:
-            return 0
+            return None
         trait_id = self.reaction_table[npc_id]
 
         reaction = db.session.execute(

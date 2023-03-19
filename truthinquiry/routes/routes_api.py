@@ -147,9 +147,8 @@ def get_npc_reaction():
     npc_id = flask.request.values.get("npcid")
 
     image = game.get_npc_reaction(npc_id)
-    errors = ["npc not in game","error reading file"]
-    if image in [0,1]:
-        return {"error": 1, "msg": errors[image]}
+    if image == None:
+        return {"error": 1, "msg": "npc not in game"}
 
     response = flask.make_response(image)
     response.headers.set('Content-Type', 'image/png')
