@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, VARCHAR, Text, ForeignKey
+from sqlalchemy import Column, Integer, VARCHAR, Text, LargeBinary, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
@@ -173,6 +173,7 @@ class Reaction(Base):
     REACTION_ID = Column(Integer, primary_key=True, autoincrement=True, comment="ID of this reaction")
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="Name of the NPC that will have this reaction")
     TRAIT_ID = Column(Integer, ForeignKey("T_TRAIT.TRAIT_ID"), primary_key=True, comment="ID of the trait of this reaction")
+    IMG = Column(LargeBinary(length=2**24), comment="Binary data of the image associated to this npc and trait")
     NPC = relationship("Npc")
     TRAIT = relationship("Trait")
 
