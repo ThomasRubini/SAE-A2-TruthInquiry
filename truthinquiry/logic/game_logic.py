@@ -282,11 +282,7 @@ def generate_game_data(lang: str) -> tuple[dict, dict]:
         data["npcs"][str(npc.NPC_ID)] = generate_npc_text(npc, lang)
         reactions_table[str(npc.NPC_ID)] = dbutils.get_npc_random_trait_id(npc)
 
-    places = []
-    while len(places) != 3:
-        place = dbutils.get_random_place()
-        if place not in places:
-            places.append(place)
+    places = list(dbutils.get_random_places(3))
 
     data["rooms"] = generate_place_data(npcs, places, lang)
     data["questions"] = {}

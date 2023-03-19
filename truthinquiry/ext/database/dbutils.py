@@ -14,13 +14,13 @@ def get_text_from_lid(lang: str, lid: int) -> str:
     texts = db.session.query(Text).filter_by(LANG=lang, LID=lid).all()
     return random.choice(texts).TEXT
 
-def get_random_place() -> Place:
+def get_random_places(n) -> Place:
     """
     Returns a random place from the database.
 
     :return: a Place object
     """
-    return random.choice(db.session.query(Place).all())
+    return random.sample(db.session.query(Place).all(), n)
 
 def get_random_npcs(n: int = 1) -> Npc :
     """
