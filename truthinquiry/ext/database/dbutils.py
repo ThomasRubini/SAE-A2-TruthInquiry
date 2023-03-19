@@ -22,13 +22,13 @@ def get_random_place() -> Place:
     """
     return random.choice(db.session.query(Place).all())
 
-def get_random_npc() -> Npc :
+def get_random_npcs(n: int = 1) -> Npc :
     """
     Returns a random npc from the database
 
     :return: a Npc object
     """
-    return random.choice(db.session.query(Npc).all())
+    return random.sample(db.session.query(Npc).all(), n)
 
 def get_npc_random_trait_id(npc_id: int) -> int:
     """

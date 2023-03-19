@@ -277,11 +277,7 @@ def generate_game_data(lang: str) -> tuple[dict, dict]:
     data = {}
     data["npcs"] = {}
     reactions_table = {}
-    npcs = []
-    while len(npcs) != 5:
-        npc = dbutils.get_random_npc()
-        if npc not in npcs:
-            npcs.append(npc)
+    npcs = list(dbutils.get_random_npcs(5))
     for npc in npcs:
         data["npcs"][str(npc.NPC_ID)] = generate_npc_text(npc, lang)
         reactions_table[str(npc.NPC_ID)] = dbutils.get_npc_random_trait_id(npc)
