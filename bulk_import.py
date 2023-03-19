@@ -1,8 +1,9 @@
-
-import argparse
-import yaml
 from dotenv import load_dotenv
 load_dotenv()
+
+import sys
+import yaml
+
 from sqlalchemy.orm import sessionmaker
 from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database.sa import engine
@@ -126,7 +127,7 @@ def bulk_import(data):
     
     for lid in lm.get_used_lids():
         print("lid :"+ str(lid))
-        session.add(Locale(lid));
+        session.add(Locale(lid))
     
     for text in TEXT_LIST:
         print("Text : "+str(text))
@@ -163,6 +164,8 @@ def bulk_import(data):
         session.add(room)
         session.commit()
 
-file = open("bulk_data.yml", "r")
-
-bulk_import(yaml.load(file, yaml.Loader))
+if len(sys.argv) <= 1:
+    print("Please enter input file")
+else:
+    file = open(sys.argv[1], "r")
+    bulk_import(yaml.load(file, yaml.Loader))
