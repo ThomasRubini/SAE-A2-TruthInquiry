@@ -39,11 +39,12 @@ def bulk_import(data, dir):
     REACTION_LIST = []
     QUESTIONS_LIST = []
     ANSWER_LIST = []
-    NPC_LIST = []
+    NPC_DICT = {}
     ROOMS_LIST = []
     
     lm = LocaleManager()
     getid = lm.get_unused_lid
+    reactions_img_dir = os.path.join(dir, data["reactions_img_dir"])
 
     # Questions
 
@@ -87,25 +88,12 @@ def bulk_import(data, dir):
     # Npcs
     npcs = data["npcs"]
     npcid = 1
-    for npc in npcs.values():
+    for npc_key, npc in npcs.items():
         new_npc = Npc(npcid, getid())
 
         # handle the names
         for lang in npc["name"]:
             TEXT_LIST.append(Text(0,new_npc.NAME_LID, lang, npc["name"][lang]))
-
-        for trait_key, reaction in npc.get("reactions", {}).items():
-            trait = TRAIT_DICT[trait_key]
-            new_reaction = Reaction(None, new_npc.NPC_ID, None)
-            new_reaction.TRAIT = trait
-
-            img_path = os.path.join(dir, reaction["img"])
-
-            with open(img_path, "rb") as f:
-                new_reaction.IMG = f.read()
-            
-            REACTION_LIST.append(new_reaction)
-
 
         for question_type in npc["answers"]:
             question_type_id = question_type_zero.QUESTION_TYPE_ID if question_type == "where" else question_type_one.QUESTION_TYPE_ID
@@ -118,8 +106,29 @@ def bulk_import(data, dir):
                 text = list(answer.values())[0]
                 TEXT_LIST.append(Text(0,new_answer.TEXT_LID, lang, text))
 
-        NPC_LIST.append(new_npc)
+        NPC_DICT[npc_key] = new_npc
         npcid += 1
+
+    # Reactions
+    for npc_key in os.listdir(reactions_img_dir):
+        for reaction_file in os.listdir(os.path.join(reactions_img_dir, npc_key)):
+
+            img_path = os.path.join(reactions_img_dir, npc_key, reaction_file)
+            with open(img_path, "rb") as f:
+                img_data = f.read()
+
+            npc = NPC_DICT[npc_key]
+            trait_key = os.path.splitext(reaction_file)[0]
+            if trait_key == 'default':
+                npc.DEFAULT_IMG = img_data
+            else:
+                trait = TRAIT_DICT[trait_key]
+
+                new_reaction = Reaction(None, npc.NPC_ID, None)
+                new_reaction.TRAIT = trait
+                new_reaction.IMG = img_data
+
+                REACTION_LIST.append(new_reaction)
 
     # rooms
     rooms = data["rooms"]
@@ -148,7 +157,7 @@ def bulk_import(data, dir):
         session.add(trait)
         session.commit()
 
-    for npc in NPC_LIST:
+    for npc in NPC_DICT.values():
         print("Npc : "+ str(npc))
         session.add(npc)
         session.commit()
