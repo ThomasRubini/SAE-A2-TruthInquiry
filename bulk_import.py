@@ -1,8 +1,10 @@
-
-import argparse
-import yaml
 from dotenv import load_dotenv
 load_dotenv()
+
+import sys
+import yaml
+import os
+
 from sqlalchemy.orm import sessionmaker
 from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database.sa import engine
@@ -29,21 +31,20 @@ class LocaleManager():
         return self.used_lids[1:]
 
 
-def bulk_import(data):
+def bulk_import(data, dir):
 
     # Data list that will be commited to the db
     TEXT_LIST = []
-    TRAIT_LIST = []
+    TRAIT_DICT = {}
     REACTION_LIST = []
     QUESTIONS_LIST = []
     ANSWER_LIST = []
-    NPC_LIST = []
+    NPC_DICT = {}
     ROOMS_LIST = []
     
-    # helper list to simplify
-    trait_names = {}
     lm = LocaleManager()
     getid = lm.get_unused_lid
+    reactions_img_dir = os.path.join(dir, data["reactions_img_dir"])
 
     # Questions
 
@@ -70,37 +71,29 @@ def bulk_import(data):
 
     # Traits
     traits = data["traits"]
-    for trait in traits.values():
+    for trait_key, trait in traits.items():
         # create the new trait
-        new_trait = Trait(0,getid(), getid())
+        new_trait = Trait(None, getid(), getid())
 
         for lang in trait["name"]:
             TEXT_LIST.append(Text(0,new_trait.NAME_LID,
                             lang, trait["name"][lang]))
-            trait_names[trait["name"][lang]] = new_trait.TRAIT_ID
 
         for lang in trait["description"]:
             TEXT_LIST.append(Text(0,new_trait.DESC_LID, lang,
                             trait["description"][lang]))
 
-        TRAIT_LIST.append(new_trait)
+        TRAIT_DICT[trait_key] = new_trait
 
     # Npcs
     npcs = data["npcs"]
     npcid = 1
-    for npc in npcs.values():
+    for npc_key, npc in npcs.items():
         new_npc = Npc(npcid, getid())
 
         # handle the names
         for lang in npc["name"]:
             TEXT_LIST.append(Text(0,new_npc.NAME_LID, lang, npc["name"][lang]))
-
-        # TODO handle reactions
-        """         
-        for reaction in npc["reactions"]:
-            if reaction in list(trait_names.keys()):
-                new_reaction = Reaction(0,new_npc.NPC_ID, trait_names[reaction])
-                REACTION_LIST.append(new_reaction) """
 
         for question_type in npc["answers"]:
             question_type_id = question_type_zero.QUESTION_TYPE_ID if question_type == "where" else question_type_one.QUESTION_TYPE_ID
@@ -113,8 +106,29 @@ def bulk_import(data):
                 text = list(answer.values())[0]
                 TEXT_LIST.append(Text(0,new_answer.TEXT_LID, lang, text))
 
-        NPC_LIST.append(new_npc)
+        NPC_DICT[npc_key] = new_npc
         npcid += 1
+
+    # Reactions
+    for npc_key in os.listdir(reactions_img_dir):
+        for reaction_file in os.listdir(os.path.join(reactions_img_dir, npc_key)):
+
+            img_path = os.path.join(reactions_img_dir, npc_key, reaction_file)
+            with open(img_path, "rb") as f:
+                img_data = f.read()
+
+            npc = NPC_DICT[npc_key]
+            trait_key = os.path.splitext(reaction_file)[0]
+            if trait_key == 'default':
+                npc.DEFAULT_IMG = img_data
+            else:
+                trait = TRAIT_DICT[trait_key]
+
+                new_reaction = Reaction(None, npc.NPC_ID, None)
+                new_reaction.TRAIT = trait
+                new_reaction.IMG = img_data
+
+                REACTION_LIST.append(new_reaction)
 
     # rooms
     rooms = data["rooms"]
@@ -126,7 +140,7 @@ def bulk_import(data):
     
     for lid in lm.get_used_lids():
         print("lid :"+ str(lid))
-        session.add(Locale(lid));
+        session.add(Locale(lid))
     
     for text in TEXT_LIST:
         print("Text : "+str(text))
@@ -138,12 +152,12 @@ def bulk_import(data):
         session.add(question)
         session.commit()
 
-    for trait in TRAIT_LIST:
+    for trait in TRAIT_DICT.values():
         print("Trait : "+ str(trait))
         session.add(trait)
         session.commit()
 
-    for npc in NPC_LIST:
+    for npc in NPC_DICT.values():
         print("Npc : "+ str(npc))
         session.add(npc)
         session.commit()
@@ -163,6 +177,8 @@ def bulk_import(data):
         session.add(room)
         session.commit()
 
-file = open("bulk_data.yml", "r")
-
-bulk_import(yaml.load(file, yaml.Loader))
+if len(sys.argv) <= 1:
+    print("Please enter input file")
+else:
+    path = sys.argv[1]
+    bulk_import(yaml.load(open(path, "r"), yaml.Loader), os.path.dirname(path))

@@ -2,7 +2,10 @@ import string
 import random
 from typing import Union
 
+from sqlalchemy import select, and_
+
 from truthinquiry.ext.database.models import *
+from truthinquiry.ext.database.fsa import db
 from truthinquiry.ext.database import dbutils
 
 games_list = {}
@@ -129,10 +132,16 @@ class Game:
         :param npc_id: the id of the npc, to get the reactions from, must be in the current game
         :return: the reaction image as bytes
         """
+        print(self.reaction_table)
         if npc_id not in self.reaction_table:
             return 0
-        reaction_id = self.reaction_table[npc_id]
-        return read_image(f"./truthinquiry/static/images/npc/{npc_id}/{reaction_id}.png")
+        trait_id = self.reaction_table[npc_id]
+
+        reaction = db.session.execute(
+            select(Reaction)
+            .where(and_(Reaction.NPC_ID == int(npc_id), Reaction.TRAIT_ID == int(trait_id)))
+            ).one()[0]
+        return reaction.IMG
 
     def get_player_results(self, responses: dict) -> Union[dict, None]:
         """
@@ -322,4 +331,5 @@ def get_npc_image(npc_id: int):
     :param npc_id: npc to get the neutral image from
     :return: the byte representation of the image, none if its not found or not readable
     """
-    return read_image(f"./truthinquiry/static/images/npc/{npc_id}/0.png")
+    npc = db.session.execute(select(Npc).where(Npc.NPC_ID==npc_id)).one()[0]
+    return npc.DEFAULT_IMG

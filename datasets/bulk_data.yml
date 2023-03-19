@@ -1,5 +1,7 @@
+reactions_img_dir: imgs
+
 npcs:
-  1:
+  medecin:
     answers:
       where:
       - FR: "Il y avait {SALLE} \xE7a m'a intrigu\xE9."
@@ -9,7 +11,7 @@ npcs:
       - FR: "Je suis pratiquement s\xFBr que j'\xE9tais avec {NPC}."
     name:
       FR: "Le M\xE9decin"
-  2:
+  diplomate:
     answers:
       where:
       - FR: Je profitais d'une collation dans {SALLE}.
@@ -20,7 +22,7 @@ npcs:
       - FR: "Avec {NPC} pour exposer nos diff\xE9rents points de vus sur divers sujets."
     name:
       FR: Le Diplomate
-  3:
+  combattant:
     answers:
       where:
       - FR: '{SALLE} nous a servi de salle de duel.'
@@ -30,7 +32,7 @@ npcs:
       - FR: "{NPC} et moi nous sommes engag\xE9s dans une joute verbale des plus palpitante."
     name:
       FR: Le Combattant
-  4:
+  duchesse:
     answers:
       where:
       - FR: Pour votre gouverne je me trouvais dans {SALLE}.
@@ -40,7 +42,7 @@ npcs:
       - FR: "J'\xE9tais avec {NPC}."
     name:
       FR: La Duchesse
-  5:
+  diva:
     answers:
       where:
       - FR: "{SALLE} me semblait \xEAtre la plus belle pi\xE8ce de la maison."
@@ -51,7 +53,7 @@ npcs:
           \ qu'une coupe de champagne."
     name:
       FR: La Diva
-  6:
+  parieuse:
     answers:
       where:
       - FR: "J'avais mont\xE9 une table de jeu dans {SALLE}."
@@ -63,7 +65,7 @@ npcs:
       - FR: "Si vous tenez \xE0 votre argent ne jouez jamais au poker avec {NPC}."
     name:
       FR: La Parieuse
-  7:
+  agent:
     answers:
       where:
       - FR: On pouvait me retrouver dans {SALLE}.
@@ -73,7 +75,7 @@ npcs:
       - FR: '{NPC}'
     name:
       FR: L'Agent
-  8:
+  voyageuse:
     answers:
       where:
       - FR: '{SALLE} me semblait un bon endroit pour me poser'
@@ -110,7 +112,7 @@ rooms:
   6:
     FR: Le jardin
 traits:
-  1:
+  mefiant:
     description:
       FR: "Un maintien rigide des traits du visage, un regard de travers. Une crispation\
         \ des sourcils et parfois des rides autour de la bouche. Ces caract\xE9ristiques\
@@ -118,7 +120,7 @@ traits:
         \ la personne en face."
     name:
       FR: "m\xE9fiant(e),"
-  2:
+  heureux:
     description:
       FR: "Un visage d\xE9contract\xE9 et ouvert, les muscles des joues contract\xE9\
         s qui laissent appara\xEEtre un sourire. On le d\xE9termine aussi par des\
@@ -128,7 +130,7 @@ traits:
         \ para\xEEtre ses r\xE9elles \xE9motions."
     name:
       FR: heureux(se),
-  3:
+  triste:
     description:
       FR: "Des sourcils contract\xE9s et resserr\xE9s vers le centre du visage auxquels\
         \ s'ajoute un regard vide ou fuyant de l'interlocuteur, soit en fermant les\
@@ -137,7 +139,7 @@ traits:
         \ ou accusations de son interlocuteur."
     name:
       FR: triste
-  4:
+  stresse:
     description:
       FR: "Un visage crisp\xE9 qui s'accompagne habituellement de sourcils fronc\xE9\
         s, un regard perdu qui se d\xE9tourne de celui de son interlocuteur. Cela\
@@ -146,7 +148,7 @@ traits:
         \ ou une peur de ce qu'annonce ou peut nous annoncer l'interlocuteur en face."
     name:
       FR: "stress\xE9(e),"
-  5:
+  surpris:
     description:
       FR: "G\xE9n\xE9ralement par des yeux \xE9carquill\xE9s et un haussement des\
         \ sourcils. Cela peut \xE9galement se distinguer par une bouche ouverte ou,\

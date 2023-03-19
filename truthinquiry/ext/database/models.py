@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, VARCHAR, Text, ForeignKey
+from sqlalchemy import Column, Integer, VARCHAR, Text, LargeBinary, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
@@ -11,7 +11,7 @@ class Text(Base):
 
     __tablename__ = 'T_TEXT'
 
-    TEXT_ID = Column(Integer, primary_key=True, comment="ID of this specific text. These IDs may be recycled in the future and may only be used for a short time period.")
+    TEXT_ID = Column(Integer, autoincrement=True, primary_key=True, comment="ID of this specific text. These IDs may be recycled in the future and may only be used for a short time period.")
     LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Reference to the locale that this text provides")
     LANG = Column(VARCHAR(2), comment="lang ID of the text value in this row, e.g FR, EN, ES")
     TEXT = Column(Text, comment="Actual text stored")
@@ -39,7 +39,7 @@ class Locale(Base):
     """
 
     __tablename__ = 'T_LOCALE'
-    LID = Column(Integer, primary_key=True, comment="ID of this locale (the other tables references to this with *_LID columns)")
+    LID = Column(Integer, primary_key=True, autoincrement=True, comment="ID of this locale (the other tables references to this with *_LID columns)")
     
     def __init__(self, LID):
         self.LID = LID
@@ -57,7 +57,7 @@ class Place(Base):
     """
 
     __tablename__ = 'T_PLACE'
-    PLACE_ID = Column(Integer, primary_key=True, comment="ID of this place")
+    PLACE_ID = Column(Integer, primary_key=True, autoincrement=True, comment="ID of this place")
     NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Place name")
     LOCALE = relationship("Locale")
 
@@ -100,7 +100,7 @@ class Answer(Base):
     """
 
     __tablename__ = "T_ANSWER"
-    QUESTION_TYPE_ID = Column(Integer,ForeignKey("T_QUESTION_TYPE.QUESTION_TYPE_ID"),primary_key=True, comment="Question type ID")
+    QUESTION_TYPE_ID = Column(Integer, ForeignKey("T_QUESTION_TYPE.QUESTION_TYPE_ID"), primary_key=True, comment="Question type ID")
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="ID of the NPC that will say this answer")
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Text of the answer")
     LOCALE = relationship("Locale")
@@ -127,6 +127,7 @@ class Npc(Base):
     __tablename__ = "T_NPC"
     NPC_ID = Column(Integer, autoincrement=True, primary_key=True, comment="ID of this Npc")
     NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this Npc")
+    DEFAULT_IMG = Column(LargeBinary(length=2**24), comment="Binary data of the default image of this Npc")
     LOCALE = relationship("Locale")
 
     def __init__(self, NPC_ID, NAME_LID):
@@ -145,7 +146,7 @@ class Trait(Base):
     Store reaction types, e.g 'happy', 'sad', without relation with NPCs
     """
     __tablename__ = "T_TRAIT"
-    TRAIT_ID = Column(Integer, primary_key=True, comment="ID of this trait")
+    TRAIT_ID = Column(Integer, primary_key=True, autoincrement=True, comment="ID of this trait")
     NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this trait")
     DESC_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Description of this trait")
 
@@ -170,9 +171,10 @@ class Reaction(Base):
     Relation between a NPC and a Trait
     """
     __tablename__ = "T_REACTION"
-    REACTION_ID = Column(Integer, primary_key=True, comment="ID of this reaction")
+    REACTION_ID = Column(Integer, primary_key=True, autoincrement=True, comment="ID of this reaction")
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="Name of the NPC that will have this reaction")
     TRAIT_ID = Column(Integer, ForeignKey("T_TRAIT.TRAIT_ID"), primary_key=True, comment="ID of the trait of this reaction")
+    IMG = Column(LargeBinary(length=2**24), comment="Binary data of the image associated to this npc and trait")
     NPC = relationship("Npc")
     TRAIT = relationship("Trait")
 
