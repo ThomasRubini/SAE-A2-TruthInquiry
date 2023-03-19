@@ -9,6 +9,9 @@ npcs:
       - FR: "Je suis pratiquement s\xFBr que j'\xE9tais avec {NPC}."
     name:
       FR: "Le M\xE9decin"
+    reactions:
+      mefiant:
+        img: imgs/medecin/mefiant.png
   2:
     answers:
       where:
@@ -110,7 +113,7 @@ rooms:
   6:
     FR: Le jardin
 traits:
-  1:
+  mefiant:
     description:
       FR: "Un maintien rigide des traits du visage, un regard de travers. Une crispation\
         \ des sourcils et parfois des rides autour de la bouche. Ces caract\xE9ristiques\
@@ -118,7 +121,7 @@ traits:
         \ la personne en face."
     name:
       FR: "m\xE9fiant(e),"
-  2:
+  decontracte:
     description:
       FR: "Un visage d\xE9contract\xE9 et ouvert, les muscles des joues contract\xE9\
         s qui laissent appara\xEEtre un sourire. On le d\xE9termine aussi par des\
@@ -128,7 +131,7 @@ traits:
         \ para\xEEtre ses r\xE9elles \xE9motions."
     name:
       FR: heureux(se),
-  3:
+  triste:
     description:
       FR: "Des sourcils contract\xE9s et resserr\xE9s vers le centre du visage auxquels\
         \ s'ajoute un regard vide ou fuyant de l'interlocuteur, soit en fermant les\
@@ -137,7 +140,7 @@ traits:
         \ ou accusations de son interlocuteur."
     name:
       FR: triste
-  4:
+  stresse:
     description:
       FR: "Un visage crisp\xE9 qui s'accompagne habituellement de sourcils fronc\xE9\
         s, un regard perdu qui se d\xE9tourne de celui de son interlocuteur. Cela\
@@ -146,7 +149,7 @@ traits:
         \ ou une peur de ce qu'annonce ou peut nous annoncer l'interlocuteur en face."
     name:
       FR: "stress\xE9(e),"
-  5:
+  surpris:
     description:
       FR: "G\xE9n\xE9ralement par des yeux \xE9carquill\xE9s et un haussement des\
         \ sourcils. Cela peut \xE9galement se distinguer par une bouche ouverte ou,\

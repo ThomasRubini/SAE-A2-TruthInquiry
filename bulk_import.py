@@ -3,6 +3,7 @@ load_dotenv()
 
 import sys
 import yaml
+import os
 
 from sqlalchemy.orm import sessionmaker
 from truthinquiry.ext.database.models import *
@@ -30,19 +31,17 @@ class LocaleManager():
         return self.used_lids[1:]
 
 
-def bulk_import(data):
+def bulk_import(data, dir):
 
     # Data list that will be commited to the db
     TEXT_LIST = []
-    TRAIT_LIST = []
+    TRAIT_DICT = {}
     REACTION_LIST = []
     QUESTIONS_LIST = []
     ANSWER_LIST = []
     NPC_LIST = []
     ROOMS_LIST = []
     
-    # helper list to simplify
-    trait_names = {}
     lm = LocaleManager()
     getid = lm.get_unused_lid
 
@@ -71,20 +70,19 @@ def bulk_import(data):
 
     # Traits
     traits = data["traits"]
-    for trait in traits.values():
+    for trait_key, trait in traits.items():
         # create the new trait
-        new_trait = Trait(0,getid(), getid())
+        new_trait = Trait(None, getid(), getid())
 
         for lang in trait["name"]:
             TEXT_LIST.append(Text(0,new_trait.NAME_LID,
                             lang, trait["name"][lang]))
-            trait_names[trait["name"][lang]] = new_trait.TRAIT_ID
 
         for lang in trait["description"]:
             TEXT_LIST.append(Text(0,new_trait.DESC_LID, lang,
                             trait["description"][lang]))
 
-        TRAIT_LIST.append(new_trait)
+        TRAIT_DICT[trait_key] = new_trait
 
     # Npcs
     npcs = data["npcs"]
@@ -96,12 +94,18 @@ def bulk_import(data):
         for lang in npc["name"]:
             TEXT_LIST.append(Text(0,new_npc.NAME_LID, lang, npc["name"][lang]))
 
-        # TODO handle reactions
-        """         
-        for reaction in npc["reactions"]:
-            if reaction in list(trait_names.keys()):
-                new_reaction = Reaction(0,new_npc.NPC_ID, trait_names[reaction])
-                REACTION_LIST.append(new_reaction) """
+        for trait_key, reaction in npc.get("reactions", {}).items():
+            trait = TRAIT_DICT[trait_key]
+            new_reaction = Reaction(None, new_npc.NPC_ID, None)
+            new_reaction.TRAIT = trait
+
+            img_path = os.path.join(dir, reaction["img"])
+
+            with open(img_path, "rb") as f:
+                new_reaction.IMG = f.read()
+            
+            REACTION_LIST.append(new_reaction)
+
 
         for question_type in npc["answers"]:
             question_type_id = question_type_zero.QUESTION_TYPE_ID if question_type == "where" else question_type_one.QUESTION_TYPE_ID
@@ -139,7 +143,7 @@ def bulk_import(data):
         session.add(question)
         session.commit()
 
-    for trait in TRAIT_LIST:
+    for trait in TRAIT_DICT.values():
         print("Trait : "+ str(trait))
         session.add(trait)
         session.commit()
@@ -167,5 +171,5 @@ def bulk_import(data):
 if len(sys.argv) <= 1:
     print("Please enter input file")
 else:
-    file = open(sys.argv[1], "r")
-    bulk_import(yaml.load(file, yaml.Loader))
+    path = sys.argv[1]
+    bulk_import(yaml.load(open(path, "r"), yaml.Loader), os.path.dirname(path))
