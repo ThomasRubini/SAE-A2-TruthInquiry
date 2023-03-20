@@ -80,11 +80,11 @@ html {
     margin: 0.25em;
 }
 
-.next_btn, .suspect_emotion_chooser {
+.home_button, .next_btn, .suspect_emotion_chooser {
     border: none;
 }
 
-.next_btn, #return_lobby_button {
+.home_button, .next_btn, #return_lobby_button {
     background-color: transparent;
 }
 
@@ -96,12 +96,11 @@ html {
     font-family: "Roboto Mono", sans-serif;
 }
 
-.reveal_culprit_explaination, .question_button, .players_list, .reveal_culprit, .scores, .summary, .suspect, .suspect_emotion_chooser {
+.explain_suspect_emotion_description, .question_button, .players_list, .return_button, .reveal_culprit, .reveal_culprit_explaination, .scores, .summary, .suspect, .suspect_emotion_chooser, .suspect_picture, .suspects_list {
     margin: 1em;
 }
 
 .suspect_picture {
-    margin: 1em;
     height: 15em;
     width: 15em;
 }
@@ -111,8 +110,15 @@ html {
 }
 
 /* Buttons */
-.action_button, .next_btn {
+.action_button, .home_button, .next_btn {
     cursor: pointer;
+}
+
+.home_button, .next_btn {
+    fill: var(--game-red);
+    height: 5em;
+    padding: 0;
+    width: 5em;
 }
 
 .action_button {
@@ -126,14 +132,10 @@ html {
 }
 
 .next_btn {
-    fill: var(--game-red);
-    height: 5em;
-    padding: 0;
     transform: rotate(180deg);
-    width: 5em;
 }
 
-#emotion_and_culprit_choices_next_btn, #interrogation_next_btn, #interrogation_suspect_previous_btn {
+#emotion_and_culprit_choices_next_btn, #interrogation_next_btn, #interrogation_suspect_previous_btn, #return_to_home_btn {
     position: fixed;
     left: calc(100% - 6em);
     top: 1em;
@@ -233,7 +235,6 @@ html {
 .explain_suspect_emotion_description {
     font-size: 1.25em;
     font-weight: normal;
-    margin: 1em;
 }
 
 .explain_suspect_emotion_title {
@@ -274,10 +275,6 @@ html {
 
 .summary_title {
     font-size: 4em;
-}
-
-.suspects_list {
-    margin: 1em;
 }
 
 #return_lobby_button {
