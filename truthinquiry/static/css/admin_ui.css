@@ -16,3 +16,11 @@
         width: 100%;
     }
 
+    .questionType{
+        border: thin solid red;
+        margin-top: 20px;
+    }
+    .question input{
+        width: 100%;
+        margin: 10px;
+    }
