@@ -1,4 +1,5 @@
 import flask
+from sqlalchemy import select, or_
 
 from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database.fsa import db
@@ -33,7 +34,29 @@ def npc(npc_id):
 
 @routes_admin.route("/questions")
 def questions():
-    return flask.render_template("admin/questions.html", langs=["FR", "EN"])
+    lang = "FR"
+
+    results = db.session.execute(
+        select(QuestionType, Text)
+        .select_from(QuestionType)
+        .join(Locale)
+        .join(Text, isouter=True)
+        .filter(or_(Text.LANG==None, Text.LANG==lang))
+        .order_by(QuestionType.QUESTION_TYPE_ID)
+    )
+
+    data = []
+    old_question_type_id = None
+
+    for question_type, locale in results:
+        if question_type.QUESTION_TYPE_ID != old_question_type_id:
+            old_question_type_id = question_type.QUESTION_TYPE_ID
+            data.append({"questions": []})
+
+        if locale:
+            data[-1]["questions"].append({"text": locale.TEXT})
+    
+    return flask.render_template("admin/questions.html", questions=data, langs=["FR", "EN"])
 
 @routes_admin.route("/places")
 def places():

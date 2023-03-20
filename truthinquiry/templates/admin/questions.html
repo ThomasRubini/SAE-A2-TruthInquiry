@@ -1,24 +1,40 @@
 <a href="/admin"> go Back </a> <br>
 
-<select id="langs" onchange="langChangedEvent()">
+<select id="langs" onchange="changeLang()">
     {%for lang in langs%}
     <option value="{{lang}}">{{lang}}</option>
     {%endfor%}
 </select>
 
 
-<form id="questionsTag" action="javascript:void(0);">
-</form>
+<section id="allQuestions">
+    {%for questionType in questions%}
+    <div class="questionType">
+        <section class="questionTypeContent">
+            {%for question in questionType["questions"]%}
+            <section class="question">
+                <input value="{{question['text']}}">
+                <button onclick="deleteEntry(this)">Delete question</button>
+            </section>
+            {%endfor%}
+        </section>
+        <button onclick="addEntry(this)">Add new</button>
+    </div>
+    {%endfor%}
+</section>
+
+<br>
 
 <button onclick="saveForm()"> Save changes </button>
 
 <style>
-    .questionTypeTag{
+    .questionType{
         border: thin solid red;
         margin-top: 20px;
     }
-    .questionTypeTag input{
+    .question input{
         width: 100%;
+        margin: 10px;
     }
 </style>
 
@@ -26,69 +42,37 @@
 <script>
 
 
-    let lang = null;
+    function addEntry(button){
+        let questionTypeContent = button.parentNode.querySelector(".questionTypeContent");
+        let newQuestion = questionTypeContent.querySelector(".question").cloneNode(true);
+        newQuestion.id = "";
+        newQuestion.querySelector("input").value = "";
+        questionTypeContent.appendChild(newQuestion);
+    }
+
+    function deleteEntry(buttonNode){
+        let placeNode = buttonNode.parentNode;
+        placeNode.parentNode.removeChild(placeNode);
+    }
 
     function saveForm(){
-        var formData = new FormData(questionsTag);
-        let questionsJson = [];
+        let data = [];
 
-        for(let questionTypeTag of questionsTag.querySelectorAll("fieldset")){
-            let questionTypeJson = [];
-            questionsJson.push(questionTypeJson);
+        for(let questionTypeNode of allQuestions.querySelectorAll(".questionType")){
+            let questionsJson = [];
+            let questionTypeJson = {"questions": questionsJson};
+            data.push(questionTypeJson);
 
-            for(let questionTag of questionTypeTag.children){
-                questionTypeJson.push({"text": questionTag.value})
+            for(let questionNode of questionTypeNode.querySelectorAll("input")){
+                questionsJson.push({"text": questionNode.value})
             }
         }
 
-        if(lang!==null){
-            makeAPIRequest("admin/setQuestions", {"questions": questionsJson, "lang": lang}, {"content": "json"})
-        }
+        makeAPIRequest("admin/setQuestions", {"questions": data, "lang": "FR"}, {"content": "json"})
     }
 
-    let lastQueriedData = [];
+    function changeLang(){
 
-    async function changeLang(newLang){
-        lang = null;
-
-        console.log("Changing language to "+newLang);
-        resp = await makeAPIRequest("admin/getQuestions", {"lang": newLang});
-
-        questionsTag.innerHTML = '';
-
-        for(let questionType of resp){
-            
-            let questionTypeTag = document.createElement("fieldset")
-            questionTypeTag.className = 'questionTypeTag';
-            questionsTag.appendChild(questionTypeTag);
-
-
-
-            function addNewInput(value=""){
-                let questionTag = document.createElement("input");
-                questionTypeTag.appendChild(questionTag);
-
-                questionTag.value = value;
-            }
-            
-            for(let question of questionType){
-                addNewInput(question.text);
-            }
-            
-            let addNewTag = document.createElement("input")
-            addNewTag.type = 'button'
-            addNewTag.value = "Add new";
-            addNewTag.onclick = () => addNewInput();
-            questionsTag.appendChild(addNewTag);
-        }
-
-        lang = newLang;
     }
-
-    function langChangedEvent(){
-        changeLang(langs.value)
-    }
-
-    changeLang(langs.value);
 
 </script>
