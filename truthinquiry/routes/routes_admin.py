@@ -34,7 +34,7 @@ def npc(npc_id):
 
 @routes_admin.route("/questions")
 def questions():
-    lang = "FR"
+    lang = flask.request.values.get("lang")
 
     results = db.session.execute(
         select(QuestionType, Text)
@@ -55,8 +55,11 @@ def questions():
 
         if locale:
             data[-1]["questions"].append({"text": locale.TEXT})
+
+    langs = [entry[0] for entry in db.session.execute(select(Text.LANG).distinct())]
     
-    return flask.render_template("admin/questions.html", questions=data, langs=["FR", "EN"])
+    print(lang)
+    return flask.render_template("admin/questions.html", questions=data, langs=langs, currentLang=lang)
 
 @routes_admin.route("/places")
 def places():
