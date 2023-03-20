@@ -39,6 +39,7 @@ html {
 .current_background {
     background-position: center;
     background-size: cover;
+    filter: blur(4px);
     position: fixed;
     height: 100%;
     left: 0;
