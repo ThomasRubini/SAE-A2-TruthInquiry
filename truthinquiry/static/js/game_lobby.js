@@ -69,7 +69,7 @@ function displayWaitingForHostMessage() {
  * shown, by removing the hidden CSS class on the element.
  * </p>
  *
- * @param {boolean} errorMessage the error message to show
+ * @param {string} errorMessage the error message to show
  */
 function displayInvalidNickNameErrorMessage(errorMessage) {
     let gameStartFailedElement = document.querySelector(".game_start_failed");
@@ -100,6 +100,12 @@ function startChallengeGame() {
 
 // Join room functions
 
+/**
+ * This function read the username join an already existing game, 
+ * to do so it calls the joinGame endpoint with the aftermentioned 
+ * username as parameter. If the request succeeds the lobby view
+ * is displayed. 
+ */
 function joinRoom() {
     if (isNickNameInvalid()) {
         displayInvalidNickNameErrorMessage("Le nom saisi n'est pas valide.");
@@ -218,13 +224,21 @@ function unsetListenerToCopyCodeButton() {
     document.getElementById("invite_friends_button").removeEventListener("click", copyCode);
 }
 
-// Utility functions
-
+/**
+ * This predicate asks the server is the current player is the owner of the 
+ * room stored in the session cookie.
+ * @returns {boolean} true if the player is the owner of the game, false otherwise
+ */
 async function isRoomOwner() {
     const response = await makeAPIRequest("isOwner");
     return response["owner"];
 }
 
+/**
+ * This predicate asks the server is the current player has joined the 
+ * room stored in the session cookie.
+ * @returns {boolean} true if the player has joined the game, false otherwise
+ */
 async function hasJoinedRoom() {
     const response = await makeAPIRequest("hasJoined");
     return response["joined"];
@@ -312,6 +326,12 @@ function getRoomCode() {
     return document.getElementById("game_id").value;
 }
 
+/**
+ * Initialize the websocket for this page, its primary use is to
+ * show in realtime players joining the room and to start the game
+ * of every player in the same time when the game owner starts the 
+ * gane
+ */
 function initSock() {
     const socket = io({
         auth: {
