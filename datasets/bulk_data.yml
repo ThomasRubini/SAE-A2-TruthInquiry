@@ -93,11 +93,13 @@ questions:
     - FR: "Vous \xE9tiez o\xF9 au moment des faits?"
     - FR: "Dans quelle salle \xE9tiez-vous pendant que le coffre \xE9tait subtilis\xE9\
         \ ?"
+    - EN: Where were you ?
   withwho:
     text:
     - FR: Etiez-vous seul au moment des faits ?
     - FR: "Quelqu\u2019un peu valider vous alibi pour la soir\xE9e ?"
     - FR: "Vous \xE9tiez accompagn\xE9 ce soir-l\xE0 ?"
+    - EN: Were you with someone ?
 rooms:
   1:
     FR: Le salon
