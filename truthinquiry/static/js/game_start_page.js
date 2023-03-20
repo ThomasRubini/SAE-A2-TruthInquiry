@@ -108,6 +108,10 @@ function areInputsValid(checkRoomCode) {
     return true;
 }
 
+
+/**
+ * Handler for the multiplayer room creation button 
+ */
 function createMultiPlayerRoom() {
     if (!areInputsValid(false)) {
         return;
@@ -118,6 +122,9 @@ function createMultiPlayerRoom() {
     startGame();
 }
 
+/**
+ * Handler for the join room button 
+ */
 function joinMultiPlayerRoom() {
     if (!areInputsValid(true)) {
         return;
@@ -197,6 +204,10 @@ function changeTheme() {
     }
 }
 
+/**
+ * This function launches a single player game. It sends the api request to
+ * create a game then it immediately start the game by sendind the startGame api
+ */
 async function startSoloGame(){
 
     if (!areInputsValid(false)) {
@@ -215,6 +226,10 @@ async function startSoloGame(){
     })
 }
 
+/**
+ * This function creates a multiplayer game by sending the createGame api call
+ * then, if no error occured, redirects to the lobby page.
+ */
 async function startGame(){
     username = document.getElementById("game_username").value;
     let data = {}
@@ -231,6 +246,12 @@ async function startGame(){
       });
 
 }
+
+/**
+ * This function read the username and the room code in order to
+ * join an already existing game, to do so it calls the joinGame endpoint
+ * with the aftermentioned username and room code as parameter. 
+ */
 async function joinGame(){
     username = document.getElementById("game_username").value;
     gameid = document.getElementById("game_room_code").value;
