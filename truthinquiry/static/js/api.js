@@ -34,7 +34,7 @@ async function makeAPIRequest(endpoint, body, options={}) {
             response.json().then(jsonResponse => {
                 if (typeof(jsonResponse["error"]) === 'number' && jsonResponse["error"] !== 0) {
                     const message = jsonResponse["msg"];
-                    alert("Erreur du serveur : " + message);
+                    alert("Erreur du serveur " + endpoint+ " : " + message);
                     reject(endpoint + ": " + message);
                 } else {
                     resolve(jsonResponse);

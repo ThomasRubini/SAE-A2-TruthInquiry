@@ -19,6 +19,10 @@
         <input type="hidden" id="game_id" name="game_id" value={{gameid}} />
         <div class="join_room_view hidden">
             <h1 class="room_title">Salon</h1>
+            <div class="unjoinded_players_list">
+                <h2 class="players_title">Joueurs</h2>
+                <div class="player_names"></div>
+            </div>
             <input type="text" id="game_username" placeholder="Entrez un pseudo" value="" required="required" maxlength="20">
             <button id="join_game_button" class="action_button">Rejoindre</button>
             <p class="game_start_failed hidden">Une erreur s'est produite. Réessayez ultérieurement.</p>

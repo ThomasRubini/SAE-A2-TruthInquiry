@@ -26,15 +26,6 @@ function displayRoomCode() {
  * Display the players list element.
  */
 function displayPlayerList() {
-    const response = makeAPIRequest("getGameMembers");
-
-    response.then(value => {
-        const playerList = document.querySelector(".player_names");
-        value["members"].forEach(username => {
-            playerList.appendChild(document.createTextNode(username + "\n"));
-        });
-    });
-
     showFirstClassElement("players_list");
 }
 
@@ -98,6 +89,20 @@ function startChallengeGame() {
     alert("Ce mode de jeu n'est malheureusement pas disponible.");
 }
 
+function getMembers(){
+    let data = {};
+    data['game_id'] = getRoomCode();
+    const response = makeAPIRequest("getGameMembers",data);
+    response.then(value => {
+        let divs = document.getElementsByClassName("player_names");
+        for (let playerList of divs) {
+            value["members"].forEach(username => {
+                console.log(username);
+                playerList.appendChild(document.createTextNode(username + "\n"));
+            });
+        }
+    });
+}
 // Join room functions
 
 function joinRoom() {
@@ -350,6 +355,7 @@ function initSock() {
  * </p>
  */
 async function initLobby() {
+    getMembers()
     if (await hasJoinedRoom()) {
         initSock();
         displayRoomView();
