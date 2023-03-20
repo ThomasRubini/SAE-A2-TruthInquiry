@@ -1,53 +1,26 @@
-<a href="/admin"> go Back </a> <br>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Places</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="admin_ui.css">
+        <script src="/static/js/admin.js"></script>
+        <script src="/static/js/api.js"></script>
+    </head>
+    <body>
+        <a href="/admin"> go Back </a> <br>
 
 
-<style>
-    section section{
-        border: thin solid red;
-        padding: 5px;
-        margin-top: 20px;
-    }
-    section section input{
-        width: 100%;
-    }
-</style>
+        <section id="places">
+        {%for place in places%}
+            <section id="{{place['id']}}">
+                <input value="{{place['name']}}">
+                <button onclick="deletePlace(this)">Delete place</button>
+            </section>
+        {%endfor%}
+        </section>
+        <button onclick="addNewInputPlaces()">Add new</button>
+        <button onclick="saveFormPlaces()">Save changes</button>
 
-
-<section id="places">
-    {%for place in places%}
-    <section id="{{place['id']}}">
-        <input value="{{place['name']}}">
-        <button onclick="deletePlace(this)">Delete place</button>
-    </section>
-    {%endfor%}
-</section>
-<button onclick="addNewInput()">Add new</button>
-<button onclick="saveForm()">Save changes</button>
-
-<script src="/static/js/api.js"></script>
-<script>
-
-function addNewInput(){
-    let newPlace = places.lastElementChild.cloneNode(true);
-    newPlace.id = "";
-    newPlace.querySelector("input").value = "";
-    places.appendChild(newPlace);
-}
-
-function deletePlace(buttonNode){
-    let placeNode = buttonNode.parentNode;
-    placeNode.parentNode.removeChild(placeNode);
-}
-
-function saveForm(){
-    let data = [];
-    for(let section of places.querySelectorAll("section")){
-        let place = {};
-        place["id"] = section.id
-        place["name"] = section.querySelector("input").value
-        data.push(place);
-    }
-    makeAPIRequest("admin/setPlaces", {"places": data, "lang": "FR"}, {"content": "json"})
-}
-
-</script>
+    </body>
+</html>

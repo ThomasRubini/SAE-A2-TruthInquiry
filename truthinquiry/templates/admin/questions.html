@@ -1,78 +1,41 @@
-<a href="/admin"> go Back </a> <br>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Admin Page</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="admin_ui.css">
+        <script src="/static/js/admin.js"></script>
+        <script src="/static/js/api.js"></script>
+    </head>
+    <body>>
+    
+        <a href="/admin"> go Back </a> <br>
 
-<select id="langs" onchange="changeLang()">
-    {%for lang in langs%}
-    <option value="{{lang}}">{{lang}}</option>
-    {%endfor%}
-</select>
+        <select id="langs" onchange="changeLang()">
+            {%for lang in langs%}
+            <option value="{{lang}}">{{lang}}</option>
+            {%endfor%}
+        </select>
 
 
-<section id="allQuestions">
-    {%for questionType in questions%}
-    <div class="questionType">
-        <section class="questionTypeContent">
-            {%for question in questionType["questions"]%}
-            <section class="question">
-                <input value="{{question['text']}}">
-                <button onclick="deleteEntry(this)">Delete question</button>
-            </section>
+        <section id="allQuestions">
+            {%for questionType in questions%}
+            <div class="questionType">
+                <section class="questionTypeContent">
+                    {%for question in questionType["questions"]%}
+                    <section class="question">
+                        <input value="{{question['text']}}">
+                        <button onclick="deleteEntry(this)">Delete question</button>
+                    </section>
+                    {%endfor%}
+                </section>
+                <button onclick="addEntry(this)">Add new</button>
+            </div>
             {%endfor%}
         </section>
-        <button onclick="addEntry(this)">Add new</button>
-    </div>
-    {%endfor%}
-</section>
 
-<br>
+        <br>
 
-<button onclick="saveForm()"> Save changes </button>
-
-<style>
-    .questionType{
-        border: thin solid red;
-        margin-top: 20px;
-    }
-    .question input{
-        width: 100%;
-        margin: 10px;
-    }
-</style>
-
-<script src="/static/js/api.js"></script>
-<script>
-
-
-    function addEntry(button){
-        let questionTypeContent = button.parentNode.querySelector(".questionTypeContent");
-        let newQuestion = questionTypeContent.querySelector(".question").cloneNode(true);
-        newQuestion.id = "";
-        newQuestion.querySelector("input").value = "";
-        questionTypeContent.appendChild(newQuestion);
-    }
-
-    function deleteEntry(buttonNode){
-        let placeNode = buttonNode.parentNode;
-        placeNode.parentNode.removeChild(placeNode);
-    }
-
-    function saveForm(){
-        let data = [];
-
-        for(let questionTypeNode of allQuestions.querySelectorAll(".questionType")){
-            let questionsJson = [];
-            let questionTypeJson = {"questions": questionsJson};
-            data.push(questionTypeJson);
-
-            for(let questionNode of questionTypeNode.querySelectorAll("input")){
-                questionsJson.push({"text": questionNode.value})
-            }
-        }
-
-        makeAPIRequest("admin/setQuestions", {"questions": data, "lang": "FR"}, {"content": "json"})
-    }
-
-    function changeLang(){
-
-    }
-
-</script>
+        <button onclick="saveFormQuestions()"> Save changes </button>
+    </body>
+</html>
