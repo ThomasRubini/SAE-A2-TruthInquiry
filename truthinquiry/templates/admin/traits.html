@@ -1,47 +1,29 @@
-<a href="/admin"> go Back </a> <br>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Traits</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="admin_ui.css">
+        <script src="/static/js/api.js"></script>
+        <script src="/static/js/admin.js"></script>
+    </head>
+    <body>
+        <a href="/admin"> go Back </a> <br>
 
-<section id="traits">
-    {%for trait in traits%}
-    <section id="{{trait['id']}}">
-        <p> Name: </p>
-        <input class="name_input" value="{{trait['name']}}">
-        <p> Description: </p>
-        <input class="desc_input" value="{{trait['desc']}}">
-        <button onclick="deleteTrait(this)">Delete trait</button>
-    </section>
-    {%endfor%}
-</section>
-<button onclick="addNewInput()">Add new</button>
-<button onclick="saveForm()">Save changes</button>
+        <section id="traits">
+        {%for trait in traits%}
+            <section id="{{trait['id']}}">
+                <p> Name: </p>
+                <input class="name_input" value="{{trait['name']}}">
+                <p> Description: </p>
+                <input class="desc_input" value="{{trait['desc']}}">
+                <button onclick="deleteTrait(this)">Delete trait</button>
+            </section>
+            {%endfor%}
+        </section>
+        <button onclick="addNewInputTraits()">Add new</button>
+        <button onclick="saveFormTraits()">Save changes</button>
 
-<p>Images are viewable in the npc views</p>
-
-<script src="/static/js/api.js"></script>
-<script>
-
-function addNewInput(){
-    let newTrait = traits.lastElementChild.cloneNode(true);
-    newTrait.id = "";
-    newTrait.querySelector(".name_input").value = "";
-    newTrait.querySelector(".desc_input").value = "";
-    traits.appendChild(newTrait);
-}
-
-function deleteTrait(buttonNode){
-    let traitNode = buttonNode.parentNode;
-    traitNode.parentNode.removeChild(traitNode);
-}
-
-function saveForm(){
-    let data = [];
-    for(let section of traits.querySelectorAll("section")){
-        let trait = {};
-        trait["id"] = section.id
-        trait["name"] = section.querySelector(".name_input").value
-        trait["desc"] = section.querySelector(".desc_input").value
-        data.push(trait);
-    }
-    makeAPIRequest("admin/setTraits", {"traits": data, "lang": "FR"}, {"content": "json"})
-}
-
-</script>
+        <p>Images are viewable in the npc views</p>
+    </body>
+</html>

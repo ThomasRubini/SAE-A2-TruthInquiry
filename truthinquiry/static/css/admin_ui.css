@@ -1,0 +1,18 @@
+    #places>section {
+        border: thin solid red;
+        padding: 5px;
+        margin-top: 20px;
+    }
+
+    #section>input{
+        width: 100%;
+    }
+    
+    .questionTypeTag{
+        border: thin solid red;
+        margin-top: 20px;
+    }
+    .questionTypeTag input{
+        width: 100%;
+    }
+
