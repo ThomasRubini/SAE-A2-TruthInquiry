@@ -35,9 +35,6 @@ def create_game():
 @routes_api.route("/getGameMembers", methods=["GET", "POST"])
 def get_members():
     game_id = flask.request.values.get("game_id")
-    print(50 * "#")
-    print(game_id)
-    print(50*"_")
     game = game_logic.get_game(game_id)
     if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
