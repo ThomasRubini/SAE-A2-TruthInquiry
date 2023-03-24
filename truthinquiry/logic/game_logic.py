@@ -132,7 +132,6 @@ class Game:
         :param npc_id: the id of the npc, to get the reactions from, must be in the current game
         :return: the reaction image as bytes
         """
-        print(self.reaction_table)
         if npc_id not in self.reaction_table:
             return None
         trait_id = self.reaction_table[npc_id]

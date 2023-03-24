@@ -34,7 +34,6 @@ def lobbyRedirect():
 @routes_ui.route("/lobby/<game_id>")
 def lobby(game_id):
     # rendered by the javascript client-side
-    print(game_id)
     if game_id is None:
         return flask.redirect("")
     return flask.render_template("lobby.html", gameid=game_id)
