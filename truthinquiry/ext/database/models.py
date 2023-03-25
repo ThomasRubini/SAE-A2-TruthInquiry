@@ -50,6 +50,27 @@ class Locale(Base):
     def __repr__(self) -> str:
         return self.__str__()
 
+    def get_texts(self, lang):
+        texts = []
+        for text in self.TEXTS:
+            if text.LANG == lang:
+                texts.append(text)
+        return texts
+
+    def get_text(self, lang, auto_create):
+        for text in self.TEXTS:
+            if text.LANG == lang:
+                return text
+        
+        if auto_create:
+            text = Text(None, None, lang, None)
+            self.TEXTS.append(text)
+            return text
+        else:
+            return None
+
+        
+
 
 class Place(Base):
     """
