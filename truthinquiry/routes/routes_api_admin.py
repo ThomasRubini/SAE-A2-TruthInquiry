@@ -57,10 +57,10 @@ def set_traits():
             # modify
             db_trait = list(filter(lambda db_trait: db_trait.TRAIT_ID == int(input_trait["id"]), db_traits))[0]
             
-            db.session.delete(db_trait.Name.TEXTS[0])
-            db.session.delete(db_trait.Desc.TEXTS[0])
-            db_trait.Name.TEXTS = [Text(None, None, input_lang, input_trait["name"])]
-            db_trait.Desc.TEXTS = [Text(None, None, input_lang, input_trait["desc"])]
+            db.session.delete(db_trait.NAME_LOCALE.get_text(input_lang))
+            db.session.delete(db_trait.DESC_LOCALE.get_text(input_lang))
+            db_trait.NAME_LOCALE.TEXTS = [Text(None, None, input_lang, input_trait["name"])]
+            db_trait.DESC_LOCALE.TEXTS = [Text(None, None, input_lang, input_trait["desc"])]
             
             db.session.add(db_trait)
             modified_db_traits.append(db_trait)
@@ -68,11 +68,11 @@ def set_traits():
             # add
             new_trait = Trait(None, None, None)
             
-            new_trait.Name = Locale(None)
-            new_trait.Desc = Locale(None)
+            new_trait.NAME_LOCALE = Locale(None)
+            new_trait.DESC_LOCALE = Locale(None)
 
-            new_trait.Name.TEXTS.append(Text(None, None, input_lang, input_trait["name"]))
-            new_trait.Desc.TEXTS.append(Text(None, None, input_lang, input_trait["desc"]))
+            new_trait.NAME_LOCALE.TEXTS.append(Text(None, None, input_lang, input_trait["name"]))
+            new_trait.DESC_LOCALE.TEXTS.append(Text(None, None, input_lang, input_trait["desc"]))
             
             db.session.add(new_trait)
 
@@ -99,9 +99,9 @@ def set_places():
             # modify
             db_place = list(filter(lambda db_place: db_place.PLACE_ID == int(input_place["id"]), db_places))[0]
             
-            db.session.delete(db_place.LOCALE.TEXTS[0])
+            db.session.delete(db_place.NAME_LOCALE.get_text(input_lang))
             
-            db_place.LOCALE.TEXTS = [Text(None, None, input_lang, input_place["name"])]
+            db_place.NAME_LOCALE.TEXTS = [Text(None, None, input_lang, input_place["name"])]
             
             db.session.add(db_place)
             modified_db_places.append(db_place)
@@ -109,8 +109,8 @@ def set_places():
             # add
             new_place = Place(None, None)
             
-            new_place.LOCALE = Locale(None)
-            new_place.LOCALE.TEXTS = [Text(None, None, input_lang, input_place["name"])]
+            new_place.NAME_LOCALE = Locale(None)
+            new_place.NAME_LOCALE.TEXTS = [Text(None, None, input_lang, input_place["name"])]
             
             db.session.add(new_place)
 
@@ -134,13 +134,13 @@ def set_npc():
     else:
         npc_obj = db.session.get(Npc, input_npc["id"])
 
-    npc_obj.LOCALE.get_text(input_lang, True).TEXT = input_npc["name"]
+    npc_obj.NAME_LOCALE.get_text(input_lang, True).TEXT = input_npc["name"]
 
     for answer_type, input_answer_type in zip(npc_obj.ANSWERS, input_npc["allAnswers"]):
-        for text in answer_type.LOCALE.get_texts(input_lang):
+        for text in answer_type.TEXT_LOCALE.get_texts(input_lang):
             db.session.delete(text)
         for input_answer in input_answer_type["answers"]:
-            answer_type.LOCALE.TEXTS.append(Text(None, None, input_lang, input_answer["text"]))
+            answer_type.TEXT_LOCALE.TEXTS.append(Text(None, None, input_lang, input_answer["text"]))
 
 
     db.session.commit()
