@@ -57,7 +57,7 @@ class Locale(Base):
                 texts.append(text)
         return texts
 
-    def get_text(self, lang, auto_create):
+    def get_text(self, lang, auto_create=False):
         for text in self.TEXTS:
             if text.LANG == lang:
                 return text

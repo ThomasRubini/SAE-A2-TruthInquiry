@@ -57,8 +57,8 @@ def set_traits():
             # modify
             db_trait = list(filter(lambda db_trait: db_trait.TRAIT_ID == int(input_trait["id"]), db_traits))[0]
             
-            db.session.delete(db_trait.NAME_LOCALE.TEXTS[0])
-            db.session.delete(db_trait.DESC_LOCALE.TEXTS[0])
+            db.session.delete(db_trait.NAME_LOCALE.get_text(input_lang))
+            db.session.delete(db_trait.DESC_LOCALE.get_text(input_lang))
             db_trait.NAME_LOCALE.TEXTS = [Text(None, None, input_lang, input_trait["name"])]
             db_trait.DESC_LOCALE.TEXTS = [Text(None, None, input_lang, input_trait["desc"])]
             
@@ -99,7 +99,7 @@ def set_places():
             # modify
             db_place = list(filter(lambda db_place: db_place.PLACE_ID == int(input_place["id"]), db_places))[0]
             
-            db.session.delete(db_place.NAME_LOCALE.TEXTS[0])
+            db.session.delete(db_place.NAME_LOCALE.get_text(input_lang))
             
             db_place.NAME_LOCALE.TEXTS = [Text(None, None, input_lang, input_place["name"])]
             
