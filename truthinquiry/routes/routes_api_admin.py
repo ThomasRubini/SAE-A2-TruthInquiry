@@ -122,3 +122,27 @@ def set_places():
     db.session.commit()
 
     return {"error": 0}
+
+@routes_api_admin.route("/setNpc", methods=["GET", "POST"])
+def set_npc():
+    input_lang = flask.request.json["lang"]
+    input_npc = flask.request.json["npc"]
+
+    if input_npc["id"] == None:
+        npc_obj = Npc(None, None)
+        db.session.add(npc_obj)
+    else:
+        npc_obj = db.session.get(Npc, input_npc["id"])
+
+    npc_obj.LOCALE.get_text(input_lang, True).TEXT = input_npc["name"]
+
+    for answer_type, input_answer_type in zip(npc_obj.ANSWERS, input_npc["allAnswers"]):
+        for text in answer_type.LOCALE.get_texts(input_lang):
+            db.session.delete(text)
+        for input_answer in input_answer_type["answers"]:
+            answer_type.LOCALE.TEXTS.append(Text(None, None, input_lang, input_answer["text"]))
+
+
+    db.session.commit()
+
+    return {"error": 0}

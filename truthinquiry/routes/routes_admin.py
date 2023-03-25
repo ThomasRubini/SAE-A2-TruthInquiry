@@ -25,6 +25,7 @@ def npc(npc_id):
             npc_answers.append(answer_list)
         
         npc_dict = {
+            "id": npc_obj.NPC_ID,
             "name": npc_obj.LOCALE.TEXTS[0].TEXT,
             "img": npc_obj.NPC_ID,
             "answers": npc_answers,

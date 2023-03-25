@@ -92,3 +92,27 @@ function changeLang(){
 
 }
 
+//functions for npc.html
+
+function saveFormNpc(){
+    let data = {}
+    
+    data["id"] = npc.querySelector("#npc_id").value;
+    data["name"] = npc.querySelector("#npc_name").value;
+    
+    let allAnswersJson = [];
+    data["allAnswers"] = allAnswersJson;
+    
+    for(let answerTypeNode of npc.querySelectorAll(".answerType")){
+        let answersJson = [];
+        let answerTypeJson = {"answers": answersJson};
+        allAnswersJson.push(answerTypeJson);
+
+        for(let answerNode of answerTypeNode.querySelectorAll("input")){
+            answersJson.push({"text": answerNode.value})
+        }
+    }
+
+    makeAPIRequest("admin/setNpc", {"npc": data, "lang": "FR"}, {"content": "json"})
+}
+
