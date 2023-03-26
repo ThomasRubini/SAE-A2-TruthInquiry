@@ -161,7 +161,7 @@ def get_npc_reaction():
 @routes_api.route("/getReaction", methods=["GET", "POST"])
 def get_reaction():
     input_uuid = flask.request.values.get("uuid")
-    results = db.session.execute(select(Reaction).where(Reaction.REACTION_UUID==uuid.UUID(input_uuid)))
+    results = db.session.execute(select(Reaction).where(Reaction.REACTION_UUID==input_uuid))
     
     row = results.first()
     if row == None:

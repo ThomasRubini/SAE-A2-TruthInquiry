@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, Integer, VARCHAR, Text, LargeBinary, ForeignKey, UUID
+from sqlalchemy import Column, Integer, VARCHAR, Text, LargeBinary, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
@@ -200,7 +200,7 @@ class Reaction(Base):
     IMG = Column(LargeBinary(length=2**24), comment="Binary data of the image associated to this npc and trait")
     NPC = relationship("Npc")
     TRAIT = relationship("Trait")
-    REACTION_UUID = Column(UUID, unique=True, comment="ID of this reaction")
+    REACTION_UUID = Column(VARCHAR(255), unique=True, comment="ID of this reaction")
 
     def __init__(self, REACTION_ID, NPC_ID, TRAIT_ID):
         self.REACTION_ID = REACTION_ID
