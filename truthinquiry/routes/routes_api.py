@@ -1,7 +1,11 @@
 import json
-import json
-import flask
+import io
 
+import flask
+from sqlalchemy import select
+
+from truthinquiry.ext.database.models import *
+from truthinquiry.ext.database.fsa import db
 from truthinquiry.ext.discord_bot import discord_bot
 from truthinquiry.ext.socketio import socket_io
 from truthinquiry.logic import game_logic
@@ -153,6 +157,20 @@ def get_npc_reaction():
     response.headers.set(
         'Content-Disposition', 'attachment', filename='reaction.png')
     return response
+
+@routes_api.route("/getReaction", methods=["GET", "POST"])
+def get_reaction():
+    input_uuid = flask.request.values.get("uuid")
+    results = db.session.execute(select(Reaction).where(Reaction.REACTION_UUID==input_uuid))
+    
+    row = results.first()
+    if row == None:
+        return {"error": 1, "msg": "No such reaction"}
+    reaction_obj = row[0]
+
+    return flask.send_file(io.BytesIO(reaction_obj.IMG), mimetype='image/png')
+    
+
 
 
 @routes_api.route("/gameProgress", methods=["GET", "POST"])
