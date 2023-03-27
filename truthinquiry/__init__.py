@@ -19,6 +19,11 @@ def register_extensions(app):
 
     discord_bot.try_start()
 
+    routes_api.scheduler.init_app(app)
+    routes_api.scheduler.start()
+
+
+
 def register_routes(app):
     app.register_blueprint(routes_api.routes_api, url_prefix="/api/v1")
     app.register_blueprint(routes_ui.routes_ui, url_prefix="/")

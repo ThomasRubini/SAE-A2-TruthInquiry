@@ -1,4 +1,5 @@
 import string
+import time
 import random
 from typing import Union
 
@@ -61,6 +62,7 @@ class Game:
         self.has_started = False
         self.gamedata = {}
         self.reaction_table = {}
+        self.creatation_timestamp = int(time.time())
 
     def set_owner(self, username: str) -> Member:
         """
