@@ -1,3 +1,5 @@
+import os
+
 import flask
 from sqlalchemy import select, delete, or_
 
@@ -7,6 +9,15 @@ from truthinquiry.utils import require_admin
 
 
 routes_api_admin = flask.Blueprint("api_admin", __name__)
+
+@routes_api_admin.route("/auth", methods=["GET", "POST"])
+def auth():
+    password = flask.request.values.get("password")
+    if password == os.getenv("ADMIN_PASSWORD"):
+        flask.session["admin"] = True
+        return flask.redirect("/admin")
+    else:
+        return flask.redirect("/admin/auth?failed=1")
 
 @routes_api_admin.route("/setQuestions", methods=["GET", "POST"])
 @require_admin(api=True)

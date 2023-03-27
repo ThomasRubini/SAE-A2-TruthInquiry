@@ -17,6 +17,10 @@ def index():
     npcs_dicts = [{"id": npc_obj.NPC_ID, "name": npc_obj.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT} for npc_obj in npcs_objs]
     return flask.render_template("admin/index.html", npcs=npcs_dicts)
 
+@routes_admin.route("/auth")
+def auth():
+    return flask.render_template("admin/auth.html")
+
 @routes_admin.route("/npc/<npc_id>")
 @require_admin(ui=True)
 def npc(npc_id):
