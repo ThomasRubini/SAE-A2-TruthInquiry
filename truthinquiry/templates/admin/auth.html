@@ -1,3 +1,7 @@
+{% if failed %}
+<p style="color: red"> Invalid password !</p>
+{% endif %}
+
 <form action="/api/v1/admin/auth" method="POST">
     <p>Password :</p>
     <input name="password">
