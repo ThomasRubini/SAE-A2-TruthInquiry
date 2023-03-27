@@ -1,6 +1,7 @@
 import json
 import io
-
+import time
+import os
 import flask
 import os
 from sqlalchemy import select
@@ -12,8 +13,20 @@ from truthinquiry.ext.socketio import socket_io
 from truthinquiry.logic import game_logic
 from dotenv import load_dotenv
 
-load_dotenv()
+from flask_apscheduler import APScheduler
+scheduler = APScheduler()
+scheduler.api_enabled = True
+
 routes_api = flask.Blueprint("api", __name__)
+@scheduler.task('interval', id='cleanup_games', seconds=1)
+def cleanup():
+    games_to_delete = []
+    for game_id, game in game_logic.games_list.items():
+        if game.creatation_timestamp + int(os.getenv("GAME_TIMEOUT")) < int(time.time()):
+            games_to_delete.append(game_id)
+    for game_id in games_to_delete:
+        del game_logic.games_list[game_id]
+
 
 # API specification is documented in api_doc.yml
 
@@ -221,6 +234,6 @@ def check_anwser():
     if game.has_finished():
         json_game_results = game.generate_game_results()
         socket_io.emit("gamefinished", json_game_results, room="game."+game.game_id)
-        del game
+        del game_logic.games_list[game.game_id]
     response = {"error": 0}
     return response
