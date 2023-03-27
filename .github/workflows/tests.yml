@@ -17,6 +17,7 @@ jobs:
         
     - name: Run tests
       env:
+        GAME_LIMIT: 100
         FLASK_SECRET: ${{SECRETS.FLASK_SECRET}}
         DB_HOST: ${{SECRETS.DB_HOST}}
         DB_PORT: ${{SECRETS.DB_PORT}}
