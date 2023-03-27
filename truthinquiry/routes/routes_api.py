@@ -1,12 +1,14 @@
 import json
 import json
 import flask
+import os
 
 from truthinquiry.ext.discord_bot import discord_bot
 from truthinquiry.ext.socketio import socket_io
 from truthinquiry.logic import game_logic
+from dotenv import load_dotenv
 
-
+load_dotenv()
 routes_api = flask.Blueprint("api", __name__)
 
 # API specification is documented in api_doc.yml
@@ -18,7 +20,8 @@ def create_game():
         return {"error": 1, "msg": "username not set"}
     if not game_logic.check_username(username):
         return {"error": 1, "msg": "invalid username"}
-
+    if len(game_logic.games_list) >= int(os.getenv("GAME_LIMIT")):
+        return {"error": 1, "msg": "Game limit reach"}
     response = {}
     response["error"] = 0
     game = game_logic.create_game(owner=username)
@@ -35,13 +38,10 @@ def create_game():
 @routes_api.route("/getGameMembers", methods=["GET", "POST"])
 def get_members():
     game_id = flask.request.values.get("game_id")
-    print(50 * "#")
-    print(game_id)
-    print(50*"_")
     game = game_logic.get_game(game_id)
     if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
-    response = {"error" : 0}
+    response = {"error": 0}
     player_list = [member.username for member in game.members]
     response["members"] = player_list
     return response
