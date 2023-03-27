@@ -19,7 +19,8 @@ def index():
 
 @routes_admin.route("/auth")
 def auth():
-    return flask.render_template("admin/auth.html")
+    input_failed = bool(flask.request.values.get("failed"))
+    return flask.render_template("admin/auth.html", failed=input_failed)
 
 @routes_admin.route("/npc/<npc_id>")
 @require_admin(ui=True)
