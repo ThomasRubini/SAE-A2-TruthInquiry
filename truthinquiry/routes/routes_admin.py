@@ -3,16 +3,27 @@ from sqlalchemy import select, or_
 
 from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database.fsa import db
+from truthinquiry.utils import require_admin
+
 
 routes_admin = flask.Blueprint("admin", __name__)
 
+DEFAULT_LANG = "FR"
+
 @routes_admin.route("/")
+@require_admin(ui=True)
 def index():
     npcs_objs = db.session.query(Npc).all()
-    npcs_dicts = [{"id": npc_obj.NPC_ID, "name": npc_obj.LOCALE.TEXTS[0].TEXT} for npc_obj in npcs_objs]
+    npcs_dicts = [{"id": npc_obj.NPC_ID, "name": npc_obj.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT} for npc_obj in npcs_objs]
     return flask.render_template("admin/index.html", npcs=npcs_dicts)
 
+@routes_admin.route("/auth")
+def auth():
+    input_failed = bool(flask.request.values.get("failed"))
+    return flask.render_template("admin/auth.html", failed=input_failed)
+
 @routes_admin.route("/npc/<npc_id>")
+@require_admin(ui=True)
 def npc(npc_id):
     if npc_id == "new":
         return flask.render_template("admin/npc.html", npc={})
@@ -21,11 +32,12 @@ def npc(npc_id):
 
         npc_answers = []
         for answer_type in npc_obj.ANSWERS:
-            answer_list = [answer.TEXT for answer in answer_type.LOCALE.TEXTS]
+            answer_list = [answer.TEXT for answer in answer_type.TEXT_LOCALE.TEXTS]
             npc_answers.append(answer_list)
         
         npc_dict = {
-            "name": npc_obj.LOCALE.TEXTS[0].TEXT,
+            "id": npc_obj.NPC_ID,
+            "name": npc_obj.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT,
             "img": npc_obj.NPC_ID,
             "answers": npc_answers,
         }
@@ -33,8 +45,9 @@ def npc(npc_id):
         return flask.render_template("admin/npc.html", npc=npc_dict)
 
 @routes_admin.route("/questions")
+@require_admin(ui=True)
 def questions():
-    lang = "FR"
+    lang = DEFAULT_LANG
 
     results = db.session.execute(
         select(QuestionType, Text)
@@ -59,13 +72,19 @@ def questions():
     return flask.render_template("admin/questions.html", questions=data, langs=["FR", "EN"])
 
 @routes_admin.route("/places")
+@require_admin(ui=True)
 def places():
+    lang = DEFAULT_LANG
+
     places_objs = db.session.query(Place).all()
-    places_dicts = [{"id": place_obj.PLACE_ID, "name": place_obj.LOCALE.TEXTS[0].TEXT} for place_obj in places_objs]
+    places_dicts = [{"id": place_obj.PLACE_ID, "name": place_obj.NAME_LOCALE.get_text(lang).TEXT} for place_obj in places_objs]
     return flask.render_template("admin/places.html", places=places_dicts)
 
 @routes_admin.route("/traits")
+@require_admin(ui=True)
 def traits():
+    lang = DEFAULT_LANG
+
     traits_objs = db.session.query(Trait).all()
-    traits_dicts = [{"id": trait_obj.TRAIT_ID, "name": trait_obj.Name.TEXTS[0].TEXT, "desc": trait_obj.Desc.TEXTS[0].TEXT} for trait_obj in traits_objs]
+    traits_dicts = [{"id": trait_obj.TRAIT_ID, "name": trait_obj.NAME_LOCALE.get_text(lang).TEXT, "desc": trait_obj.DESC_LOCALE.get_text(lang).TEXT} for trait_obj in traits_objs]
     return flask.render_template("admin/traits.html", traits=traits_dicts)

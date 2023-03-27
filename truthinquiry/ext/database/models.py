@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import Column, Integer, VARCHAR, Text, LargeBinary, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
 
@@ -50,6 +52,27 @@ class Locale(Base):
     def __repr__(self) -> str:
         return self.__str__()
 
+    def get_texts(self, lang):
+        texts = []
+        for text in self.TEXTS:
+            if text.LANG == lang:
+                texts.append(text)
+        return texts
+
+    def get_text(self, lang, auto_create=False):
+        for text in self.TEXTS:
+            if text.LANG == lang:
+                return text
+        
+        if auto_create:
+            text = Text(None, None, lang, None)
+            self.TEXTS.append(text)
+            return text
+        else:
+            return None
+
+        
+
 
 class Place(Base):
     """
@@ -59,7 +82,7 @@ class Place(Base):
     __tablename__ = 'T_PLACE'
     PLACE_ID = Column(Integer, primary_key=True, autoincrement=True, comment="ID of this place")
     NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Place name")
-    LOCALE = relationship("Locale")
+    NAME_LOCALE = relationship("Locale")
 
     def __init__(self, PLACE_ID, NAME_LID):
         self.PLACE_ID = PLACE_ID
@@ -80,7 +103,7 @@ class QuestionType(Base):
     __tablename__ = "T_QUESTION_TYPE"
     QUESTION_TYPE_ID = Column(Integer, default=0, primary_key=True, comment="ID of this question type.")
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Question text")
-    LOCALE = relationship("Locale")
+    TEXT_LOCALE = relationship("Locale")
 
     def __init__(self, QUESTION_TYPE_ID, TEXT_LID):
         self.QUESTION_TYPE_ID = QUESTION_TYPE_ID
@@ -103,7 +126,7 @@ class Answer(Base):
     QUESTION_TYPE_ID = Column(Integer, ForeignKey("T_QUESTION_TYPE.QUESTION_TYPE_ID"), primary_key=True, comment="Question type ID")
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="ID of the NPC that will say this answer")
     TEXT_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Text of the answer")
-    LOCALE = relationship("Locale")
+    TEXT_LOCALE = relationship("Locale")
     NPC = relationship("Npc", backref="ANSWERS")
 
     def __init__(self, QUESTION_TYPE_ID, NPC_ID, TEXT_LID):
@@ -128,7 +151,7 @@ class Npc(Base):
     NPC_ID = Column(Integer, autoincrement=True, primary_key=True, comment="ID of this Npc")
     NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this Npc")
     DEFAULT_IMG = Column(LargeBinary(length=2**24), comment="Binary data of the default image of this Npc")
-    LOCALE = relationship("Locale")
+    NAME_LOCALE = relationship("Locale")
 
     def __init__(self, NPC_ID, NAME_LID):
         self.NPC_ID = NPC_ID
@@ -150,8 +173,8 @@ class Trait(Base):
     NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this trait")
     DESC_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Description of this trait")
 
-    Name = relationship("Locale",foreign_keys=[NAME_LID])
-    Desc = relationship("Locale",foreign_keys=[DESC_LID])
+    NAME_LOCALE = relationship("Locale",foreign_keys=[NAME_LID])
+    DESC_LOCALE = relationship("Locale",foreign_keys=[DESC_LID])
 
 
     def __init__(self, TRAIT_ID, NAME_LID, DESC_LID):
@@ -177,14 +200,16 @@ class Reaction(Base):
     IMG = Column(LargeBinary(length=2**24), comment="Binary data of the image associated to this npc and trait")
     NPC = relationship("Npc")
     TRAIT = relationship("Trait")
+    REACTION_UUID = Column(VARCHAR(255), unique=True, comment="ID of this reaction")
 
     def __init__(self, REACTION_ID, NPC_ID, TRAIT_ID):
         self.REACTION_ID = REACTION_ID
         self.NPC_ID = NPC_ID
         self.TRAIT_ID = TRAIT_ID
+        self.REACTION_UUID = uuid.uuid4()
 
     def __str__(self) -> str:
-        return f"Reaction(REACTION_ID={self.REACTION_ID}, NPC_ID={self.NPC_ID}, TRAIT_ID={self.TRAIT_ID})"
+        return f"Reaction(REACTION_ID={self.REACTION_ID}, NPC_ID={self.NPC_ID}, TRAIT_ID={self.TRAIT_ID}, REACTION_UUID={self.REACTION_UUID})"
 
     def __repr__(self) -> str:
         return self.__str__()
