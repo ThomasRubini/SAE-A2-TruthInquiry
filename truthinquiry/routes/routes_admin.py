@@ -3,18 +3,22 @@ from sqlalchemy import select, or_
 
 from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database.fsa import db
+from truthinquiry.utils import require_admin
+
 
 routes_admin = flask.Blueprint("admin", __name__)
 
 DEFAULT_LANG = "FR"
 
 @routes_admin.route("/")
+@require_admin(ui=True)
 def index():
     npcs_objs = db.session.query(Npc).all()
     npcs_dicts = [{"id": npc_obj.NPC_ID, "name": npc_obj.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT} for npc_obj in npcs_objs]
     return flask.render_template("admin/index.html", npcs=npcs_dicts)
 
 @routes_admin.route("/npc/<npc_id>")
+@require_admin(ui=True)
 def npc(npc_id):
     if npc_id == "new":
         return flask.render_template("admin/npc.html", npc={})
@@ -36,6 +40,7 @@ def npc(npc_id):
         return flask.render_template("admin/npc.html", npc=npc_dict)
 
 @routes_admin.route("/questions")
+@require_admin(ui=True)
 def questions():
     lang = DEFAULT_LANG
 
@@ -62,6 +67,7 @@ def questions():
     return flask.render_template("admin/questions.html", questions=data, langs=["FR", "EN"])
 
 @routes_admin.route("/places")
+@require_admin(ui=True)
 def places():
     lang = DEFAULT_LANG
 
@@ -70,6 +76,7 @@ def places():
     return flask.render_template("admin/places.html", places=places_dicts)
 
 @routes_admin.route("/traits")
+@require_admin(ui=True)
 def traits():
     lang = DEFAULT_LANG
 

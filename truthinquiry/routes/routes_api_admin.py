@@ -3,11 +3,13 @@ from sqlalchemy import select, delete, or_
 
 from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database.fsa import db
+from truthinquiry.utils import require_admin
 
 
 routes_api_admin = flask.Blueprint("api_admin", __name__)
 
 @routes_api_admin.route("/setQuestions", methods=["GET", "POST"])
+@require_admin(api=True)
 def set_questions():
     if not flask.request.json:
         return {"error": 1, "msg": "no json set"}
@@ -44,6 +46,7 @@ def set_questions():
     return {"error": 0}
 
 @routes_api_admin.route("/setTraits", methods=["GET", "POST"])
+@require_admin(api=True)
 def set_traits():
     input_lang = flask.request.json["lang"]
     input_traits = flask.request.json["traits"]
@@ -86,6 +89,7 @@ def set_traits():
     return {"error": 0}
 
 @routes_api_admin.route("/setPlaces", methods=["GET", "POST"])
+@require_admin(api=True)
 def set_places():
     input_lang = flask.request.json["lang"]
     input_places = flask.request.json["places"]
@@ -124,6 +128,7 @@ def set_places():
     return {"error": 0}
 
 @routes_api_admin.route("/setNpc", methods=["GET", "POST"])
+@require_admin(api=True)
 def set_npc():
     input_lang = flask.request.json["lang"]
     input_npc = flask.request.json["npc"]
