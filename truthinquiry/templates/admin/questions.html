@@ -11,13 +11,6 @@
     
         <a href="/admin"> go Back </a> <br>
 
-        <select id="langs" onchange="changeLang()">
-            {%for lang in langs%}
-            <option value="{{lang}}">{{lang}}</option>
-            {%endfor%}
-        </select>
-
-
         <section id="allQuestions">
             {%for questionType in questions%}
             <div class="questionType">
