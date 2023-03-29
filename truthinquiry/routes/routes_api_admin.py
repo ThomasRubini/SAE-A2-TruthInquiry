@@ -163,3 +163,11 @@ def set_npc():
     db.session.commit()
 
     return {"error": 0}
+
+@routes_api_admin.route("/deleteNpc", methods=["GET", "POST"])
+@require_admin(api=True)
+def delete_npc():
+    input_npc_id = flask.request.json["npc_id"]
+    db.session.execute(delete(Npc).where(Npc.NPC_ID==input_npc_id))
+    db.session.commit()
+    return {}
