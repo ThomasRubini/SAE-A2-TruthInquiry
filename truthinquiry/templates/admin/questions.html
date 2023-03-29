@@ -18,11 +18,11 @@
                     {%for question in questionType["questions"]%}
                     <section class="question">
                         <input value="{{question['text']}}">
-                        <button onclick="deleteEntry(this)">Delete question</button>
+                        <button onclick="deleteInputQuestions(this)">Delete question</button>
                     </section>
                     {%endfor%}
                 </section>
-                <button onclick="addEntry(this)">Add new</button>
+                <button onclick="addInputQuestions(this)">Add new</button>
             </div>
             {%endfor%}
         </section>

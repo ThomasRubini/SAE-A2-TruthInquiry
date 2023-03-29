@@ -15,11 +15,11 @@
         {%for place in places%}
             <section id="{{place['id']}}">
                 <input value="{{place['name']}}">
-                <button onclick="deletePlace(this)">Delete place</button>
+                <button onclick="deleteInputPlaces(this)">Delete place</button>
             </section>
         {%endfor%}
         </section>
-        <button onclick="addNewInputPlaces()">Add new</button>
+        <button onclick="addInputPlaces()">Add new</button>
         <button onclick="saveFormPlaces()">Save changes</button>
 
     </body>

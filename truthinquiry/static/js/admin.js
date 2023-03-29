@@ -1,18 +1,18 @@
 //functions for places.html
 
-function addNewInputPlaces(){
+function addInputPlaces(){
     let newPlace = places.lastElementChild.cloneNode(true);
     newPlace.id = "";
     newPlace.querySelector("input").value = "";
     places.appendChild(newPlace);
 }
 
-function deletePlace(buttonNode){
+function deleteInputPlaces(buttonNode){
     let placeNode = buttonNode.parentNode;
     placeNode.parentNode.removeChild(placeNode);
 }
 
-function saveForm(){
+function saveFormPlaces(){
     let data = [];
     for(let section of places.querySelectorAll("section")){
         let place = {};
@@ -27,7 +27,7 @@ function saveForm(){
 //functions for traits.html
 
 
-function addNewInputTraits(){
+function addInputTraits(){
     let newTrait = traits.lastElementChild.cloneNode(true);
     newTrait.id = "";
     newTrait.querySelector(".name_input").value = "";
@@ -35,7 +35,7 @@ function addNewInputTraits(){
     traits.appendChild(newTrait);
 }
 
-function deleteTrait(buttonNode){
+function deleteInputTraits(buttonNode){
     let traitNode = buttonNode.parentNode;
     traitNode.parentNode.removeChild(traitNode);
 }
@@ -59,7 +59,7 @@ function saveFormTraits(){
 
 
 
-function addEntry(button){
+function addInputQuestions(button){
     let questionTypeContent = button.parentNode.querySelector(".questionTypeContent");
     let newQuestion = questionTypeContent.querySelector(".question").cloneNode(true);
     newQuestion.id = "";
@@ -67,7 +67,7 @@ function addEntry(button){
     questionTypeContent.appendChild(newQuestion);
 }
 
-function deleteEntry(buttonNode){
+function deleteInputQuestions(buttonNode){
     let placeNode = buttonNode.parentNode;
     placeNode.parentNode.removeChild(placeNode);
 }
@@ -86,10 +86,6 @@ function saveFormQuestions(){
     }
 
     makeAPIRequest("admin/setQuestions", {"questions": data, "lang": "FR"}, {"content": "json"})
-}
-
-function changeLang(){
-
 }
 
 //functions for npc.html
