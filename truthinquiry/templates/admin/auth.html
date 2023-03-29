@@ -1,9 +1,31 @@
-{% if failed %}
-<p style="color: red"> Invalid password !</p>
-{% endif %}
-
-<form action="/api/v1/admin/auth" method="POST">
-    <p>Password :</p>
-    <input name="password">
-    <input type="submit" value="Submit">
-</form>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Truth Inquiry - Connexion à l'interface d'administration</title>
+        <link rel="stylesheet" href="/static/css/admin_ui.css">
+        <link rel="stylesheet" href="/static/css/admin_ui_login.css">
+        <link rel="icon" href="/static/images/favicon/favicon_32.png" type="image/png" sizes="32x32">
+        <link rel="icon" href="/static/images/favicon/favicon_64.png" type="image/png" sizes="64x64">
+        <link rel="icon" href="/static/images/favicon/favicon_96.png" type="image/png" sizes="96x96">
+        <link rel="icon" href="/static/images/favicon/favicon_128.png" type="image/png" sizes="128x128">
+        <link rel="icon" href="/static/images/favicon/favicon_192.png" type="image/png" sizes="192x192">
+        <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="256x256">
+        <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="512x512">
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h1 class="login_title">Truth Inquiry - Connexion à l'interface d'administration</h1>
+        <form action="/api/v1/admin/auth" method="POST">
+            <div class="password_field">
+                <label for="password" class="password_label">Mot de passe&nbsp;:</label>
+                <input id="password" name="password" type="password" placeholder="Mot de passe" required="required" title="Saisissez votre mot de passe">
+            </div>
+            <input type="submit" value="Connexion">
+        </form>
+        {% if failed %}
+        <p class="invalid_password">Mot de passe invalide&nbsp;!</p>
+        {% endif %}
+    </body>
+</html>
