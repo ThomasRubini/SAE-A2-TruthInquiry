@@ -144,11 +144,12 @@ def set_npc():
     input_lang = flask.request.json["lang"]
     input_npc = flask.request.json["npc"]
 
-    if input_npc["id"] == None:
-        npc_obj = Npc(None, None)
-        db.session.add(npc_obj)
-    else:
+    if input_npc["id"]:
         npc_obj = db.session.get(Npc, input_npc["id"])
+    else:
+        npc_obj = Npc(None, None)
+        npc_obj.NAME_LOCALE = Locale(None)
+        db.session.add(npc_obj)
 
     npc_obj.NAME_LOCALE.get_text(input_lang, True).TEXT = input_npc["name"]
 
