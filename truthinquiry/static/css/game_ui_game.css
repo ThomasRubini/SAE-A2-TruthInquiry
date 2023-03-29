@@ -81,6 +81,10 @@ html {
     margin: 0.25em;
 }
 
+.home_button, .next_btn, .suspects {
+    padding: 0;
+}
+
 .home_button, .next_btn, .suspect_emotion_chooser {
     border: none;
 }
@@ -101,6 +105,10 @@ html {
     margin: 1em;
 }
 
+.suspect {
+    list-style-type: none;
+}
+
 .suspect_picture {
     height: 15em;
     width: 15em;
@@ -118,7 +126,6 @@ html {
 .home_button, .next_btn {
     fill: var(--game-red);
     height: 5em;
-    padding: 0;
     width: 5em;
 }
 
@@ -192,13 +199,8 @@ html {
 .culprit_icon {
     fill: var(--game-white);
     height: 1em;
-    width: 1em;
-}
-
-.culprit_btn_text {
-    margin: 0;
-    margin-left: 0.25em;
     margin-right: 0.25em;
+    width: 1em;
 }
 
 .culprit_btn_checked {

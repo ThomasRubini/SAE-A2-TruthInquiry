@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
+        <meta charset="UTF-8">
         <title>Truth Inquiry - Salon</title>
         <link rel="stylesheet" href="/static/css/game_ui.css">
         <link rel="stylesheet" href="/static/css/game_ui_lobby.css">
@@ -13,11 +14,10 @@
         <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="512x512">
         <meta name="color-scheme" content="dark light">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta charset="UTF-8">
     </head>
     <body class="game_app">
-        <input type="hidden" id="game_id" name="game_id" value={{gameid}} />
-        <div class="join_room_view hidden">
+        <input type="hidden" id="game_id" name="game_id" value={{gameid}}>
+        <section class="join_room_view hidden">
             <h1 class="room_title">Salon</h1>
             <div class="unjoinded_players_list">
                 <h2 class="players_title">Joueurs</h2>
@@ -26,8 +26,8 @@
             <input type="text" id="game_username" placeholder="Entrez un pseudo" value="" required="required" maxlength="20">
             <button id="join_game_button" class="action_button">Rejoindre</button>
             <p class="game_start_failed hidden">Une erreur s'est produite. Réessayez ultérieurement.</p>
-        </div>
-        <div class="room_view hidden">
+        </section>
+        <section class="room_view hidden">
             <div class="room_view_container">
                 <h1 class="room_title">Salon</h1>
                 <div class="room_code_text hidden">
@@ -57,10 +57,10 @@
                 </div>
                 <h3 class="multi_player_mode_waiting_for_host hidden">En attente du démarrage de la partie par l'hôte&nbsp;…</h3>
             </div>
-        </div>
+        </section>
         <div class="alert_dialog_background"></div>
-        <div class="unsupported_browser">
-            <div id="unsupported_browser_dialog" class="alert_dialog">
+        <section class="unsupported_browser">
+            <dialog id="unsupported_browser_dialog" class="alert_dialog">
                 <h3 class="alert_dialog_title">Navigateur non supporté</h3>
                 <p class="alert_dialog_msg unsupported_browser_msg"></p>
                 <div class="footer_links">
@@ -68,21 +68,21 @@
                     <a href="/licenses" class="footer_link link" target="_blank" title="Consulter les licenses des éléments non-originaux de Truth Inquiry (ouverture dans un nouvel onglet)">Licenses</a>
                     <a href="/legal" class="footer_link link" target="_blank" title="Consulter les mentions légales de Truth Inquiry (ouverture dans un nouvel onglet)">Mentions légales</a>
                 </div>
-            </div>
-        </div>
+            </dialog>
+        </section>
         <noscript>
-            <div class="alert_dialog_background" style="display: block;"></div>
-            <div class="js_requirement">
-                <div id="js_requirement_dialog" class="alert_dialog" style="display: block;">
-                    <h3 class="alert_dialog_title" style="display: block;">JavaScript nécessaire</h3>
-                    <p class="alert_dialog_msg unsupported_browser_msg" style="display: block;">Désolé, mais JavaScript est nécessaire pour faire fonctionner Truth Inquiry. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir jouer au jeu.</p>
-                </div>
-                <div class="footer_links">
-                    <a href="/privacy" class="footer_link link" target="_blank" title="Consulter la politique de confidentialité de Truth Inquiry (ouverture dans un nouvel onglet)">Politique de confidentialité</a>
-                    <a href="/licenses" class="footer_link link" target="_blank" title="Consulter les licenses des éléments non-originaux de Truth Inquiry (ouverture dans un nouvel onglet)">Licenses</a>
-                    <a href="/legal" class="footer_link link" target="_blank" title="Consulter les mentions légales de Truth Inquiry (ouverture dans un nouvel onglet)">Mentions légales</a>
-                </div>
-            </div>
+            <div class="alert_dialog_background"></div>
+            <section class="js_requirement">
+                <dialog id="js_requirement_dialog" class="alert_dialog alert_dialog_show">
+                    <h3 class="alert_dialog_title">JavaScript nécessaire</h3>
+                    <p class="alert_dialog_msg unsupported_browser_msg">Désolé, mais JavaScript est nécessaire pour faire fonctionner Truth Inquiry. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir jouer au jeu.</p>
+                    <div class="footer_links">
+                        <a href="/privacy" class="footer_link link" target="_blank" title="Consulter la politique de confidentialité de Truth Inquiry (ouverture dans un nouvel onglet)">Politique de confidentialité</a>
+                        <a href="/licenses" class="footer_link link" target="_blank" title="Consulter les licenses des éléments non-originaux de Truth Inquiry (ouverture dans un nouvel onglet)">Licenses</a>
+                        <a href="/legal" class="footer_link link" target="_blank" title="Consulter les mentions légales de Truth Inquiry (ouverture dans un nouvel onglet)">Mentions légales</a>
+                    </div>
+                </dialog>
+            </section>
         </noscript>
         <script src="/static/js/socket.io_v4.4.1/socket.io.min.js"></script>
         <script src="/static/js/api.js"></script>

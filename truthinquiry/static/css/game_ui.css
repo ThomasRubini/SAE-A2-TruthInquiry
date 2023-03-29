@@ -31,10 +31,9 @@
     /* Colors */
     color-scheme: dark;
     --alert-dialog-background-color: #000000DF;
-    --button-links-gray-color: #939393;
     --dark-theme-background-color: #213C40;
     --game-black: #000000;
-    --game-blue: #0096FF;
+    --game-blue: #7DDCFF;
     --game-green: #008000;
     --game-grey: #5A5656;
     --game-red: #BD1E1E;
@@ -52,6 +51,10 @@ html {
 
 body {
     margin: var(--body-margin);
+}
+
+noscript .alert_dialog_background, noscript .alert_dialog_msg, noscript .alert_dialog_title {
+    display: block;
 }
 
 .action_button {
@@ -100,21 +103,23 @@ body {
 /* Footer */
 .footer_link {
     color: var(--game-white);
-    font-family: sans-serif;
+    font-family: "Roboto Mono", sans-serif;
     font-size: 1em;
     font-weight: bold;
     margin: 0.5em;
+    text-align: center;
     transition: color 0.25s;
 }
 
 .footer_link:hover {
-    color: var(--button-links-gray-color);
+    color: var(--game-black);
 }
 
 .footer_links {
+    align-items: center;
+    align-self: flex-end;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     height: var(--footer-links-height);
     justify-content: flex-end;
 }
@@ -130,6 +135,8 @@ body {
 
 /* Alert dialogs */
 .alert_dialog {
+    background-color: var(--game-grey);
+    border-color: var(--game-white);
     border-radius: var(--button-and-dialog-border-radius);
     display: none;
     font-family: "Spicy Rice", serif;
@@ -137,6 +144,7 @@ body {
     flex-wrap: nowrap;
     justify-content: center;
     left: 50%;
+    overflow: auto;
     padding: 2em;
     position: absolute;
     top: 50%;
@@ -149,6 +157,8 @@ body {
 }
 
 .alert_dialog_title {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
     font-size: 2em;
     font-weight: normal;
     text-align: center;
