@@ -74,9 +74,12 @@ function showEmotionAndCulpritChoicesView() {
 }
 
 /**
- * Parse the gamedata object to retreive the room in which the npc passed as parameter is
- * located and the second npc located in the same room. When the passed npc is alone in the
- * room, a npc is choosen at random as the returned partener
+ * Parse the gamedata object to retreive the room in which the npc passed as parameter is located
+ * and the second npc located in the same room.
+ *
+ * <p>
+ * When the passed npc is alone in the room, a npc is chosen at random as the returned partener.
+ * </p>
  */
 function getNpcLocationAndPartner(npcid) {
     const data = {};
@@ -102,9 +105,12 @@ function getNpcLocationAndPartner(npcid) {
 }
 
 /**
- * Parse the gamedata object to retreive the room in which the npc passed as parameter is
- * located and the second npc located in the same room. When the passed npc is alone in the
- * room, a npc is choosen at random as the returned partener
+ * Parse the gamedata object to retreive the room in which the npc passed as parameter is located
+ * and the second npc located in the same room.
+ *
+ * <p>
+ * When the passed npc is alone in the room, a npc is chosen at random as the returned partner.
+ * </p>
  */
 function disableCulpritButtons(culprit_choices_element, selected_suspect) {
     let childrenCulpritChoicesElement = culprit_choices_element.children;
@@ -123,8 +129,8 @@ function disableCulpritButtons(culprit_choices_element, selected_suspect) {
 }
 
 /**
- * Return the npc designed as the "culprit" of the crime, the culprit
- * is determined by being the only npc alone in a room.
+ * Return the npc designed as the "culprit" of the crime, the culprit is determined by being the
+ * only npc alone in a room.
  */
 function getCulprit() {
     let culprit = null;
@@ -140,8 +146,8 @@ function getCulprit() {
 }
 
 /**
- * handler for the function call "askQuestion" for a type_zero question
- * also known as "Where were you ?"
+ * Handler for the function call {@link askQuestion} for a type_zero question also known as
+ * "Where were you ?".
  */
 async function askTypeZeroQuestion() {
     askQuestion(npcLocationAndPartner => gameData["npcs"][currentNpc]["QA_0"].replace(
@@ -149,8 +155,8 @@ async function askTypeZeroQuestion() {
 }
 
 /**
- * handler for the function call "askQuestion" for a type_one question
- * also known as "With who were you with ?"
+ * Handler for the function call {@link askQuestion} for a type_one question also known as
+ * "With who were you with ?".
  */
 async function askTypeOneQuestion() {
     askQuestion(npcLocationAndPartner => gameData["npcs"][currentNpc]["QA_1"].replace(
@@ -158,11 +164,14 @@ async function askTypeOneQuestion() {
 }
 
 /**
- * This function primary goal is to display the answer to the question the player
- * asked to a npc. 
- * It parses the gamedata object to retreive the answer of the npc
- * and fill the variables left in the string accordingly to the type of the question.
- * Then it fetches the reacion of the npc and diplays it all.
+ * This function's primary goal is to display the answer to the question the player
+ * asked to a npc.
+ *
+ * <p>
+ * It parses the gamedata object to retreive the answer of the npc and fill the variables left in
+ * the string accordingly to the type of the question; then it fetches the reacion of the npc and
+ * diplays it all.
+ * </p>
  */
 async function askQuestion(buildAnswer) {
     unsetQuestionButtonsListeners();
@@ -187,7 +196,7 @@ async function askQuestion(buildAnswer) {
 }
 
 /**
- * This function sends the player's answers to the server
+ * Send the player's answers to the server.
  */
 async function sendAnswers() {
     const selections = document.getElementsByClassName("suspect_emotion_chooser");
@@ -209,8 +218,10 @@ async function sendAnswers() {
  * then decide on which npc is the culprit.
  */
 function renderAnswerSelectionPanel() {
+    const culpritChoices = document.getElementById("culprits_choices");
+
     npcsIds.forEach(element => {
-        const suspect = document.createElement("div");
+        const suspect = document.createElement("li");
         suspect.classList.add("suspect");
 
         const suspectEmotionChooser = document.createElement("select");
@@ -228,14 +239,20 @@ function renderAnswerSelectionPanel() {
 
         const img = document.createElement('img');
         img.classList.add("suspect_picture");
+        img.setAttribute("alt", "Image d'un suspect");
         img.src = NPC_IMAGE_PATH + element;
         suspect.appendChild(img);
 
         const button = document.createElement("button");
         button.classList.add("culprit_btn", "action_button");
-        button.innerHTML = '<svg class="culprit_checked_icon hidden culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"></path></svg><svg class="culprit_unchecked_icon culprit_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><path d="M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z"></svg><p class="culprit_btn_text">Couplable</p>';
 
-        const culpritChoices = document.getElementById("culprits_choices");
+        button.appendChild(createCulpritSvgElement("culprit_checked_icon",
+            "M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z", true));
+        button.appendChild(createCulpritSvgElement("culprit_unchecked_icon",
+            "M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z",
+            false));
+
+        button.appendChild(document.createTextNode("Couplable"));
 
         button.addEventListener("click", () => {
             disableCulpritButtons(culpritChoices, suspect);
@@ -248,7 +265,30 @@ function renderAnswerSelectionPanel() {
 }
 
 /**
- * Show the screen in which the player asks auestions to the npcs
+ * Create a culprit SVG {@link Element}.
+ *
+ * @param {String} buttonCssClass     the specific CSS class to add to the culprit button
+ * @param {String} pathAttributeValue the value of the path attribute of the SVG element generated
+ * @returns a svg {@link Element} with a culprit button depending of the custom CSS class, path
+ * attribute value and isHidden values
+ */
+function createCulpritSvgElement(buttonCssClass, pathAttributeValue, isHidden) {
+    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgElement.classList.add(buttonCssClass, "culprit_icon");
+    if (isHidden) {
+        svgElement.classList.add("hidden");
+    }
+    svgElement.setAttribute("viewBox", "0 0 48 48");
+
+    const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathElement.setAttribute("d", pathAttributeValue);
+
+    svgElement.appendChild(pathElement);
+    return svgElement;
+}
+
+/**
+ * Show the screen in which the player asks questions to the npcs.
  */
 function renderInterrogation() {
     document.getElementById("QA_0").textContent = gameData["questions"]["QA_0"];
@@ -257,11 +297,12 @@ function renderInterrogation() {
     const interrogationSuspects = document.getElementById("interrogation_suspects");
 
     npcsIds.forEach(element => {
-        const suspect = document.createElement("div");
+        const suspect = document.createElement("li");
         suspect.classList.add("suspect");
 
         const img = document.createElement('img');
         img.classList.add("suspect_picture");
+        img.setAttribute("alt", "Image d'un suspect");
         img.src = NPC_IMAGE_PATH + element;
         suspect.appendChild(img);
 
@@ -281,12 +322,14 @@ function renderInterrogation() {
     });
 }
 
-
 /**
- * Initialize the websocket for this page, its primary use is to
- * show the final page once it receive the event that all player have finished
- * it parses the payload send by the server containing the other players
+ * Initialize the websocket for this page, its primary use is to show the final page once it
+ * receives the event that all players have finished.
+ *
+ * <p>
+ * It parses the payload send by the server containing the other players
  * nicknames and scores.
+ * </p>
  */
 function initSock() {
     const socket = io({
@@ -306,9 +349,12 @@ function initSock() {
     
     socket.on("gamefinished", finalResults => {
         hideFirstClassElement("emotion_and_culprit_choices");
-        document.querySelector(".reveal_score").textContent =
-            Object.values(finalResults["player"][username])
-                .filter(x => x == true).length + " / 5";
+        const revealScoreElement = document.createElement("h2");
+        revealScoreElement.classList.add("reveal_score");
+        revealScoreElement.textContent = Object.values(finalResults["player"][username])
+            .filter(x => x == true).length + " / 5";
+
+        document.querySelector(".player_score").appendChild(revealScoreElement);
 
         const playerListElement = document.querySelector(".players_list");
 
@@ -331,9 +377,14 @@ function initSock() {
         const culpritName = gameData["npcs"][culprit]["name"];
         document.querySelector(".reveal_culprit_title").textContent += " " + culpritName;
 
-        const culpritElement = document.getElementById("culprit");
-        culpritElement.src = NPC_IMAGE_PATH + culprit;
+        const culpritElement = document.createElement("img");
+        culpritElement.classList.add("suspect_picture");
         culpritElement.setAttribute("alt", "Image du ou de la coupable, " + culpritName);
+        culpritElement.src = NPC_IMAGE_PATH + culprit;
+        culpritElement.setAttribute("draggable", "false");
+
+        document.querySelector(".reveal_culprit")
+            .appendChild(culpritElement);
 
         showFirstClassElement("results_game");
         setGameBackground(RESULTS_IMAGE_PATH);
@@ -346,6 +397,7 @@ function initSock() {
                 suspect.classList.add("summary_suspect");
 
                 const img = document.createElement("img");
+                img.setAttribute("alt", "Image d'un suspect");
                 img.src = NPC_IMAGE_PATH + npcid;
                 suspect.appendChild(img);
 
@@ -366,12 +418,11 @@ function initSock() {
             });
     });
 }
-/** 
- * This function retreive the initial gamedata of the game
- * containing all of the needed textual ressources to make
- * the game playable
-*/
 
+/**
+ * Retreive the initial gamedata of the game containing all of the needed textual ressources to
+ * make the game playable.
+ */
 async function setGameData() {
     const response = await makeAPIRequest("getGameData");
     gameData = response["gamedata"];
@@ -380,7 +431,7 @@ async function setGameData() {
 }
 
 /**
- * Initialize the game, by setting the game data, initializing the socket, rendering the answer
+ * Initialize the game by setting the game data, initializing the socket, rendering the answer
  * selection panel, rendering the interrogation view, setting questions buttons listeners,
  * setting introduction and interrogation listeners, showing the introduction view and setting the
  * introduction image as the game background.

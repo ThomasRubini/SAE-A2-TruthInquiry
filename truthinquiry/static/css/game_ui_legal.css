@@ -1,8 +1,19 @@
 /* Common properties */
 html {
-    background-color: var(--game-black);
+    background-color: var(--game-grey);
     color: var(--game-white);
     font-family: "Roboto Mono", "sans-serif";
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--body-margin) * 2);
+    width: calc(100vw - var(--body-margin) * 2);
+}
+
+footer {
+    margin-top: auto;
 }
 
 /* Legal links and texts */
