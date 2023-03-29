@@ -226,6 +226,26 @@ def check_username(username: str) -> bool:
 
     return True
 
+def check_game_id(game_id: str) -> bool:
+    """
+    Check if a game_id is valid using a set of rules
+
+    :param game_id: the game_id to check
+    :return: True or False depending on if the rules are respected
+    """
+
+    if not game_id:
+        return False
+    if not game_id.isalnum():
+        return False
+    if not game_id == game_id.strip():
+        return False
+    if not len(game_id) == 6:
+        return False
+
+    return True
+
+
 
 def generate_npc_text(npc: Npc, lang: str) -> dict:
     """
