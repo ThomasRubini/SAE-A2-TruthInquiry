@@ -187,7 +187,7 @@ async function askQuestion(buildAnswer) {
     // Sleep for 4 sec
     await new Promise(r => setTimeout(r, 4000));
 
-    document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + currentNpc;
+    document.getElementById("currentNpcPicure").src = NPC_REACTION_PATH + currentNpc;
     hideFirstClassElement("question_answer");
 
     document.querySelector(".suspect_answer").textContent = "";
@@ -296,14 +296,27 @@ function renderInterrogation() {
 
     const interrogationSuspects = document.getElementById("interrogation_suspects");
 
-    npcsIds.forEach(element => {
+    npcsIds.forEach(npc_id => {
         const suspect = document.createElement("li");
         suspect.classList.add("suspect");
 
+        const name = document.createElement('p')
+        name.textContent = gameData['npcs'][npc_id]["name"]
+        suspect.appendChild(name);
+
         const img = document.createElement('img');
+        img.id = "suspect_picture_of_" + npc_id
         img.classList.add("suspect_picture");
         img.setAttribute("alt", "Image d'un suspect");
-        img.src = NPC_IMAGE_PATH + element;
+        img.src = NPC_IMAGE_PATH + npc_id;
+        img.addEventListener("click", () => {
+            // TODO remove this listener when we know the questions has already been asked;
+            currentNpc = npc_id;
+            document.getElementById("suspect_picture_of_" + npc_id).classList.add("gray");
+            document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + npc_id;
+            hideFirstClassElement("interrogation");
+            showFirstClassElement("interrogation_suspect");
+        });
         suspect.appendChild(img);
 
         const button = document.createElement("button");
@@ -311,15 +324,20 @@ function renderInterrogation() {
         button.textContent = "Interroger";
         button.addEventListener("click", () => {
             // TODO remove this listener when we know the questions has already been asked;
-            currentNpc = element;
-            document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + element;
+            currentNpc = npc_id;
+            document.getElementById("suspect_picture_of_" + npc_id).classList.add("gray");
+            document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + npc_id;
             hideFirstClassElement("interrogation");
             showFirstClassElement("interrogation_suspect");
         });
-
         suspect.appendChild(button);
         interrogationSuspects.appendChild(suspect);
     });
+}
+
+
+function renderIntroduction(){
+    document.getElementById("username").textContent += username;
 }
 
 /**
@@ -400,20 +418,23 @@ function initSock() {
                 img.setAttribute("alt", "Image d'un suspect");
                 img.src = NPC_IMAGE_PATH + npcid;
                 suspect.appendChild(img);
+                
+                const explain = document.createElement("div")
+                explain.classList.add("explain")
 
                 const emotionTitle = document.createElement("h2");
                 emotionTitle.classList.add("explain_suspect_emotion_title");
                 emotionTitle.textContent = "Ce suspect était "
                     + finalResults["npcs"][npcid]["reaction"] + ".";
-
-                suspect.appendChild(emotionTitle);
-
+                
+                explain.appendChild(emotionTitle);
+                
                 const emotionDesc = document.createElement("p");
                 emotionDesc.classList.add("explain_suspect_emotion_description");
                 emotionDesc.textContent = "Cette émotion se caractérise par "
                     + finalResults["npcs"][npcid]["description"];
-                suspect.appendChild(emotionDesc);
-
+                explain.appendChild(emotionDesc);
+                suspect.appendChild(explain)
                 suspectListElement.appendChild(suspect);
             });
     });
@@ -439,6 +460,7 @@ async function setGameData() {
 async function initGame() {
     await setGameData();
     initSock();
+    renderIntroduction();
     renderAnswerSelectionPanel();
     renderInterrogation();
     setQuestionButtonsListeners()

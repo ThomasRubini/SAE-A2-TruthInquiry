@@ -90,7 +90,7 @@ def join_game():
     flask.session["is_owner"] = False
     flask.session["username"] = username
 
-    socket_io.emit("playersjoin", [flask.session["username"]], room="game."+game.game_id)
+    socket_io.emit("playersjoin", flask.session["username"], room="game."+game.game_id)
 
     return {"error": 0}
 

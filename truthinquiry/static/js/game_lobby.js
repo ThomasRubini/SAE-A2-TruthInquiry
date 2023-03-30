@@ -1,4 +1,12 @@
+const LOBBY_IMAGE_PATH = "/static/images/cuisine.png"
 // Display functions
+
+/*
+ * Set the current game background to the first element with the current_background CSS class.
+ */
+function setGameBackground(backgroundPath) {
+    document.querySelector(".current_background").style.backgroundImage = 'url("' + backgroundPath + '")';
+}
 
 /**
  * Display the invalid rounds count message element, by removing the hidden CSS class.
@@ -353,8 +361,8 @@ function initSock() {
     })
 
     socket.on("playersjoin", username => {
-        document.querySelector(".player_names")
-            .appendChild(document.createTextNode(username + "\n"));
+        console.log(username);
+        document.querySelector(".player_names").textContent += username + "\n";
     });
 }
 
@@ -375,6 +383,7 @@ function initSock() {
  * </p>
  */
 async function initLobby() {
+    setGameBackground(LOBBY_IMAGE_PATH)
     getMembers()
     if (await hasJoinedRoom()) {
         initSock();

@@ -19,6 +19,23 @@
 
 @font-face {
     font-display: swap;
+    font-family: "Park Lane";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/park_lane/parklane.regular.otf") format('otf'), url("../fonts/park_lane/parklane.regular.ttf") format('truetype');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "Ironick";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/ironick_nf/IronickNF.otf") format('otf'), url("../fonts/ironick_nf/IronickNF.ttf") format('truetype');
+}
+
+
+@font-face {
+    font-display: swap;
     font-family: "Roboto Mono";
     font-style: normal;
     font-weight: 400;
@@ -37,6 +54,8 @@
     --game-green: #008000;
     --game-grey: #5A5656;
     --game-red: #BD1E1E;
+    --game-gold:  #E5BA73;
+    --game-dark-gold:  #B9935A;
     --game-white: #FFFFFF;
     --light-theme-background-color: #B1EDE8;
     /* Sizes */
@@ -58,7 +77,7 @@ noscript .alert_dialog_background, noscript .alert_dialog_msg, noscript .alert_d
 }
 
 .action_button {
-    background-color: var(--game-red);
+    background-color: var(--game-dark-gold);
     border-color: var(--game-black);
     border-radius: var(--button-and-dialog-border-radius);
     border-style: solid;
@@ -89,7 +108,13 @@ noscript .alert_dialog_background, noscript .alert_dialog_msg, noscript .alert_d
 /* Utility classes */
 .hidden {
     display: none !important;
+    transition: all 0.5s ease;
 }
+
+.gray {
+    filter: grayscale(1);
+}
+
 
 /* Links */
 .link {

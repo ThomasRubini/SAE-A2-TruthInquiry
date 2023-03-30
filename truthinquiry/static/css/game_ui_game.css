@@ -12,8 +12,8 @@ html {
     font-family: "Titan One", sans-serif;
 }
 
-.anwser_title, .emotion_and_culprit_choices_title, .introduction_text, .introduction_title, .interrogation_title, .results_title, .reveal_culprit_title, .score_title, .summary_title {
-    font-family: "Spicy Rice", serif;
+.anwser_title, .emotion_and_culprit_choices_title, .introduction_text, .introduction_title, .interrogation_title, .results_title,.introduction_right ,.reveal_culprit_title, .score_title, .summary_title {
+    font-family: "Ironick", serif;
 }
 
 .culprit_btn, .interrogation, .player_score, .question_answer, .questions_and_image, .reveal_culprit, .reveal_score, .scores, .summary, .summary_suspect, .suspect_picture[alt], .suspect, .suspects, .suspects_list {
@@ -50,7 +50,7 @@ html {
 }
 
 .emotion_and_culprit_choices_title, .interrogation_title, .introduction_title, .results_title, .reveal_culprit_title, .reveal_score, .score_title, .summary_title {
-    color: var(--game-red);
+    color: var(--game-gold);
 }
 
 .emotion_and_culprit_choices_title, .results_title, .reveal_culprit_title, .score_title, .summary, .summary_title, .suspect_picture[alt] {
@@ -110,8 +110,32 @@ html {
 }
 
 .suspect_picture {
+    border: var(--game-dark-gold) solid 5px;
+    border-radius: 1em;
     height: 15em;
     width: 15em;
+    transition: all 0.5s ease;
+    
+}
+.npc_answer{
+    flex-direction: column;
+    width: 40em;
+}
+.image_interrogation{
+    height: 25em;
+    width: 25em;
+}
+
+.question_answer{
+border: var(--game-dark-gold) solid;
+border-radius: 1em;
+height: 5em;
+background-color: #000000d0;
+}
+
+.suspect_picture:hover {
+    filter: grayscale(0);
+    transition: all 0.5s ease;
 }
 
 .suspect_picture[alt] {
@@ -152,11 +176,20 @@ html {
 /* Introduction */
 .introduction {
     padding: 1em;
+    display: flex;
+    flex-direction: row;
+}
+.introduction_left{
+    padding: 1em;
     max-width: 50vw;
 }
-
-.introduction_text {
+.introduction_right{
     font-size: 2em;
+    padding: 1em;
+    max-width: 50vw;
+}
+.introduction_text {
+    font-size: 3em;
     margin-bottom: 1em;
     margin-top: 1em;
 }
@@ -166,13 +199,25 @@ html {
     text-align: left;
 }
 
+.inspector_picture{
+    border: var(--game-dark-gold) solid 5px;
+    border-radius: 1em;
+    max-width: 45vw;
+    background-color: #000000d0;
+}
+
+.username{
+    font-size: 3em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
 /* Interrogation */
 .ask_button {
     background-color: var(--game-white);
     color: var(--game-black);
     text-transform: none;
 }
-
 .anwser_title {
     font-size: 2.5em;
     margin: 0.25em;
@@ -235,6 +280,13 @@ html {
 }
 
 /* Results and scores */
+.explain {
+    border: var(--game-dark-gold) solid;
+    border-radius: 1em;
+    background-color: #000000d0;
+}
+
+
 .explain_suspect_emotion_description {
     font-size: 1.25em;
     font-weight: normal;

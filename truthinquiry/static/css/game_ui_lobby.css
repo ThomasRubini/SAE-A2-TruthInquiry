@@ -3,6 +3,18 @@ html {
     background-color: var(--game-black);
     color: var(--game-white);
 }
+.current_background {
+    background-position: center;
+    background-size: cover;
+    filter: blur(4px);
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Place the background behind everything */
+    z-index: -9999;
+}
 
 .action_button, .multi_player_mode_choice_title, .multi_player_mode_waiting_for_host, .player_name, .players_title, .rounds_count_title, .room_code_text_title, .room_title, #game_username, #rounds_count {
     font-family: "Titan One", sans-serif;
@@ -133,6 +145,9 @@ html {
 
 .multi_player_mode_choices {
     padding: 1em;
+    border: var(--game-dark-gold) solid;
+    border-radius: 1em;
+    background-color: #000000d0;
 }
 
 /* Rounds count */
@@ -163,7 +178,6 @@ html {
     border-radius: 0.75em;
     font-size: 1.25em;
     max-height: 12em;
-    min-width: 25em;
     overflow-y: scroll;
     padding: 0.25em;
 }
