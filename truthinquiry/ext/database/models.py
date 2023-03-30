@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy import Column, Integer, VARCHAR, Text, LargeBinary, ForeignKey
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship, declarative_base, deferred
 
 Base = declarative_base()
 
@@ -150,7 +150,7 @@ class Npc(Base):
     __tablename__ = "T_NPC"
     NPC_ID = Column(Integer, autoincrement=True, primary_key=True, comment="ID of this Npc")
     NAME_LID = Column(Integer, ForeignKey("T_LOCALE.LID"), comment="Name of this Npc")
-    DEFAULT_IMG = Column(LargeBinary(length=2**24), comment="Binary data of the default image of this Npc")
+    DEFAULT_IMG = deferred(Column(LargeBinary(length=2**24), comment="Binary data of the default image of this Npc"))
     NAME_LOCALE = relationship("Locale")
 
     def __init__(self, NPC_ID, NAME_LID):
