@@ -55,6 +55,8 @@ def create_game():
 @routes_api.route("/getGameMembers", methods=["GET", "POST"])
 def get_members():
     game_id = flask.request.values.get("game_id")
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
     game = game_logic.get_game(game_id)
     if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
@@ -66,6 +68,8 @@ def get_members():
 @routes_api.route("/joinGame", methods=["GET", "POST"])
 def join_game():
     game_id = flask.request.values.get("game_id")
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
     username = flask.request.values.get("username")
     if game_id is None or username is None:
         return {"error": 1, "msg": "username or game id not set"}
@@ -91,7 +95,10 @@ def join_game():
 def is_owner():
     if not flask.session:
         return {"error": 0, "owner": False}
-    game = game_logic.get_game(flask.session["game_id"])
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
     if game is None:
         return {"error": 0, "owner": False}
 
@@ -104,7 +111,10 @@ def is_owner():
 def has_joined():
     if not flask.session:
         return {"error": 0, "joined": False}
-    game = game_logic.get_game(flask.session["game_id"])
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
     if game is None:
         return {"error": 0, "joined": False}
     return {"error": 0, "joined": True}
@@ -115,7 +125,10 @@ def start_game():
         return {"error": 1, "msg": "No session"}
     if not flask.session["is_owner"]:
         return {"error": 1, "msg": "you are not the owner of this game"}
-    game = game_logic.get_game(flask.session["game_id"])
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
     if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
     if game.has_started:
@@ -129,7 +142,10 @@ def start_game():
 def get_data():
     if not flask.session:
         return {"error": 1, "msg": "No session"}
-    game = game_logic.get_game(flask.session["game_id"])
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
     if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
 
@@ -159,7 +175,10 @@ def get_npc_reaction():
 
     if not flask.session:
         return {"error": 1, "msg": "No session"}
-    game = game_logic.get_game(flask.session["game_id"])
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
     if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
     npc_id = flask.request.values.get("npcid")
@@ -193,7 +212,10 @@ def get_reaction():
 def game_progress():
     if not flask.session:
         return {"error": 1, "msg": "No session"}
-    game = game_logic.get_game(flask.session["game_id"])
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
 
     if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
@@ -210,7 +232,10 @@ def game_progress():
 def check_anwser():
     if not flask.session:
         return {"error": 1, "msg": "No session"}
-    game = game_logic.get_game(flask.session["game_id"])
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
 
     if game is None:
         return {"error": 1, "msg": "this game doesn't exist"}
