@@ -66,7 +66,7 @@ class DiscordBot:
         """
         Update the bot's status using the app's current context
         """
-        games_n = len(app.game_logic.games_list)
+        games_n = len(truthinquiry.logic.game_logic.games_list)
         activity_name = f"Handling {games_n} game{'' if games_n==1 else 's'} !"
         activity = discord.Activity(name=activity_name, type=discord.ActivityType.watching)
         await self.bot.change_presence(activity=activity)
