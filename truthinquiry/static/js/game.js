@@ -187,7 +187,7 @@ async function askQuestion(buildAnswer) {
     // Sleep for 4 sec
     await new Promise(r => setTimeout(r, 4000));
 
-    document.getElementById("currentNpcPicure").src = NPC_REACTION_PATH + currentNpc;
+    document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + currentNpc;
     hideFirstClassElement("question_answer");
 
     document.querySelector(".suspect_answer").textContent = "";
