@@ -20,7 +20,7 @@ def bulk_export():
     rooms = data["rooms"] = {}
     for room in session.query(Place).all():
         current_room = rooms[room.PLACE_ID] = {}
-        for text in session.query(Locale).filter_by(TEXT_ID=room.NAME_LID).all():
+        for text in session.query(Text).filter_by(LID=room.NAME_LID).all():
             current_room[text.LANG] = text.TEXT
     
     questions = data["questions"] = {}
@@ -37,18 +37,18 @@ def bulk_export():
     for trait in session.query(Trait).all():
         current_trait = traits[trait.TRAIT_ID] = {}
         current_trait["name"] = {}
-        for text in session.query(TEXT).filter_by(LID=trait.NAME_LID):
+        for text in session.query(Text).filter_by(LID=trait.NAME_LID):
             current_trait["name"][text.LANG] = text.TEXT
         
         current_trait["description"] = {}
-        for text in session.query(TEXT).filter_by(LID=trait.DESC_LID):
+        for text in session.query(Text).filter_by(LID=trait.DESC_LID):
             current_trait["description"][text.LANG] = text.TEXT
 
     npcs = data["npcs"] = {}
     for npc in session.query(Npc).all():
         current_npc = npcs[npc.NPC_ID] = {}
         current_npc["name"] = {}
-        for text in session.query(TEXT).filter_by(LID=npc.NAME_LID):
+        for text in session.query(Text).filter_by(LID=npc.NAME_LID):
             current_npc["name"][text.LANG] = text.TEXT
         
         #TODO reactions
@@ -56,8 +56,8 @@ def bulk_export():
         current_npc["answers"]["where"] = []
         current_npc["answers"]["withwho"] = []
         for answer in session.query(Answer).filter_by(NPC_ID=npc.NPC_ID):
-            answer_list = current_npc["answers"]["where"] if answer.QA_TYPE == 0 else current_npc["answers"]["withwho"]
-            for text in session.query(TEXT).filter_by(LID=answer.TEXT_LID):
+            answer_list = current_npc["answers"]["where"] if answer.QUESTION_TYPE_ID == 0 else current_npc["answers"]["withwho"]
+            for text in session.query(Text).filter_by(LID=answer.TEXT_LID):
                 answer_list.append({text.LANG: text.TEXT})
     return data
 

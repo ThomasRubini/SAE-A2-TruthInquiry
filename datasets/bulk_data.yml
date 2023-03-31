@@ -119,7 +119,7 @@ traits:
         \ sont synonymes d'incompr\xE9hension ou de peur de ce que peut nous annoncer\
         \ la personne en face."
     name:
-      FR: "m\xE9fiant(e),"
+      FR: "m\xE9fiant(e)"
   heureux:
     description:
       FR: "Un visage d\xE9contract\xE9 et ouvert, les muscles des joues contract\xE9\
@@ -129,7 +129,7 @@ traits:
         \ montre une complicit\xE9 avec l'interlocuteur ou un moyen de ne pas laisser\
         \ para\xEEtre ses r\xE9elles \xE9motions."
     name:
-      FR: heureux(se),
+      FR: heureux(se)
   triste:
     description:
       FR: "Des sourcils contract\xE9s et resserr\xE9s vers le centre du visage auxquels\
@@ -147,7 +147,7 @@ traits:
         \ les l\xE8vres par exemple. Tout cela traduit une difficult\xE9 de concentration\
         \ ou une peur de ce qu'annonce ou peut nous annoncer l'interlocuteur en face."
     name:
-      FR: "stress\xE9(e),"
+      FR: "stress\xE9(e)"
   surpris:
     description:
       FR: "G\xE9n\xE9ralement par des yeux \xE9carquill\xE9s et un haussement des\
@@ -156,5 +156,5 @@ traits:
         \ Ces caract\xE9ristiques correspondent \xE0 un choc, une incompr\xE9hension\
         \ ou encore un \xE9tonnement de ce que voit ou entend la personne."
     name:
-      FR: surpris(e),
+      FR: surpris(e)
 
