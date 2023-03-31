@@ -1,4 +1,4 @@
-const LOBBY_IMAGE_PATH = "/static/images/cuisine.png"
+const LOBBY_IMAGE_PATH = "/static/images/cuisine.jpg"
 // Display functions
 
 /*
