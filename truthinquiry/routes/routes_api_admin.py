@@ -19,6 +19,11 @@ def auth():
     else:
         return flask.redirect("/admin/auth?failed=1")
 
+@routes_api_admin.route("/logout", methods=["GET", "POST"])
+def logout():
+    flask.session.pop("admin", None)
+    return flask.redirect("/")
+
 @routes_api_admin.route("/setQuestions", methods=["GET", "POST"])
 @require_admin(api=True)
 def set_questions():
