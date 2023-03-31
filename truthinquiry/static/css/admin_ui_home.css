@@ -1,0 +1,57 @@
+.add_npc_icon {
+    height: 2em;
+    transition-property: fill;
+    width: 2em;
+}
+
+.add_npc_icon:hover {
+    transition-property: fill;
+}
+
+.add_npc_link {
+    align-items: center;
+    border-color: var(--admin-white-color);
+    border-radius: 1em;
+    border-style: solid;
+    border-width: 0.125em;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.25em;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 15em;
+    padding: 0.25em;
+}
+
+.add_npc_link:hover {
+    background-color: var(--admin-white-color);
+    color: var(--admin-grey-color);
+}
+
+.add_npc_link:hover > .add_npc_icon {
+    fill: var(--admin-grey-color);
+}
+
+.character_item {
+    font-size: 1.5em;
+    list-style-type: none;
+    margin: 1em;
+}
+
+.character_item a {
+    text-decoration: underline;
+    text-decoration-color: var(--admin-white-color);
+}
+
+.character_list {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    padding: 0;
+}

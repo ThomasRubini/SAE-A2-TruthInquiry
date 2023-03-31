@@ -11,9 +11,49 @@
 :root {
     --admin-grey-color: #5A5656;
     --admin-red-color: #FF0000;
+    --admin-white-color: #FFFFFF;
     --adming-yellow-color: #FFC800;
     --body-margin: 0.375em;
     font-family: "Roboto Mono", sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+a, body {
+    color: var(--admin-white-color);
+}
+
+a:visited {
+    color: unset;
+}
+
+body {
+    margin: var(--body-margin);
+}
+
+header {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+header a {
+    border-radius: 1em;
+    border-style: solid;
+    border-width: 0.125em;
+    font-size: 1.25em;
+    margin: 1em;
+    padding: 0.5em;
+    text-decoration: none;
+}
+
+header a:hover {
+    background-color: var(--admin-white-color);
+    color: var(--admin-grey-color);
 }
 
 html {
@@ -21,8 +61,42 @@ html {
     margin: 0;
 }
 
-body {
-    margin: var(--body-margin);
+svg {
+    fill: var(--admin-white-color);
+}
+
+.page_category {
+    font-size: 2em;
+}
+
+.page_category, .page_title {
+    font-weight: bold;
+}
+
+.page_category, .page_description, .page_title {
+    margin: 1em;
+    text-align: center;
+}
+
+.page_description {
+    font-size: 1.25em;
+}
+
+.page_title {
+    font-size: 3em;
+    overflow-wrap: anywhere;
+}
+
+.short_color_transition {
+    transition-property: background-color, color;
+    transition-duration: 0.25s;
+    transition-timing-function: linear;
+}
+
+.short_color_transition:hover {
+    transition-property: background-color, color;
+    transition-duration: 0.25s;
+    transition-timing-function: linear;
 }
 
 #places>section {
