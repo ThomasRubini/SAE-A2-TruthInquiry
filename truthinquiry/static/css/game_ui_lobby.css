@@ -25,7 +25,7 @@ html {
 }
 
 .game_start_failed, .multi_player_challenge_mode_invalid_input, .room_code, .room_title {
-    color: var(--game-red);
+    color: var(--game-dark-gold);
 }
 
 .join_room_view, .multi_player_mode_choice, .multi_player_mode_choice_number, .players_title, .room_code_text, .room_view_container {

@@ -50,7 +50,7 @@ input::placeholder {
 }
 
 .back_btn {
-    fill: var(--game-red);
+    fill: var(--game-dark-gold);
 }
 
 .game_begin {
@@ -58,6 +58,7 @@ input::placeholder {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    border: var(--game-gold) solid 1px;
     border-radius: 1.5em;
     flex-wrap: wrap;
     /*
@@ -66,7 +67,6 @@ input::placeholder {
     */
     height: calc(100vh - var(--body-margin) * 2
         - var(--game-begin-margin) * 2
-        - var(--header-actions-side)
         - var(--footer-links-height));
     justify-content: center;
     margin: var(--game-begin-margin);

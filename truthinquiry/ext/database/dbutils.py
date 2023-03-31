@@ -52,6 +52,16 @@ def get_npc_random_answer(npc_id:int, qa_type:int) -> Answer :
     answers = db.session.query(Answer).filter_by(QUESTION_TYPE_ID=qa_type,NPC_ID=npc_id.NPC_ID).all()
     return random.choice(answers)
 
+def get_npc_from_npc_id(npc_id: int) -> Npc:
+    """
+    Gets a Npc object from a npc_id
+
+    :param npc_id: the id of the trait to search for
+    :return: a Npc object
+    """
+    npc = db.session.query(Npc).filter_by(NPC_ID=npc_id).one()
+    return npc
+
 def get_random_question(qa_type: int) -> QuestionType :
     """
     Returns a random inspector question from a question type
@@ -93,6 +103,18 @@ def get_reaction_description(lang, trait_id) -> str:
     desc_lid = db.session.query(Trait).filter_by(TRAIT_ID=trait_id).one().DESC_LID
     return get_text_from_lid(lang, desc_lid)
 
+def get_reaction_from_npc_and_trait(npc_id: int,trait_id:int )-> Reaction:
+    """_summary_
+
+    Args:
+        npc_id (int): _description_
+        trait_id (int): _description_
+
+    Returns:
+        Reaction: _description_
+    """
+    return db.session.query(Reaction).filter_by(NPC_ID=npc_id,TRAIT_ID=trait_id).one()
+
 def get_traits(lang: str) -> list:
     """
     Returns the list of all possible reactions trait in the given language
@@ -104,3 +126,14 @@ def get_traits(lang: str) -> list:
     for trait in db.session.query(Trait).all():
         traits.append(get_text_from_lid(lang,trait.NAME_LID))
     return traits
+
+def get_reaction_from_uuid(input_uuid: str) -> Reaction :
+    """_summary_ TODO
+
+    Args:
+        input_uuid (str): _description_
+
+    Returns:
+        Reaction: _description_
+    """
+    return db.session.query(Reaction).filter_by(REACTION_UUID=input_uuid).one()

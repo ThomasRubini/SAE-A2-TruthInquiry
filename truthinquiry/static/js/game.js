@@ -3,6 +3,7 @@ const INTERROGATION_IMAGE_PATH = "/static/images/salle-interrogation.png";
 const RESULTS_IMAGE_PATH = "/static/images/salle-resultats.png";
 const NPC_REACTION_PATH = "/api/v1/getNpcReaction?npcid=";
 const NPC_IMAGE_PATH = "/api/v1/getNpcImage?npcid=";
+const NPC_FINAL_REACTION_PATH = "/api/v1/getReaction?uuid="
 
 let npcsIds = [];
 let gameData = {};
@@ -408,6 +409,7 @@ function initSock() {
     });
     
     socket.on("gamefinished", finalResults => {
+        console.log(finalResults);
         hideFirstClassElement("emotion_and_culprit_choices");
         const revealScoreElement = document.createElement("h2");
         revealScoreElement.classList.add("reveal_score");
@@ -458,7 +460,7 @@ function initSock() {
 
                 const img = document.createElement("img");
                 img.setAttribute("alt", "Image d'un suspect");
-                img.src = NPC_IMAGE_PATH + npcid;
+                img.src = NPC_FINAL_REACTION_PATH + finalResults["npcs"][npcid]["uuid"];
                 suspect.appendChild(img);
                 
                 const explain = document.createElement("div")

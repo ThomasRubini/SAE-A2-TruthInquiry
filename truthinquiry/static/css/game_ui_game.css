@@ -133,9 +133,10 @@ height: 6em;
 background-color: #000000d0;
 }
 
-.suspect_picture:hover {
+.suspect > .suspect_picture:hover {
     filter: grayscale(0);
     transition: all 0.5s ease;
+    background-color: #000000d0;
 }
 
 .suspect_picture[alt] {
@@ -148,7 +149,7 @@ background-color: #000000d0;
 }
 
 .home_button, .next_btn {
-    fill: var(--game-red);
+    fill: var(--game-dark-gold);
     height: 5em;
     width: 5em;
 }

@@ -198,9 +198,9 @@ class Reaction(Base):
     NPC_ID = Column(Integer, ForeignKey("T_NPC.NPC_ID"), primary_key=True, comment="Name of the NPC that will have this reaction")
     TRAIT_ID = Column(Integer, ForeignKey("T_TRAIT.TRAIT_ID"), primary_key=True, comment="ID of the trait of this reaction")
     IMG = Column(LargeBinary(length=2**24), comment="Binary data of the image associated to this npc and trait")
+    REACTION_UUID = Column(VARCHAR(255), unique=True, comment="ID of this reaction")
     NPC = relationship("Npc")
     TRAIT = relationship("Trait")
-    REACTION_UUID = Column(VARCHAR(255), unique=True, comment="ID of this reaction")
 
     def __init__(self, REACTION_ID, NPC_ID, TRAIT_ID):
         self.REACTION_ID = REACTION_ID

@@ -3,8 +3,6 @@ import time
 import random
 from typing import Union
 
-from sqlalchemy import select, and_
-
 from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database.fsa import db
 from truthinquiry.ext.database import dbutils
@@ -90,6 +88,7 @@ class Game:
             trait_id = self.reaction_table[npc_id]
             trait = dbutils.get_trait_from_trait_id(trait_id)
             npcs[npc_id]["reaction"] = dbutils.get_text_from_lid("FR", trait.NAME_LID)
+            npcs[npc_id]["uuid"] = dbutils.get_reaction_from_npc_and_trait(npc_id,self.reaction_table[npc_id]).REACTION_UUID
             npcs[npc_id]["description"] = dbutils.get_reaction_description("FR", trait.TRAIT_ID)
         player_results = data["player"] = {}
         for member in self.members:
@@ -140,11 +139,7 @@ class Game:
         if npc_id not in self.reaction_table:
             return None
         trait_id = self.reaction_table[npc_id]
-
-        reaction = db.session.execute(
-            select(Reaction)
-            .where(and_(Reaction.NPC_ID == int(npc_id), Reaction.TRAIT_ID == int(trait_id)))
-            ).one()[0]
+        reaction = dbutils.get_reaction_from_npc_and_trait(npc_id,trait_id)
         return reaction.IMG
 
     def get_player_results(self, responses: dict) -> Union[dict, None]:
@@ -347,5 +342,15 @@ def get_npc_image(npc_id: int):
     :param npc_id: npc to get the neutral image from
     :return: the byte representation of the image, none if its not found or not readable
     """
-    npc = db.session.execute(select(Npc).where(Npc.NPC_ID==npc_id)).one()[0]
+    npc = dbutils.get_npc_from_npc_id(npc_id)
     return npc.DEFAULT_IMG
+
+def get_reactions_image_from_uuid(uuid: str):
+    """
+    Returns the byte representation of the neutral image for an npc
+
+    :param npc_id: npc to get the neutral image from
+    :return: the byte representation of the image, none if its not found or not readable
+    """
+    reaction = dbutils.get_reaction_from_uuid(uuid)
+    return reaction.IMG

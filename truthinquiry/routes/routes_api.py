@@ -203,14 +203,11 @@ def get_npc_reaction():
 @routes_api.route("/getReaction", methods=["GET", "POST"])
 def get_reaction():
     input_uuid = flask.request.values.get("uuid")
-    results = db.session.execute(select(Reaction).where(Reaction.REACTION_UUID==input_uuid))
-    
-    row = results.first()
-    if row == None:
+    image = game_logic.get_reactions_image_from_uuid(input_uuid)
+    if image is None:
         return {"error": 1, "msg": "No such reaction"}
-    reaction_obj = row[0]
 
-    return flask.send_file(io.BytesIO(reaction_obj.IMG), mimetype='image/png')
+    return flask.send_file(io.BytesIO(image), mimetype='image/png')
     
 
 

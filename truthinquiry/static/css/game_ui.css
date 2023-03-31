@@ -48,13 +48,13 @@
     /* Colors */
     color-scheme: dark;
     --alert-dialog-background-color: #000000DF;
-    --dark-theme-background-color: #213C40;
+    --dark-theme-background-color: #0c0b0c;
     --game-black: #000000;
     --game-blue: #7DDCFF;
     --game-green: #008000;
     --game-grey: #5A5656;
     --game-red: #BD1E1E;
-    --game-gold:  #E5BA73;
+    --game-gold:  rgb(214,168,81);
     --game-dark-gold:  #B9935A;
     --game-white: #FFFFFF;
     --light-theme-background-color: #B1EDE8;
