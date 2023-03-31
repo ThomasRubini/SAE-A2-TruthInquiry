@@ -137,7 +137,6 @@ function joinRoom() {
     response.then(() => {
         displayRoomView();
         displayPlayerList();
-        initSock();
         hideFirstClassElement("join_room_view");
     })
 }
@@ -356,13 +355,15 @@ function initSock() {
         console.log("Connected to the server!");
     })
 
-    socket.on("gamestart", () => {
-        window.location.href = "/multi";
+    socket.on("gamestart", async () => {
+        if (await hasJoinedRoom()) window.location.href = "/multi";
     })
 
     socket.on("playersjoin", username => {
         console.log(username);
-        document.querySelector(".player_names").textContent += username + "\n";
+        Array.from(document.getElementsByClassName("player_names")).forEach(playerList =>{
+            playerList.textContent += username + "\n";
+        })
     });
 }
 
@@ -385,8 +386,8 @@ function initSock() {
 async function initLobby() {
     setGameBackground(LOBBY_IMAGE_PATH)
     getMembers()
+    initSock();
     if (await hasJoinedRoom()) {
-        initSock();
         displayRoomView();
 
         if (await isRoomOwner()) {

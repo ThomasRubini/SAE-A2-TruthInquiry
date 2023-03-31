@@ -129,7 +129,7 @@ html {
 .question_answer{
 border: var(--game-dark-gold) solid;
 border-radius: 1em;
-height: 5em;
+height: 6em;
 background-color: #000000d0;
 }
 

@@ -317,6 +317,8 @@ function createCulpritSvgElement(buttonCssClass, pathAttributeValue, isHidden) {
  * Show the screen in which the player asks questions to the npcs.
  */
 function renderInterrogation() {
+    if (gameData["solo"] === true) document.getElementById("open_chat_button").classList.add("hidden");
+
     document.getElementById("QA_0").textContent = gameData["questions"]["QA_0"];
     document.getElementById("QA_1").textContent = gameData["questions"]["QA_1"];
 

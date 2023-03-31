@@ -85,6 +85,10 @@ def join_game():
 
     if not game.add_member(username):
         return {"error": 1, "msg": f"Username '{username}' already used in game {game.game_id}"}
+    
+    if game.has_started:
+        return {"error": 1, "msg": f"Game {game.game_id} has already started"}
+
 
     flask.session["game_id"] = game.game_id
     flask.session["is_owner"] = False
