@@ -48,6 +48,32 @@ function unsetQuestionButtonsListeners() {
         .removeEventListener("click", askTypeOneQuestion);
 }
 
+function setChatBoxButtonsListeners() {
+    document.getElementById("close_chat_button")
+        .addEventListener("click", closeForm);
+    document.getElementById("open_chat_button")
+        .addEventListener("click", openForm);
+    document.getElementById("chat_button_send")
+        .addEventListener("click", sendChatMessage);
+        
+}
+
+
+/**
+ * Shows the chat box
+ */
+function openForm() {
+    document.getElementById("chatbox").style.display = "block";
+  }
+  
+/**
+ * Hides the chat box
+ */
+  function closeForm() {
+    document.getElementById("chatbox").style.display = "none";
+  }
+
+
 /**
  * Go back to interrogation view, by hiding the interrogation suspect view.
  */
@@ -335,6 +361,13 @@ function renderInterrogation() {
     });
 }
 
+function sendChatMessage(){
+    const message = document.getElementById("chat_message_box").value;
+    const data = {};
+    data["msg"] = message;
+    makeAPIRequest("chatMessage",data);
+    document.getElementById("chat_message_box").value = '';
+}
 
 function renderIntroduction(){
     document.getElementById("username").textContent += username;
@@ -363,6 +396,13 @@ function initSock() {
     //TODO Send and receive userprogress when they have sent their responses
     socket.on("gameprogress", username => {
         console.log(username);
+    });
+
+    socket.on("chatMessage", message => {
+        const message_received = document.createElement("li");
+        message_received.classList.add("message");
+        message_received.textContent = message;
+        document.getElementById("message_list").appendChild(message_received);
     });
     
     socket.on("gamefinished", finalResults => {
@@ -465,6 +505,7 @@ async function initGame() {
     renderInterrogation();
     setQuestionButtonsListeners()
     setIntroductionAndInterrogationListeners();
+    setChatBoxButtonsListeners();
     showFirstClassElement("introduction");
     setGameBackground(INTRO_IMAGE_PATH);
 }

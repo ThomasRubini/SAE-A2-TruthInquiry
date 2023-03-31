@@ -230,6 +230,24 @@ def game_progress():
 
     return {"error": 0}
 
+@routes_api.route("/chatMessage", methods=["GET", "POST"])
+def chat_message():
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
+    if game is None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+
+    username = flask.session["username"]
+    message_received = flask.request.values.get("msg")
+    
+    message_sent = f"{username} : {message_received}"
+    socket_io.emit("chatMessage", message_sent, room="game."+game.game_id)
+
+    return {"error": 0}
 
 @routes_api.route("/submitAnswers", methods=["GET", "POST"])
 def check_anwser():
