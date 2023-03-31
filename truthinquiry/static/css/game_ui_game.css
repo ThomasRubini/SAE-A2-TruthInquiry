@@ -215,7 +215,7 @@ background-color: #000000d0;
 
 /* Interrogation */
 .ask_button {
-    background-color: var(--game-white);
+    background-color: var(--game-dark-gold);
     color: var(--game-black);
     text-transform: none;
 }
@@ -240,6 +240,16 @@ background-color: #000000d0;
 #interrogation_suspect_previous_btn {
     margin-right: 1em;
 }
+.suspect_name{
+    font-family: "Park Lane";
+    font-size: 2em;
+    color: var(--game-dark-gold);
+    border-radius: 0.25em;
+    margin: 0;
+    border: var(--game-dark-gold) solid 1px;
+    padding: 0.25em;
+    background-color: #000000dd;
+}
 
 /* Emotion and culprit choices */
 .culprit_icon {
@@ -248,6 +258,7 @@ background-color: #000000d0;
     margin-right: 0.25em;
     width: 1em;
 }
+
 
 .culprit_btn_checked {
     background-color: var(--game-green);

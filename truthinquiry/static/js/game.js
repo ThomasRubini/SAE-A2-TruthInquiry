@@ -331,6 +331,7 @@ function renderInterrogation() {
 
         const name = document.createElement('p')
         name.textContent = gameData['npcs'][npc_id]["name"]
+        name.classList.add("suspect_name");
         suspect.appendChild(name);
 
         const img = document.createElement('img');
