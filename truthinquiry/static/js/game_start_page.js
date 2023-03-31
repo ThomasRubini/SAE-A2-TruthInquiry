@@ -219,6 +219,7 @@ async function startSoloGame(){
     username = document.getElementById("game_username").value;
     let data = {}
     data["username"] = username;
+    data["solo"] = true;
     await makeAPIRequest("createGame",data);
     start = makeAPIRequest("startGame");
     start.then(()=>{

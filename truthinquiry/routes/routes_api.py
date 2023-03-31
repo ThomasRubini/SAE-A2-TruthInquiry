@@ -39,9 +39,12 @@ def create_game():
         return {"error": 1, "msg": "invalid username"}
     if len(game_logic.games_list) >= int(os.getenv("GAME_LIMIT")):
         return {"error": 1, "msg": "Game limit reach"}
+    is_solo = flask.request.values.get("solo")
     response = {}
     response["error"] = 0
     game = game_logic.create_game(owner=username)
+    if is_solo == "true":
+        game.is_solo = True
     response["game_id"] = game.game_id
 
     flask.session["game_id"] = game.game_id

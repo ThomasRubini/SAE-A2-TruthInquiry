@@ -63,6 +63,7 @@ class Game:
         self.gamedata = {}
         self.reaction_table = {}
         self.creatation_timestamp = int(time.time())
+        self.is_solo = False
 
     def set_owner(self, username: str) -> Member:
         """
@@ -102,6 +103,8 @@ class Game:
 #       TODO Get language from player
         self.gamedata, self.reaction_table = generate_game_data("FR")
         self.gamedata["game_id"] = self.game_id
+        if self.is_solo:
+            self.gamedata["solo"] = True
 
     def get_member(self, username: str) -> Union[Member, None]:
         """
