@@ -35,26 +35,26 @@
             <img class="character_image" alt="{{'Image du personnage' + (' ' + npc.get('name') if npc.get('name') else '')}}" src="{{'/static/images/no_photography_white.svg' if npc.get('img') == None else '/api/v1/getNpcImage?npcid=' + npc.get('img')|string}}">
         </section>
         
-        <section>
+        <section id="reactions">
             <h2 class="section_title">Réactions</h2>
             
-            {%for reaction in npc.get("reactions")%}
-            <div>
-                <p> {{reaction.get('name')}} </p>
-                <img src="{{reaction.get('url')}}" style="max-width: 100; max-height: 100px">
-                <input type="file" accept="image/png, image/jpeg" onchange="changeReaction(this)">
-            </div>
-            {%endfor%}
-            
-
-            {%if npc.get("reaction_to_add")%}
-            <select>
-                {%for reaction_to_add in npc.get("reaction_to_add")%}
-                <option value="{{reaction_to_add.get('id')}}">{{reaction_to_add.get('name')}}</option>
+                {%for reaction in npc.get("reactions")%}
+                <div>
+                    <p> {{reaction.get('name')}} </p>
+                    <img src="{{reaction.get('url')}}" style="max-width: 100; max-height: 100px">
+                    <input class="img_input", type="file" accept="image/png, image/jpeg" onchange="changeReaction(this)">
+                    <input class="reaction_id", type="hidden" value="{{reaction.get('id')}}">
+                    <button onclick="deleteReaction(this)">Delete reaction</button>
+                </div>
                 {%endfor%}
-            </select>
-            {%endif%}
         </section>
+
+        <select id="reactions_to_add" onchange="addReaction(this)">
+            <option value="" default></option>
+            {%for reaction_to_add in npc.get("reaction_to_add") or []%}
+            <option value="{{reaction_to_add.get('id')}}">{{reaction_to_add.get('name')}}</option>
+            {%endfor%}
+        </select>
 
         <section>
             <h2 class="section_title">Réponses aux questions lors de l'interrogation</h2>

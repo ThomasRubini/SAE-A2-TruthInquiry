@@ -42,3 +42,34 @@ function changeReaction(inputNode){
     }
     reader.readAsDataURL(inputNode.files[0]);
 }
+
+function deleteReaction(node){
+    const reactionNode = node.parentNode;
+    const reactionId = reactionNode.querySelector(".reaction_id").value;
+    const reactionName = reactionNode.querySelector("p").innerText;
+
+    reactionNode.parentNode.removeChild(reactionNode);
+    
+    const option = document.createElement("option");
+    option.value = reactionId
+    option.innerText = reactionName
+
+    reactions_to_add.appendChild(option);
+}
+
+function addReaction(selectNode){
+    const selectedOptionNode = selectNode.selectedOptions[0];
+    
+    const reactionId = selectedOptionNode.value;
+    const reactionName = selectedOptionNode.innerText;
+
+    selectNode.removeChild(selectedOptionNode);
+
+    const newReaction = reactions.querySelector("div").cloneNode(true);
+    newReaction.querySelector("img").src = "";
+    newReaction.querySelector(".img_input").value = null;
+    newReaction.querySelector(".reaction_id").value = reactionId
+    newReaction.querySelector("p").innerText = reactionName
+    
+    reactions.appendChild(newReaction);
+}
