@@ -87,33 +87,3 @@ function saveFormQuestions(){
 
     makeAPIRequest("admin/setQuestions", {"questions": data, "lang": "FR"}, {"content": "json"})
 }
-
-//functions for npc.html
-
-function saveFormNpc(){
-    let data = {}
-    
-    data["id"] = npc.querySelector("#npc_id").value;
-    data["name"] = npc.querySelector("#npc_name").value;
-    
-    let allAnswersJson = [];
-    data["allAnswers"] = allAnswersJson;
-    
-    for(let answerTypeNode of npc.querySelectorAll(".answerType")){
-        let answersJson = [];
-        let answerTypeJson = {"answers": answersJson};
-        allAnswersJson.push(answerTypeJson);
-
-        for(let answerNode of answerTypeNode.querySelectorAll("input")){
-            answersJson.push({"text": answerNode.value})
-        }
-    }
-
-    makeAPIRequest("admin/setNpc", {"npc": data, "lang": "FR"}, {"content": "json"})
-}
-
-async function deleteNpc(){
-    let npc_id = npc.querySelector("#npc_id").value;
-    await makeAPIRequest("admin/deleteNpc", {"npc_id": npc_id, "lang": "FR"}, {"content": "json"});
-    document.location = "/admin";
-}
