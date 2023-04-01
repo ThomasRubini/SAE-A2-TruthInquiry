@@ -33,6 +33,11 @@ body {
     margin: var(--body-margin);
 }
 
+button, input {
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 1em;
+}
+
 header {
     align-content: center;
     align-items: center;
@@ -94,7 +99,6 @@ svg {
 }
 
 .short_color_transition:hover {
-    transition-property: background-color, color;
     transition-duration: 0.25s;
     transition-timing-function: linear;
 }

@@ -1,36 +1,82 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>NPC</title>
         <meta charset="UTF-8">
+        <title>Truth Inquiry - {{'Gestion' if npc.get('id') else 'Ajout'}} d'un personnage</title>
         <link rel="stylesheet" href="/static/css/admin_ui.css">
-        <script src="/static/js/api.js"></script>
-        <script src="/static/js/admin.js"></script>
+        <link rel="stylesheet" href="/static/css/admin_ui_npc.css">
+        <link rel="icon" href="/static/images/favicon/favicon_32.png" type="image/png" sizes="32x32">
+        <link rel="icon" href="/static/images/favicon/favicon_64.png" type="image/png" sizes="64x64">
+        <link rel="icon" href="/static/images/favicon/favicon_96.png" type="image/png" sizes="96x96">
+        <link rel="icon" href="/static/images/favicon/favicon_128.png" type="image/png" sizes="128x128">
+        <link rel="icon" href="/static/images/favicon/favicon_192.png" type="image/png" sizes="192x192">
+        <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="256x256">
+        <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="512x512">
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <a href="/admin"> go Back </a> <br>
-
-        <section id="npc">
-            <section>
-                <span>Npc name: </span>
-                <input id="npc_id" value="{{ npc.get('id') or ''}}" hidden>
-                <input id="npc_name" value="{{ npc.get('name') or ''}}">
-                <img href="{{npc.get('img')}}">
-            </section>
-            
-            <section>
-                <p>Answers:</p>
-                {%for answer_type in npc.get("answers") or []%}
-                <section class="answerType">
-                    {%for answer in answer_type%}
-                    <input value="{{answer}}">
-                    {%endfor%}
-                </section>
-                {%endfor%}
-            </section>
+        <header>
+            <a class="short_color_transition" href="/admin" title="Cliquez ici pour revenir à l'accueil de l'interface d'administration du jeu">Accueil</a>
+            <a class="short_color_transition" href="/admin/questions" title="Cliquez ici pour gérer les questions du jeu">Gestion des questions</a>
+            <a class="short_color_transition" href="/admin/places" title="Cliquez ici pour gérer les lieux du jeu">Gestion des lieux</a>
+            <a class="short_color_transition" href="/admin/traits" title="Cliquez ici pour gérer les réactions du jeu">Gestion des réactions</a>
+            <a class="short_color_transition" href="/api/v1/admin/logout" title="Cliquez ici pour vous déconnecter de l'interface d'administration du jeu">Déconnexion</a>
+        </header>
+        <h1 class="page_title">Truth Inquiry - Interface d'administration</h1>
+        <h2 class="page_category">{{'Gestion' if npc.get('id') else 'Ajout'}} d'un personnage</h2>
+        <p class="page_description">Cliquez sur les champs pour éditer les informations. Dans les réponses aux questions lors de l'interrogation, utilisez «&nbsp;{NPC}&nbsp;» pour faire référence au nom d'un personnage et «&nbsp;{SALLE}&nbsp;» pour faire référence au nom d'une salle.</p>
+        <section>
+            <h2 class="section_title">Informations sur le personnage</h2>
+            <input id="npc_id" value="{{ npc.get('id') or ''}}" hidden="hidden">
+            <p class="info_item">Nom du personnage</p>
+            <input type="text" id="npc_name" value="{{ npc.get('name') or ''}}" title="Saisissez le nom du personnage" aria-label="Nom du personnage">
+            <p class="info_item">Image du personnage</p>
+            <img class="character_image" alt="{{'Image du personnage' + (' ' + npc.get('name') if npc.get('name') else '')}}" src="{{'/static/images/no_photography_white.svg' if npc.get('img') == None else '/api/v1/getNpcImage?npcid=' + npc.get('img')|string}}">
         </section>
-
-        <button onclick="saveFormNpc()">Save changes</button>
-        <button onclick="deleteNpc()">Delete Npc</button>
+        <section>
+            <h2 class="section_title">Réponses aux questions lors de l'interrogation</h2>
+            <div class="answer_groups">
+                {%for answer_type in npc.get("answers") or []%}
+                <div class="answer_group">
+                    {%for answer in answer_type%}
+                    <input type="text" value="{{answer}}" title="Saisissez le texte de la réponse" aria-label="Texte de la réponse">
+                    {%endfor%}
+                </div>
+                {%endfor%}
+            </div>
+        </section>
+        <div class="action_buttons">
+            {% if npc.get('id'): %}
+            <button id="save_edits_button" class="action_button short_color_transition" onclick="createOrUpdateNpc()"  title="Cliquez ici pour enregister les modifications sur le personnage">
+                <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
+                    <path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"/>
+                </svg>
+                Enregister les modifications du personnage
+            </button>
+            <button id="delete_npc_button" class="action_button short_color_transition" onclick="deleteNpc()" title="Cliquez ici pour supprimer le personnage">
+                <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
+                    <path d="M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z"/>
+                </svg>
+                Supprimer le personnage
+            </button>
+            {% else: %}
+            <button id="add_npc_button" class="action_button short_color_transition" onclick="createOrUpdateNpc()" title="Cliquez ici pour ajouter un personnage avec les données saisies">
+                <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
+                    <path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"/>
+                </svg>
+                Ajouter un personnage
+            </button>
+            {% endif %}
+        </div>
+        <noscript>
+            <div class="alert_dialog_background"></div>
+            <dialog>
+                <h3 class="alert_dialog_title">JavaScript nécessaire</h3>
+                <p class="alert_dialog_msg unsupported_browser_msg">Désolé, mais JavaScript est nécessaire pour faire fonctionner cette page. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir ajouter ou gérer un personnage.</p>
+            </dialog>
+        </noscript>
+        <script src="/static/js/api.js"></script>
+        <script src="/static/js/admin_npc.js"></script>
     </body>
 </html>
