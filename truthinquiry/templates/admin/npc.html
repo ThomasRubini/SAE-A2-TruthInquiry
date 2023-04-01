@@ -38,7 +38,7 @@
         <section id="reactions">
             <h2 class="section_title">Réactions</h2>
             
-                {%for reaction in npc.get("reactions")%}
+                {%for reaction in npc.get("reactions") or []%}
                 <div>
                     <p> {{reaction.get('name')}} </p>
                     <img src="{{reaction.get('url')}}" style="max-width: 100; max-height: 100px">
