@@ -206,7 +206,7 @@ async function askQuestion(buildAnswer) {
     document.querySelector(".suspect_answer").textContent = buildAnswer(
         getNpcLocationAndPartner(currentNpc));
 
-    showFirstClassElement("question_answer");
+    showFirstClassElement("suspect_answer");
 
     document.getElementById("currentNpcPicure").src = NPC_REACTION_PATH + currentNpc;
 
@@ -214,8 +214,8 @@ async function askQuestion(buildAnswer) {
     // Sleep for 4 sec
     await new Promise(r => setTimeout(r, 4000));
 
-    document.getElementById("currentNpcPicure").src = NPC_REACTION_PATH + currentNpc;
-    hideFirstClassElement("question_answer");
+    document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + currentNpc;
+    hideFirstClassElement("suspect_answer");
 
     document.querySelector(".suspect_answer").textContent = "";
 
