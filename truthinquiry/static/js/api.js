@@ -17,6 +17,8 @@ async function makeAPIRequest(endpoint, body, options={}) {
     if (options["content"] === 'json') {
         fetchOptions["headers"]["Content-Type"] = 'application/json'
         fetchOptions["body"] = JSON.stringify(body)
+    } else if (options["content"] === 'form') {
+        fetchOptions["body"] = body;
     } else {
         fetchOptions["body"] = new URLSearchParams(body);
     }
