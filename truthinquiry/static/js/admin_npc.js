@@ -31,3 +31,14 @@ async function deleteNpc() {
     alert("Opération effectuée avec succès");
     document.location = "/admin";
 }
+
+function changeReaction(inputNode){
+    const parentNode = inputNode.parentNode;
+    const imgNode = parentNode.querySelector('img');
+    
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+        imgNode.src = e.target.result
+    }
+    reader.readAsDataURL(inputNode.files[0]);
+}

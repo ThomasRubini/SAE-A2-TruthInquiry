@@ -34,6 +34,28 @@
             <p class="info_item">Image du personnage</p>
             <img class="character_image" alt="{{'Image du personnage' + (' ' + npc.get('name') if npc.get('name') else '')}}" src="{{'/static/images/no_photography_white.svg' if npc.get('img') == None else '/api/v1/getNpcImage?npcid=' + npc.get('img')|string}}">
         </section>
+        
+        <section>
+            <h2 class="section_title">Réactions</h2>
+            
+            {%for reaction in npc.get("reactions")%}
+            <div>
+                <p> {{reaction.get('name')}} </p>
+                <img src="{{reaction.get('url')}}" style="max-width: 100; max-height: 100px">
+                <input type="file" accept="image/png, image/jpeg" onchange="changeReaction(this)">
+            </div>
+            {%endfor%}
+            
+
+            {%if npc.get("reaction_to_add")%}
+            <select>
+                {%for reaction_to_add in npc.get("reaction_to_add")%}
+                <option value="{{reaction_to_add.get('id')}}">{{reaction_to_add.get('name')}}</option>
+                {%endfor%}
+            </select>
+            {%endif%}
+        </section>
+
         <section>
             <h2 class="section_title">Réponses aux questions lors de l'interrogation</h2>
             <div class="answer_groups">
