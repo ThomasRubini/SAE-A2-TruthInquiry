@@ -26,7 +26,8 @@ def cleanup():
             games_to_delete.append(game_id)
     for game_id in games_to_delete:
         del game_logic.games_list[game_id]
-    discord_bot.update_games_presence()
+    if os.getenv("DISCORD_BOT_TOKEN") is not "":
+        discord_bot.update_games_presence()
 
 
 # API specification is documented in api_doc.yml
