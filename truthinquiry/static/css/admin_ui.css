@@ -33,9 +33,24 @@ body {
     margin: var(--body-margin);
 }
 
+button {
+    align-items: center;
+    border-radius: 1em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
 button, input {
+    background-color: transparent;
+    border-color: var(--admin-white-color);
+    border-style: solid;
+    border-width: 0.125em;
+    color: var(--admin-white-color);
     font-family: "Roboto Mono", sans-serif;
     font-size: 1em;
+    margin: 1em;
+    padding: 0.25em;
 }
 
 header {
@@ -56,9 +71,13 @@ header a {
     text-decoration: none;
 }
 
-header a:hover {
+a:hover {
     background-color: var(--admin-white-color);
     color: var(--admin-grey-color);
+}
+
+a:hover > .action_icon, .action_button:hover > .action_icon {
+    fill: var(--admin-grey-color);
 }
 
 html {
@@ -68,6 +87,17 @@ html {
 
 svg {
     fill: var(--admin-white-color);
+}
+
+.action_button:hover {
+    background-color: var(--admin-white-color);
+    color: var(--admin-grey-color);
+}
+
+.action_icon {
+    height: 2em;
+    transition-property: fill !important;
+    width: 2em;
 }
 
 .page_category {
@@ -111,21 +141,4 @@ svg {
 
 #section>input{
     width: 100%;
-}
-
-.questionTypeTag{
-    border: thin solid red;
-    margin-top: 20px;
-}
-.questionTypeTag input{
-    width: 100%;
-}
-
-.questionType{
-    border: thin solid red;
-    margin-top: 20px;
-}
-.question input{
-    width: 100%;
-    margin: 10px;
 }

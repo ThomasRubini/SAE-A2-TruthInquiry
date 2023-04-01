@@ -1,0 +1,32 @@
+.add_question_btn, #save_changes {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.delete_question_btn, .question_input {
+    margin: 1em;
+}
+
+.question {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.question_input {
+    flex-grow: 1;
+}
+
+.question_type {
+    border-color: var(--admin-white-color);
+    border-radius: 1em;
+    border-style: solid;
+    margin: 1em;
+}
+
+.question_type_title {
+    font-size: 1.5em;
+    text-align: center;
+}

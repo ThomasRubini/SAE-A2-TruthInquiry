@@ -51,39 +51,3 @@ function saveFormTraits(){
     }
     makeAPIRequest("admin/setTraits", {"traits": data, "lang": "FR"}, {"content": "json"})
 }
-
-
-
-//functions for questions.html
-
-
-
-
-function addInputQuestions(button){
-    let questionTypeContent = button.parentNode.querySelector(".questionTypeContent");
-    let newQuestion = questionTypeContent.querySelector(".question").cloneNode(true);
-    newQuestion.id = "";
-    newQuestion.querySelector("input").value = "";
-    questionTypeContent.appendChild(newQuestion);
-}
-
-function deleteInputQuestions(buttonNode){
-    let placeNode = buttonNode.parentNode;
-    placeNode.parentNode.removeChild(placeNode);
-}
-
-function saveFormQuestions(){
-    let data = [];
-
-    for(let questionTypeNode of allQuestions.querySelectorAll(".questionType")){
-        let questionsJson = [];
-        let questionTypeJson = {"questions": questionsJson};
-        data.push(questionTypeJson);
-
-        for(let questionNode of questionTypeNode.querySelectorAll("input")){
-            questionsJson.push({"text": questionNode.value})
-        }
-    }
-
-    makeAPIRequest("admin/setQuestions", {"questions": data, "lang": "FR"}, {"content": "json"})
-}

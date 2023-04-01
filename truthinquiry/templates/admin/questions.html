@@ -1,34 +1,69 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>Admin Page</title>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="admin_ui.css">
-        <script src="/static/js/admin.js"></script>
-        <script src="/static/js/api.js"></script>
+        <title>Truth Inquiry - Gestion des questions</title>
+        <link rel="stylesheet" href="/static/css/admin_ui.css">
+        <link rel="stylesheet" href="/static/css/admin_ui_questions.css">
+        <link rel="icon" href="/static/images/favicon/favicon_32.png" type="image/png" sizes="32x32">
+        <link rel="icon" href="/static/images/favicon/favicon_64.png" type="image/png" sizes="64x64">
+        <link rel="icon" href="/static/images/favicon/favicon_96.png" type="image/png" sizes="96x96">
+        <link rel="icon" href="/static/images/favicon/favicon_128.png" type="image/png" sizes="128x128">
+        <link rel="icon" href="/static/images/favicon/favicon_192.png" type="image/png" sizes="192x192">
+        <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="256x256">
+        <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="512x512">
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-    
-        <a href="/admin"> go Back </a> <br>
-
-        <section id="allQuestions">
-            {%for questionType in questions%}
-            <div class="questionType">
-                <section class="questionTypeContent">
-                    {%for question in questionType["questions"]%}
-                    <section class="question">
-                        <input value="{{question['text']}}">
-                        <button onclick="deleteInputQuestions(this)">Delete question</button>
-                    </section>
-                    {%endfor%}
-                </section>
-                <button onclick="addInputQuestions(this)">Add new</button>
+        <header>
+            <a class="short_color_transition" href="/admin" title="Cliquez ici pour revenir à l'accueil de l'interface d'administration du jeu">Accueil</a>
+            <a class="short_color_transition" href="/admin/questions" title="Cliquez ici pour gérer les questions du jeu">Gestion des questions</a>
+            <a class="short_color_transition" href="/admin/places" title="Cliquez ici pour gérer les lieux du jeu">Gestion des lieux</a>
+            <a class="short_color_transition" href="/admin/traits" title="Cliquez ici pour gérer les réactions du jeu">Gestion des réactions</a>
+            <a class="short_color_transition" href="/api/v1/admin/logout" title="Cliquez ici pour vous déconnecter de l'interface d'administration du jeu">Déconnexion</a>
+        </header>
+        <h1 class="page_title">Truth Inquiry - Interface d'administration</h1>
+        <h2 class="page_category">Gestion des questions</h2>
+        <p class="page_description">Cliquez sur les champs pour éditer les questions.</p>
+        {%for questionType in questions%}
+        <section class="question_type">
+            <h3 class="question_type_title">Type de question {{loop.index0}}</h3>
+            <div class="question_type_list">
+                {%for question in questionType["questions"]%}
+                <div class="question">
+                    <input class="question_input" type="text" value="{{question['text']}}">
+                    <button class="delete_question_btn action_button short_color_transition" title="Cliquez ici pour supprimer cette question">
+                        <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
+                            <path d="M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z"/>
+                        </svg>
+                        Supprimer la question
+                    </button>
+                </div>
+                {%endfor%}
             </div>
-            {%endfor%}
+            <button class="add_question_btn action_button short_color_transition" title="Cliquez ici pour ajouter une question au type {{loop.index0}}">
+                <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960">
+                    <path d="M435 871V622H185v-91h250V281h91v250h250v91H526v249h-91Z"/>
+                </svg>
+                Ajouter une question
+            </button>
         </section>
-
-        <br>
-
-        <button onclick="saveFormQuestions()"> Save changes </button>
+        {%endfor%}
+        <button id="save_changes" class="action_button short_color_transition" title="Cliquez ici pour enregistrer vos changements">
+            <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
+                <path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"/>
+            </svg>
+            Sauvegarder les changements
+        </button>
+        <noscript>
+            <div class="alert_dialog_background"></div>
+            <dialog>
+                <h3 class="alert_dialog_title">JavaScript nécessaire</h3>
+                <p class="alert_dialog_msg unsupported_browser_msg">Désolé, mais JavaScript est nécessaire pour faire fonctionner cette page. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir gérer les questions.</p>
+            </dialog>
+        </noscript>
+        <script src="/static/js/api.js"></script>
+        <script src="/static/js/admin_questions.js"></script>
     </body>
 </html>
