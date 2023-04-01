@@ -51,7 +51,7 @@
 
         <select id="reactions_to_add" onchange="addReaction(this)">
             <option value="" default></option>
-            {%for reaction_to_add in npc.get("reaction_to_add") or []%}
+            {%for reaction_to_add in npc.get("reactions_to_add") or []%}
             <option value="{{reaction_to_add.get('id')}}">{{reaction_to_add.get('name')}}</option>
             {%endfor%}
         </select>

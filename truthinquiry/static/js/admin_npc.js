@@ -1,4 +1,7 @@
-function createOrUpdateNpc() {
+
+const reactionsDelta = {}
+
+async function createOrUpdateNpc() {
     const data = {};
     data["id"] = document.querySelector("#npc_id").value;
     data["name"] = document.querySelector("#npc_name").value;
@@ -16,9 +19,36 @@ function createOrUpdateNpc() {
         });
     }
 
-    makeAPIRequest("admin/setNpc", {"npc": data, "lang": "FR"}, {"content": "json"}).then(() => {
-        alert("Opération effectuée avec succès");
-    });
+    await makeAPIRequest("admin/setNpc", {"npc": data, "lang": "FR"}, {"content": "json"});
+
+    await uploadReactionsDelta();
+
+    alert("Opération effectuée avec succès");
+}
+
+async function uploadReactionsDelta() {
+    let requests = [];
+
+
+    for(const [reactionId, reactionNode] of Object.entries(reactionsDelta)){
+        const formData = new FormData();
+        formData.append("npc_id", npc_id.value);
+        formData.append("trait_id", reactionId);
+        
+        if(reactionNode === null) formData.append("file", "null");
+        else{
+            const file = reactionNode.querySelector(".img_input").files[0]
+            formData.append("file", file ? file : "");
+        }
+
+        requests.push(makeAPIRequest("admin/setReaction", formData, {"content": "form"}));
+    }
+
+    for(request of requests){
+        await request;
+    }
+
+    
 }
 
 async function deleteNpc() {
@@ -35,12 +65,15 @@ async function deleteNpc() {
 function changeReaction(inputNode){
     const parentNode = inputNode.parentNode;
     const imgNode = parentNode.querySelector('img');
+    const reactionId = parentNode.querySelector('.reaction_id').value;
     
     const reader = new FileReader();
     reader.onload = (e)=>{
         imgNode.src = e.target.result
     }
     reader.readAsDataURL(inputNode.files[0]);
+
+    reactionsDelta[reactionId] = parentNode;
 }
 
 function deleteReaction(node){
@@ -55,6 +88,8 @@ function deleteReaction(node){
     option.innerText = reactionName
 
     reactions_to_add.appendChild(option);
+
+    reactionsDelta[reactionId] = null;
 }
 
 function addReaction(selectNode){
@@ -72,4 +107,6 @@ function addReaction(selectNode){
     newReaction.querySelector("p").innerText = reactionName
     
     reactions.appendChild(newReaction);
+
+    reactionsDelta[reactionId] = newReaction;
 }
