@@ -1,8 +1,9 @@
-const INTRO_IMAGE_PATH = "/static/images/entrée-manoir.png";
-const INTERROGATION_IMAGE_PATH = "/static/images/salle-interrogation.png";
-const RESULTS_IMAGE_PATH = "/static/images/salle-resultats.png";
+const INTRO_IMAGE_PATH = "/static/images/entrée-manoir.jpg";
+const INTERROGATION_IMAGE_PATH = "/static/images/salle-interrogation.jpg";
+const RESULTS_IMAGE_PATH = "/static/images/salle-resultats.jpg";
 const NPC_REACTION_PATH = "/api/v1/getNpcReaction?npcid=";
 const NPC_IMAGE_PATH = "/api/v1/getNpcImage?npcid=";
+const NPC_FINAL_REACTION_PATH = "/api/v1/getReaction?uuid="
 
 let npcsIds = [];
 let gameData = {};
@@ -47,6 +48,32 @@ function unsetQuestionButtonsListeners() {
     document.getElementById("QA_1")
         .removeEventListener("click", askTypeOneQuestion);
 }
+
+function setChatBoxButtonsListeners() {
+    document.getElementById("close_chat_button")
+        .addEventListener("click", closeForm);
+    document.getElementById("open_chat_button")
+        .addEventListener("click", openForm);
+    document.getElementById("chat_button_send")
+        .addEventListener("click", sendChatMessage);
+        
+}
+
+
+/**
+ * Shows the chat box
+ */
+function openForm() {
+    document.getElementById("chatbox").style.display = "block";
+  }
+  
+/**
+ * Hides the chat box
+ */
+  function closeForm() {
+    document.getElementById("chatbox").style.display = "none";
+  }
+
 
 /**
  * Go back to interrogation view, by hiding the interrogation suspect view.
@@ -179,7 +206,7 @@ async function askQuestion(buildAnswer) {
     document.querySelector(".suspect_answer").textContent = buildAnswer(
         getNpcLocationAndPartner(currentNpc));
 
-    showFirstClassElement("question_answer");
+    showFirstClassElement("suspect_answer");
 
     document.getElementById("currentNpcPicure").src = NPC_REACTION_PATH + currentNpc;
 
@@ -188,7 +215,7 @@ async function askQuestion(buildAnswer) {
     await new Promise(r => setTimeout(r, 4000));
 
     document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + currentNpc;
-    hideFirstClassElement("question_answer");
+    hideFirstClassElement("suspect_answer");
 
     document.querySelector(".suspect_answer").textContent = "";
 
@@ -291,19 +318,35 @@ function createCulpritSvgElement(buttonCssClass, pathAttributeValue, isHidden) {
  * Show the screen in which the player asks questions to the npcs.
  */
 function renderInterrogation() {
+    if (gameData["solo"] === true) document.getElementById("open_chat_button").classList.add("hidden");
+
     document.getElementById("QA_0").textContent = gameData["questions"]["QA_0"];
     document.getElementById("QA_1").textContent = gameData["questions"]["QA_1"];
 
     const interrogationSuspects = document.getElementById("interrogation_suspects");
 
-    npcsIds.forEach(element => {
+    npcsIds.forEach(npc_id => {
         const suspect = document.createElement("li");
         suspect.classList.add("suspect");
 
+        const name = document.createElement('p')
+        name.textContent = gameData['npcs'][npc_id]["name"]
+        name.classList.add("suspect_name");
+        suspect.appendChild(name);
+
         const img = document.createElement('img');
+        img.id = "suspect_picture_of_" + npc_id
         img.classList.add("suspect_picture");
         img.setAttribute("alt", "Image d'un suspect");
-        img.src = NPC_IMAGE_PATH + element;
+        img.src = NPC_IMAGE_PATH + npc_id;
+        img.addEventListener("click", () => {
+            // TODO remove this listener when we know the questions has already been asked;
+            currentNpc = npc_id;
+            document.getElementById("suspect_picture_of_" + npc_id).classList.add("gray");
+            document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + npc_id;
+            hideFirstClassElement("interrogation");
+            showFirstClassElement("interrogation_suspect");
+        });
         suspect.appendChild(img);
 
         const button = document.createElement("button");
@@ -311,15 +354,27 @@ function renderInterrogation() {
         button.textContent = "Interroger";
         button.addEventListener("click", () => {
             // TODO remove this listener when we know the questions has already been asked;
-            currentNpc = element;
-            document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + element;
+            currentNpc = npc_id;
+            document.getElementById("suspect_picture_of_" + npc_id).classList.add("gray");
+            document.getElementById("currentNpcPicure").src = NPC_IMAGE_PATH + npc_id;
             hideFirstClassElement("interrogation");
             showFirstClassElement("interrogation_suspect");
         });
-
         suspect.appendChild(button);
         interrogationSuspects.appendChild(suspect);
     });
+}
+
+function sendChatMessage(){
+    const message = document.getElementById("chat_message_box").value;
+    const data = {};
+    data["msg"] = message;
+    makeAPIRequest("chatMessage",data);
+    document.getElementById("chat_message_box").value = '';
+}
+
+function renderIntroduction(){
+    document.getElementById("username").textContent += username;
 }
 
 /**
@@ -346,8 +401,16 @@ function initSock() {
     socket.on("gameprogress", username => {
         console.log(username);
     });
+
+    socket.on("chatMessage", message => {
+        const message_received = document.createElement("li");
+        message_received.classList.add("message");
+        message_received.textContent = message;
+        document.getElementById("message_list").appendChild(message_received);
+    });
     
     socket.on("gamefinished", finalResults => {
+        console.log(finalResults);
         hideFirstClassElement("emotion_and_culprit_choices");
         const revealScoreElement = document.createElement("h2");
         revealScoreElement.classList.add("reveal_score");
@@ -398,22 +461,25 @@ function initSock() {
 
                 const img = document.createElement("img");
                 img.setAttribute("alt", "Image d'un suspect");
-                img.src = NPC_IMAGE_PATH + npcid;
+                img.src = NPC_FINAL_REACTION_PATH + finalResults["npcs"][npcid]["uuid"];
                 suspect.appendChild(img);
+                
+                const explain = document.createElement("div")
+                explain.classList.add("explain")
 
                 const emotionTitle = document.createElement("h2");
                 emotionTitle.classList.add("explain_suspect_emotion_title");
                 emotionTitle.textContent = "Ce suspect était "
                     + finalResults["npcs"][npcid]["reaction"] + ".";
-
-                suspect.appendChild(emotionTitle);
-
+                
+                explain.appendChild(emotionTitle);
+                
                 const emotionDesc = document.createElement("p");
                 emotionDesc.classList.add("explain_suspect_emotion_description");
                 emotionDesc.textContent = "Cette émotion se caractérise par "
                     + finalResults["npcs"][npcid]["description"];
-                suspect.appendChild(emotionDesc);
-
+                explain.appendChild(emotionDesc);
+                suspect.appendChild(explain)
                 suspectListElement.appendChild(suspect);
             });
     });
@@ -439,10 +505,12 @@ async function setGameData() {
 async function initGame() {
     await setGameData();
     initSock();
+    renderIntroduction();
     renderAnswerSelectionPanel();
     renderInterrogation();
     setQuestionButtonsListeners()
     setIntroductionAndInterrogationListeners();
+    setChatBoxButtonsListeners();
     showFirstClassElement("introduction");
     setGameBackground(INTRO_IMAGE_PATH);
 }

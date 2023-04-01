@@ -281,4 +281,4 @@ document.getElementById("join_room_button").addEventListener("click", joinMultiP
 
 // Execution of functions
 
-setCurrentTheme();
+//setCurrentTheme();

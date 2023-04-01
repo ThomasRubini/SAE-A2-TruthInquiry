@@ -85,12 +85,16 @@ def join_game():
 
     if not game.add_member(username):
         return {"error": 1, "msg": f"Username '{username}' already used in game {game.game_id}"}
+    
+    if game.has_started:
+        return {"error": 1, "msg": f"Game {game.game_id} has already started"}
+
 
     flask.session["game_id"] = game.game_id
     flask.session["is_owner"] = False
     flask.session["username"] = username
 
-    socket_io.emit("playersjoin", [flask.session["username"]], room="game."+game.game_id)
+    socket_io.emit("playersjoin", flask.session["username"], room="game."+game.game_id)
 
     return {"error": 0}
 
@@ -199,14 +203,11 @@ def get_npc_reaction():
 @routes_api.route("/getReaction", methods=["GET", "POST"])
 def get_reaction():
     input_uuid = flask.request.values.get("uuid")
-    results = db.session.execute(select(Reaction).where(Reaction.REACTION_UUID==input_uuid))
-    
-    row = results.first()
-    if row == None:
+    image = game_logic.get_reactions_image_from_uuid(input_uuid)
+    if image is None:
         return {"error": 1, "msg": "No such reaction"}
-    reaction_obj = row[0]
 
-    return flask.send_file(io.BytesIO(reaction_obj.IMG), mimetype='image/png')
+    return flask.send_file(io.BytesIO(image), mimetype='image/png')
     
 
 
@@ -230,6 +231,24 @@ def game_progress():
 
     return {"error": 0}
 
+@routes_api.route("/chatMessage", methods=["GET", "POST"])
+def chat_message():
+    if not flask.session:
+        return {"error": 1, "msg": "No session"}
+    game_id = flask.session["game_id"]
+    if not game_logic.check_game_id(game_id):
+        return {"error": 1, "msg": "invalid game_id"}
+    game = game_logic.get_game(game_id)
+    if game is None:
+        return {"error": 1, "msg": "this game doesn't exist"}
+
+    username = flask.session["username"]
+    message_received = flask.request.values.get("msg")
+    
+    message_sent = f"{username} : {message_received}"
+    socket_io.emit("chatMessage", message_sent, room="game."+game.game_id)
+
+    return {"error": 0}
 
 @routes_api.route("/submitAnswers", methods=["GET", "POST"])
 def check_anwser():

@@ -12,8 +12,8 @@ html {
     font-family: "Titan One", sans-serif;
 }
 
-.anwser_title, .emotion_and_culprit_choices_title, .introduction_text, .introduction_title, .interrogation_title, .results_title, .reveal_culprit_title, .score_title, .summary_title {
-    font-family: "Spicy Rice", serif;
+.anwser_title, .emotion_and_culprit_choices_title, .introduction_text, .introduction_title, .interrogation_title, .results_title,.introduction_right ,.reveal_culprit_title, .score_title, .summary_title {
+    font-family: "Ironick", serif;
 }
 
 .culprit_btn, .interrogation, .player_score, .question_answer, .questions_and_image, .reveal_culprit, .reveal_score, .scores, .summary, .summary_suspect, .suspect_picture[alt], .suspect, .suspects, .suspects_list {
@@ -50,7 +50,7 @@ html {
 }
 
 .emotion_and_culprit_choices_title, .interrogation_title, .introduction_title, .results_title, .reveal_culprit_title, .reveal_score, .score_title, .summary_title {
-    color: var(--game-red);
+    color: var(--game-gold);
 }
 
 .emotion_and_culprit_choices_title, .results_title, .reveal_culprit_title, .score_title, .summary, .summary_title, .suspect_picture[alt] {
@@ -110,8 +110,33 @@ html {
 }
 
 .suspect_picture {
+    border: var(--game-dark-gold) solid 5px;
+    border-radius: 1em;
     height: 15em;
     width: 15em;
+    transition: all 0.5s ease;
+    
+}
+.npc_answer{
+    flex-direction: column;
+    width: 40em;
+}
+.image_interrogation{
+    height: 25em;
+    width: 25em;
+}
+
+.question_answer{
+border: var(--game-dark-gold) solid;
+border-radius: 1em;
+height: 6em;
+background-color: #000000d0;
+}
+
+.suspect > .suspect_picture:hover {
+    filter: grayscale(0);
+    transition: all 0.5s ease;
+    background-color: #000000d0;
 }
 
 .suspect_picture[alt] {
@@ -124,7 +149,7 @@ html {
 }
 
 .home_button, .next_btn {
-    fill: var(--game-red);
+    fill: var(--game-dark-gold);
     height: 5em;
     width: 5em;
 }
@@ -152,11 +177,20 @@ html {
 /* Introduction */
 .introduction {
     padding: 1em;
+    display: flex;
+    flex-direction: row;
+}
+.introduction_left{
+    padding: 1em;
     max-width: 50vw;
 }
-
-.introduction_text {
+.introduction_right{
     font-size: 2em;
+    padding: 1em;
+    max-width: 50vw;
+}
+.introduction_text {
+    font-size: 3em;
     margin-bottom: 1em;
     margin-top: 1em;
 }
@@ -166,13 +200,25 @@ html {
     text-align: left;
 }
 
+.inspector_picture{
+    border: var(--game-dark-gold) solid 5px;
+    border-radius: 1em;
+    max-width: 45vw;
+    background-color: #000000d0;
+}
+
+.username{
+    font-size: 3em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
 /* Interrogation */
 .ask_button {
-    background-color: var(--game-white);
+    background-color: var(--game-dark-gold);
     color: var(--game-black);
     text-transform: none;
 }
-
 .anwser_title {
     font-size: 2.5em;
     margin: 0.25em;
@@ -194,6 +240,16 @@ html {
 #interrogation_suspect_previous_btn {
     margin-right: 1em;
 }
+.suspect_name{
+    font-family: "Park Lane";
+    font-size: 2em;
+    color: var(--game-dark-gold);
+    border-radius: 0.25em;
+    margin: 0;
+    border: var(--game-dark-gold) solid 1px;
+    padding: 0.25em;
+    background-color: #000000dd;
+}
 
 /* Emotion and culprit choices */
 .culprit_icon {
@@ -202,6 +258,7 @@ html {
     margin-right: 0.25em;
     width: 1em;
 }
+
 
 .culprit_btn_checked {
     background-color: var(--game-green);
@@ -235,6 +292,13 @@ html {
 }
 
 /* Results and scores */
+.explain {
+    border: var(--game-dark-gold) solid;
+    border-radius: 1em;
+    background-color: #000000d0;
+}
+
+
 .explain_suspect_emotion_description {
     font-size: 1.25em;
     font-weight: normal;
@@ -282,4 +346,88 @@ html {
 
 #return_lobby_button {
     border: transparent;
+}
+
+* {box-sizing: border-box;}
+
+/* chat */
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+  background-color: #000000dd;
+  color: var(--game-dark-gold);
+  padding: 16px 20px;
+  border: var(--game-dark-gold) solid;
+  border-radius: 1em;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+/* The popup chat - hidden by default */
+.chat-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  color: var(--game-dark-gold);
+  right: 15px;
+  z-index: 9;
+  border: solid black 1px;
+  border-radius: 1em;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  border: solid var(--game-dark-gold);
+  border-radius: 1em;
+  background-color: black;
+}
+
+/* Full-width textarea */
+.form-container textarea {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+  resize: none;
+  min-height: 5em;
+}
+
+/* When the textarea gets focus, do something */
+#chat_message_box{
+  background-color: #505050;
+  outline: none;
+  margin: 10px;
+}
+.message{
+    list-style-type: none
+}
+/* Set a style for the submit/send button */
+.form-container .btn {
+  background-color: black;
+  color: #04AA6D;
+  padding: 16px 20px;
+  border: #04AA6D solid;
+  border-radius: 1em;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: black;
+  color: red;
+  border-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+    opacity: 1;
 }

@@ -1,4 +1,12 @@
+const LOBBY_IMAGE_PATH = "/static/images/cuisine.jpg"
 // Display functions
+
+/*
+ * Set the current game background to the first element with the current_background CSS class.
+ */
+function setGameBackground(backgroundPath) {
+    document.querySelector(".current_background").style.backgroundImage = 'url("' + backgroundPath + '")';
+}
 
 /**
  * Display the invalid rounds count message element, by removing the hidden CSS class.
@@ -129,7 +137,6 @@ function joinRoom() {
     response.then(() => {
         displayRoomView();
         displayPlayerList();
-        initSock();
         hideFirstClassElement("join_room_view");
     })
 }
@@ -348,13 +355,15 @@ function initSock() {
         console.log("Connected to the server!");
     })
 
-    socket.on("gamestart", () => {
-        window.location.href = "/multi";
+    socket.on("gamestart", async () => {
+        if (await hasJoinedRoom()) window.location.href = "/multi";
     })
 
     socket.on("playersjoin", username => {
-        document.querySelector(".player_names")
-            .appendChild(document.createTextNode(username + "\n"));
+        console.log(username);
+        Array.from(document.getElementsByClassName("player_names")).forEach(playerList =>{
+            playerList.textContent += username + "\n";
+        })
     });
 }
 
@@ -375,9 +384,10 @@ function initSock() {
  * </p>
  */
 async function initLobby() {
+    setGameBackground(LOBBY_IMAGE_PATH)
     getMembers()
+    initSock();
     if (await hasJoinedRoom()) {
-        initSock();
         displayRoomView();
 
         if (await isRoomOwner()) {

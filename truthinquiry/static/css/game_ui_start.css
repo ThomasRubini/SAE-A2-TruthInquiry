@@ -50,14 +50,15 @@ input::placeholder {
 }
 
 .back_btn {
-    fill: var(--game-red);
+    fill: var(--game-dark-gold);
 }
 
 .game_begin {
-    background-image: url("../images/start_background.png");
+    background-image: url("../images/start_background.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    border: var(--game-gold) solid 1px;
     border-radius: 1.5em;
     flex-wrap: wrap;
     /*
@@ -66,15 +67,14 @@ input::placeholder {
     */
     height: calc(100vh - var(--body-margin) * 2
         - var(--game-begin-margin) * 2
-        - var(--header-actions-side)
         - var(--footer-links-height));
     justify-content: center;
     margin: var(--game-begin-margin);
 }
 
 .game_title {
-    color: var(--game-red);
-    font-family: "Spicy Rice", serif;
+    color: var(--game-gold);
+    font-family: "Ironick", serif;
     font-size: 5em;
     font-weight: bold;
     margin: 0.25em;
@@ -109,7 +109,7 @@ input::placeholder {
 }
 
 .game_mode_selection {
-    background-image: url("../images/start_background.png");
+    background-image: url("../images/start_background.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -133,10 +133,6 @@ input::placeholder {
 }
 
 .game_mode_choice_selector {
-    background-color: var(--game-black);
-    border-color: var(--game-white);
-    border-style: solid;
-    border-radius: 1.5em;
     padding: 1em;
 }
 
