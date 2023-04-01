@@ -26,6 +26,7 @@ def cleanup():
             games_to_delete.append(game_id)
     for game_id in games_to_delete:
         del game_logic.games_list[game_id]
+    discord_bot.update_games_presence()
 
 
 # API specification is documented in api_doc.yml
@@ -282,5 +283,6 @@ def check_anwser():
         json_game_results = game.generate_game_results()
         socket_io.emit("gamefinished", json_game_results, room="game."+game.game_id)
         del game_logic.games_list[game.game_id]
+        discord_bot.update_games_presence()
     response = {"error": 0}
     return response
