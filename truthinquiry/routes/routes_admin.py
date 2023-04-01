@@ -35,11 +35,27 @@ def npc(npc_id):
             answer_list = [answer.TEXT for answer in answer_type.TEXT_LOCALE.TEXTS]
             npc_answers.append(answer_list)
         
+        reactions = [{
+            "id": reaction.TRAIT.TRAIT_ID,
+            "name": reaction.TRAIT.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT,
+            "url": "/api/v1/getReaction?uuid="+reaction.REACTION_UUID
+        } for reaction in npc_obj.REACTIONS]
+
+        reactions_to_add = []
+        for trait in db.session.query(Trait).all():
+            if trait.TRAIT_ID not in [reaction.TRAIT.TRAIT_ID for reaction in npc_obj.REACTIONS]:
+                reactions_to_add.append({
+                    "id": trait.TRAIT_ID,
+                    "name": trait.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT
+                })
+
         npc_dict = {
             "id": npc_obj.NPC_ID,
             "name": npc_obj.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT,
             "img": npc_obj.NPC_ID,
             "answers": npc_answers,
+            "reactions": reactions,
+            "reactions_to_add": reactions_to_add,
         }
 
         return flask.render_template("admin/npc.html", npc=npc_dict)

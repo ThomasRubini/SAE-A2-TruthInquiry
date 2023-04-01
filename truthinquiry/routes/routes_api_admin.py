@@ -1,7 +1,7 @@
 import os
 
 import flask
-from sqlalchemy import select, delete, or_
+from sqlalchemy import select, delete, and_
 
 from truthinquiry.ext.database.models import *
 from truthinquiry.ext.database.fsa import db
@@ -175,4 +175,37 @@ def delete_npc():
     input_npc_id = flask.request.json["npc_id"]
     db.session.execute(delete(Npc).where(Npc.NPC_ID==input_npc_id))
     db.session.commit()
+    return {}
+
+@routes_api_admin.route("/setReaction", methods=["GET", "POST"])
+@require_admin(api=True)
+def setReaction():
+    input_npc_id = flask.request.values["npc_id"]
+    input_trait_id = flask.request.values["trait_id"]
+
+    row = db.session.execute(
+        select(Reaction)
+        .where(and_(
+            Reaction.NPC_ID==input_npc_id,
+            Reaction.TRAIT_ID==input_trait_id
+        ))
+    ).first()
+    
+    reaction = None if row == None else row[0]
+    
+
+    if len(flask.request.files) == 0: # want to delete
+        if reaction:
+            db.session.delete(reaction)
+        else:
+            return {"msg": "No such reaction"} # Not an error because this can be intentional
+    else:
+        input_reaction_file = flask.request.files['file']
+        if not reaction:
+            reaction = Reaction(None, input_npc_id, input_trait_id)
+            db.session.add(reaction)
+        reaction.IMG = input_reaction_file.read()
+    
+    db.session.commit()
+    
     return {}
