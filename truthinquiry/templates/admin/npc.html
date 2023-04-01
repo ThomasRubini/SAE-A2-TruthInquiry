@@ -43,7 +43,7 @@
                     <p> {{reaction.get('name')}} </p>
                     <img src="{{reaction.get('url')}}" style="max-width: 100; max-height: 100px">
                     <input class="img_input", type="file" accept="image/png, image/jpeg" onchange="changeReaction(this)">
-                    <input class="reaction_id", type="hidden" value="{{reaction.get('id')}}">
+                    <input class="trait_id", type="hidden" value="{{reaction.get('trait_id')}}">
                     <button onclick="deleteReaction(this)">Delete reaction</button>
                 </div>
                 {%endfor%}
@@ -52,7 +52,7 @@
         <select id="reactions_to_add" onchange="addReaction(this)">
             <option value="" default></option>
             {%for reaction_to_add in npc.get("reactions_to_add") or []%}
-            <option value="{{reaction_to_add.get('id')}}">{{reaction_to_add.get('name')}}</option>
+            <option value="{{reaction_to_add.get('trait_id')}}">{{reaction_to_add.get('name')}}</option>
             {%endfor%}
         </select>
 
