@@ -36,7 +36,7 @@ def npc(npc_id):
             npc_answers.append(answer_list)
         
         reactions = [{
-            "id": reaction.TRAIT.TRAIT_ID,
+            "trait_id": reaction.TRAIT.TRAIT_ID,
             "name": reaction.TRAIT.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT,
             "url": "/api/v1/getReaction?uuid="+reaction.REACTION_UUID
         } for reaction in npc_obj.REACTIONS]
@@ -45,7 +45,7 @@ def npc(npc_id):
         for trait in db.session.query(Trait).all():
             if trait.TRAIT_ID not in [reaction.TRAIT.TRAIT_ID for reaction in npc_obj.REACTIONS]:
                 reactions_to_add.append({
-                    "id": trait.TRAIT_ID,
+                    "trait_id": trait.TRAIT_ID,
                     "name": trait.NAME_LOCALE.get_text(DEFAULT_LANG).TEXT
                 })
 
