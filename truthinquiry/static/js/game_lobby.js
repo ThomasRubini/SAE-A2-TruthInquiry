@@ -81,7 +81,8 @@ function displayInvalidNickNameErrorMessage(errorMessage) {
 /**
  * Start a game in the history mode.
  */
-function startHistoryGame() {
+function startHistoryGame(event) {
+    event.target.textContent = "Chargement...";
     makeAPIRequest("startGame");
 }
 
