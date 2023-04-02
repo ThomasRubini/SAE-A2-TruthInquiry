@@ -8,9 +8,9 @@ input, .action_button, .game_mode_item_title {
     font-family: "Titan One", sans-serif;
 }
 
-.back_button, .theme_switcher_btn {
-    height: var(--header-actions-side);
-    width: var(--header-actions-side);
+#back_button, .theme_switcher_btn {
+    height: 2em;
+    width: 5em;
 }
 
 .game_begin, .game_mode_item, .game_mode_item_input_text_single_line, .game_mode_items, .game_mode_selection {

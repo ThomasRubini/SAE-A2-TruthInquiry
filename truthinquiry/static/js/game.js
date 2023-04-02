@@ -281,8 +281,9 @@ function renderAnswerSelectionPanel() {
 
         button.appendChild(document.createTextNode("Couplable"));
 
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (event) => {
             disableCulpritButtons(culpritChoices, suspect);
+            event.target.textContent = "attente des autres joueurs...";
             sendAnswers();
         });
 

@@ -112,26 +112,26 @@ function areInputsValid(checkRoomCode) {
 /**
  * Handler for the multiplayer room creation button 
  */
-function createMultiPlayerRoom() {
+function createMultiPlayerRoom(event) {
     if (!areInputsValid(false)) {
         return;
     }
 
     hideInvalidInputErrorMessage();
-
+    event.target.textContent = "Chargement...";
     startGame();
 }
 
 /**
  * Handler for the join room button 
  */
-function joinMultiPlayerRoom() {
+function joinMultiPlayerRoom(event) {
     if (!areInputsValid(true)) {
         return;
     }
 
     hideInvalidInputErrorMessage();
-
+    event.target.textContent = "Chargement...";
     joinGame();
 }
 
@@ -208,14 +208,13 @@ function changeTheme() {
  * This function launches a single player game. It sends the api request to
  * create a game then it immediately start the game by sendind the startGame api
  */
-async function startSoloGame(){
+async function startSoloGame(event){
 
     if (!areInputsValid(false)) {
         return;
     }
-
+    event.target.textContent = "Chargement...";
     hideInvalidInputErrorMessage();
-
     username = document.getElementById("game_username").value;
     let data = {}
     data["username"] = username;
