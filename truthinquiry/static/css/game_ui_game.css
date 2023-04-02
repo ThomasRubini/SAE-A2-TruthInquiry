@@ -205,6 +205,7 @@ background-color: #000000d0;
     border-radius: 1em;
     max-width: 45vw;
     background-color: #000000d0;
+    position: fixed;
 }
 
 .username{
