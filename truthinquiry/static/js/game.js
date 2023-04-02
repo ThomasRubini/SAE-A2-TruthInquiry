@@ -283,7 +283,8 @@ function renderAnswerSelectionPanel() {
 
         button.addEventListener("click", (event) => {
             disableCulpritButtons(culpritChoices, suspect);
-            event.target.textContent = "attente des autres joueurs...";
+            if (gameData["solo"] === true) event.target.textContent = "envoie des réponses..."; 
+            else event.target.textContent = "attente des autres joueurs...";
             sendAnswers();
         });
 
