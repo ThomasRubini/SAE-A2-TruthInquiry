@@ -1,16 +1,36 @@
+img[alt] {
+    font-size: 1em;
+}
+
+img[alt], .info_item, .section_title {
+    text-align: center;
+}
+
 input[type="text"] {
     width: 20em;
 }
 
-.action_buttons, .answer_groups {
-    align-content: center;
-    display: flex;
+option {
+    background-color: var(--admin-white-color);
+    color: var(--admin-black-color);
+}
+
+.action_buttons, .answer_groups, .reaction, #add_reactions {
     flex-wrap: wrap;
+}
+
+.action_buttons, .answer_group, .answer_groups, .reaction, #add_reactions {
+    display: flex;
     justify-content: center;
 }
 
-.character_image {
-    width: 15em;
+.answer_group, .reaction, #add_reactions {
+    align-items: center;
+    flex-direction: column;
+}
+
+.character_image, .reaction_image {
+    width: 20em;
 }
 
 .character_image, #npc_name {
@@ -26,8 +46,8 @@ input[type="text"] {
     font-size: 1.25em;
 }
 
-.info_item, .section_title {
-    text-align: center;
+.reaction, #add_reactions {
+    align-content: center;
 }
 
 .section_title {

@@ -9,6 +9,7 @@
 }
 
 :root {
+    --admin-black-color: #000000;
     --admin-grey-color: #5A5656;
     --admin-red-color: #FF0000;
     --admin-white-color: #FFFFFF;
@@ -41,7 +42,7 @@ button {
     justify-content: center;
 }
 
-button, input {
+button, input, select {
     background-color: transparent;
     border-color: var(--admin-white-color);
     border-style: solid;
@@ -71,12 +72,12 @@ header a {
     text-decoration: none;
 }
 
-a:hover {
+a:focus, a:hover {
     background-color: var(--admin-white-color);
     color: var(--admin-grey-color);
 }
 
-a:hover > .action_icon, .action_button:hover > .action_icon {
+a:focus > .action_icon, .action_button:focus > .action_icon, a:hover > .action_icon, .action_button:hover > .action_icon {
     fill: var(--admin-grey-color);
 }
 
@@ -89,7 +90,7 @@ svg {
     fill: var(--admin-white-color);
 }
 
-.action_button:hover {
+.action_button:focus, .action_button:hover {
     background-color: var(--admin-white-color);
     color: var(--admin-grey-color);
 }
