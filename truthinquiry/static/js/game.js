@@ -144,9 +144,19 @@ function disableCulpritButtons(culprit_choices_element, selected_suspect) {
         let child = childrenCulpritChoicesElement[index];
 
         if (selected_suspect != child) {
-            child.querySelector(".culprit_btn").classList.add("hidden");
+            const culpritButton = child.querySelector(".culprit_btn");
+            if (culpritButton === null) {
+                continue;
+            }
+
+            culpritButton.classList.add("hidden");
         } else {
-            child.querySelector(".culprit_unchecked_icon").classList.add("hidden");
+            const culpritUncheckedIcon = child.querySelector(".culprit_unchecked_icon");
+            if (culpritUncheckedIcon === null) {
+                continue;
+            }
+
+            culpritUncheckedIcon.classList.add("hidden");
             child.querySelector(".culprit_checked_icon").classList.remove("hidden");
             child.querySelector(".culprit_btn").classList.add("culprit_btn_checked");
         }
@@ -279,9 +289,9 @@ function renderAnswerSelectionPanel() {
 
         button.appendChild(document.createTextNode("Couplable"));
 
-        button.addEventListener("click", event => {
+        button.addEventListener("click", () => {
             disableCulpritButtons(culpritChoices, suspect);
-            event.target.textContent = gameData["solo"] === true ? "Envoi des réponses\u00A0..." : "En attente des autres joueurs\u00A0...";
+            button.textContent = gameData["solo"] === true ? "Envoi des réponses\u00A0..." : "En attente des autres joueurs\u00A0...";
             sendAnswers();
         });
 
