@@ -1,3 +1,5 @@
+import os
+
 import flask
 
 routes_ui = flask.Blueprint("ui", __name__)
@@ -20,7 +22,8 @@ def licenses():
 
 @routes_ui.route("/legal")
 def legal():
-    return flask.render_template("legal.html")
+    hosting_info = os.getenv("HOSTING_INFO")
+    return flask.render_template("legal.html", hosting_info=hosting_info)
 
 @routes_ui.route("/docs")
 def doc():
