@@ -26,37 +26,41 @@
         <h1 class="page_title">Truth Inquiry - Interface d'administration</h1>
         <h2 class="page_category">{{'Gestion' if npc.get('id') else 'Ajout'}} d'un personnage</h2>
         <p class="page_description">Cliquez sur les champs pour éditer les informations. Dans les réponses aux questions lors de l'interrogation, utilisez «&nbsp;{NPC}&nbsp;» pour faire référence au nom d'un personnage et «&nbsp;{SALLE}&nbsp;» pour faire référence au nom d'une salle.</p>
-        <section>
+        <section id="character_info">
             <h2 class="section_title">Informations sur le personnage</h2>
-            <input id="npc_id" value="{{ npc.get('id') or ''}}" hidden="hidden">
+            <input id="npc_id" value="{{ npc.get('id') or ''}}" type="hidden">
             <p class="info_item">Nom du personnage</p>
             <input type="text" id="npc_name" value="{{ npc.get('name') or ''}}" title="Saisissez le nom du personnage" aria-label="Nom du personnage">
             <p class="info_item">Image du personnage</p>
             <img class="character_image" alt="{{'Image du personnage' + (' ' + npc.get('name') if npc.get('name') else '')}}" src="{{'/static/images/no_photography_white.svg' if npc.get('img') == None else '/api/v1/getNpcImage?npcid=' + npc.get('img')|string}}">
         </section>
-        
         <section id="reactions">
-            <h2 class="section_title">Réactions</h2>
-            
-                {%for reaction in npc.get("reactions") or []%}
-                <div>
-                    <p> {{reaction.get('name')}} </p>
-                    <img src="{{reaction.get('url')}}" style="max-width: 100; max-height: 100px">
-                    <input class="img_input", type="file" accept="image/png, image/jpeg" onchange="changeReaction(this)">
-                    <input class="trait_id", type="hidden" value="{{reaction.get('trait_id')}}">
-                    <button onclick="deleteReaction(this)">Delete reaction</button>
-                </div>
-                {%endfor%}
-        </section>
-
-        <select id="reactions_to_add" onchange="addReaction(this)">
-            <option value="" default></option>
-            {%for reaction_to_add in npc.get("reactions_to_add") or []%}
-            <option value="{{reaction_to_add.get('trait_id')}}">{{reaction_to_add.get('name')}}</option>
+            <h2 class="section_title">Images des réactions</h2>
+            {%for reaction in npc.get("reactions") or []%}
+            <section class="reaction">
+                <h3 class="reaction_name">{{reaction.get('name')}}</h3>
+                <img class="reaction_image" alt="Image d'une réaction d'un personnage" src="{{reaction.get('url')}}">
+                <input class="img_input" type="file" accept="image/png, image/jpg, image/jpeg">
+                <input class="trait_id" type="hidden" value="{{reaction.get('trait_id')}}">
+                <button class="delete_image_reaction_btn action_button short_color_transition" title="Cliquez ici pour supprimer l'image de cette réaction">
+                    <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
+                        <path d="M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z"/>
+                    </svg>
+                    Supprimer l'image de la réaction
+                </button>
+            </section>
             {%endfor%}
-        </select>
-
-        <section>
+        </section>
+        <section id="add_reactions">
+            <h2 class="section_title">Réactions à ajouter</h2>
+            <select id="add_reactions_selector">
+                <option value="" selected="selected">Sélectionnez une réaction à ajouter</option>
+                {%for reaction_to_add in npc.get("reactions_to_add") or []%}
+                <option value="{{reaction_to_add.get('trait_id')}}">{{reaction_to_add.get('name')}}</option>
+                {%endfor%}
+            </select>
+        </section>
+        <section id="interrogation_answers">
             <h2 class="section_title">Réponses aux questions lors de l'interrogation</h2>
             <div class="answer_groups">
                 {%for answer_type in npc.get("answers") or []%}
@@ -95,7 +99,8 @@
             <div class="alert_dialog_background"></div>
             <dialog>
                 <h3 class="alert_dialog_title">JavaScript nécessaire</h3>
-                <p class="alert_dialog_msg unsupported_browser_msg">Désolé, mais JavaScript est nécessaire pour faire fonctionner cette page. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir ajouter ou gérer un personnage.</p>
+                <p class="alert_dialog_msg">Désolé, mais JavaScript est nécessaire pour faire fonctionner cette page. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir ajouter ou gérer un personnage.</p>
+                <a class="alert_dialog_bottom_link short_color_transition" href="/api/v1/admin/logout" title="Cliquez ici pour vous déconnecter de l'interface d'administration du jeu">Se déconnecter de l'interface d'administration du jeu</a>
             </dialog>
         </noscript>
         <script src="/static/js/api.js"></script>

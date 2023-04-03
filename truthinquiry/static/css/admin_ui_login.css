@@ -31,3 +31,9 @@ input {
     flex-direction: row;
     justify-content: center;
 }
+
+#login_input_button {
+    cursor: pointer;
+    border-radius: 1em;
+    padding: 0.25em;
+}

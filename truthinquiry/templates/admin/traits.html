@@ -1,29 +1,72 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>Traits</title>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="admin_ui.css">
-        <script src="/static/js/api.js"></script>
-        <script src="/static/js/admin.js"></script>
+        <title>Truth Inquiry - Gestion des réactions</title>
+        <link rel="stylesheet" href="/static/css/admin_ui.css">
+        <link rel="stylesheet" href="/static/css/admin_ui_traits.css">
+        <link rel="icon" href="/static/images/favicon/favicon_32.png" type="image/png" sizes="32x32">
+        <link rel="icon" href="/static/images/favicon/favicon_64.png" type="image/png" sizes="64x64">
+        <link rel="icon" href="/static/images/favicon/favicon_96.png" type="image/png" sizes="96x96">
+        <link rel="icon" href="/static/images/favicon/favicon_128.png" type="image/png" sizes="128x128">
+        <link rel="icon" href="/static/images/favicon/favicon_192.png" type="image/png" sizes="192x192">
+        <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="256x256">
+        <link rel="icon" href="/static/images/favicon/favicon_256.png" type="image/png" sizes="512x512">
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <a href="/admin"> go Back </a> <br>
-
-        <section id="traits">
+        <header>
+            <a class="short_color_transition" href="/admin" title="Cliquez ici pour revenir à l'accueil de l'interface d'administration du jeu">Accueil</a>
+            <a class="short_color_transition" href="/admin/questions" title="Cliquez ici pour gérer les questions du jeu">Gestion des questions</a>
+            <a class="short_color_transition" href="/admin/places" title="Cliquez ici pour gérer les lieux du jeu">Gestion des lieux</a>
+            <a class="short_color_transition" href="/admin/traits" title="Cliquez ici pour gérer les réactions du jeu">Gestion des réactions</a>
+            <a class="short_color_transition" href="/api/v1/admin/logout" title="Cliquez ici pour vous déconnecter de l'interface d'administration du jeu">Déconnexion</a>
+        </header>
+        <h1 class="page_title">Truth Inquiry - Interface d'administration</h1>
+        <h2 class="page_category">Gestion des réactions</h2>
+        <p class="page_description">Cliquez sur les champs pour éditer les informations. Les images des émotions sont disponibles par personnage dans leur page de gestion dédiée.</p>
+        <div id="traits">
         {%for trait in traits%}
-            <section id="{{trait['id']}}">
-                <p> Name: </p>
-                <input class="name_input" value="{{trait['name']}}">
-                <p> Description: </p>
-                <input class="desc_input" value="{{trait['desc']}}">
-                <button onclick="deleteInputTraits(this)">Delete trait</button>
-            </section>
+            <div data-id="{{trait['id']}}" class="trait">
+                <div class="trait_name_container">
+                    <h3 class="trait_name">Nom de la réaction&nbsp;:</h3>
+                    <input type="text" class="trait_name_input" value="{{trait['name']}}">
+                </div>
+                <div class="trait_description_container">
+                    <h3 class="trait_description">Description de la réaction&nbsp;:</h3>
+                    <input type="text" class="trait_description_input" value="{{trait['desc']}}">
+                </div>
+                <button class="delete_trait_btn action_button short_color_transition">
+                    <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
+                        <path d="M12.45 38.7 9.3 35.55 20.85 24 9.3 12.5l3.15-3.2L24 20.8 35.55 9.3l3.15 3.2L27.2 24l11.5 11.55-3.15 3.15L24 27.2Z"/>
+                    </svg>
+                    Supprimer la réaction
+                </button>
+            </div>
             {%endfor%}
-        </section>
-        <button onclick="addInputTraits()">Add new</button>
-        <button onclick="saveFormTraits()">Save changes</button>
-
-        <p>Images are viewable in the npc views</p>
+        </div>
+        <button id="add_trait" class="action_button short_color_transition">
+            <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960">
+                <path d="M435 871V622H185v-91h250V281h91v250h250v91H526v249h-91Z"/>
+            </svg>
+            Ajouter une nouvelle réaction
+        </button>
+        <button id="save_changes" class="action_button short_color_transition">
+            <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48">
+                <path d="M18.9 36.75 6.65 24.5l3.3-3.3 8.95 9L38 11.1l3.3 3.25Z"/>
+            </svg>
+            Sauvegarder les changements
+        </button>
+        <noscript>
+            <div class="alert_dialog_background"></div>
+            <dialog>
+                <h3 class="alert_dialog_title">JavaScript nécessaire</h3>
+                <p class="alert_dialog_msg">Désolé, mais JavaScript est nécessaire pour faire fonctionner cette page. Veuillez l'activer dans votre navigateur ou en utiliser un qui le supporte afin de pouvoir gérer les émotions.</p>
+                <a class="alert_dialog_bottom_link short_color_transition" href="/api/v1/admin/logout" title="Cliquez ici pour vous déconnecter de l'interface d'administration du jeu">Se déconnecter de l'interface d'administration du jeu</a>
+            </dialog>
+        </noscript>
+        <script src="/static/js/api.js"></script>
+        <script src="/static/js/admin_traits.js"></script>
     </body>
 </html>

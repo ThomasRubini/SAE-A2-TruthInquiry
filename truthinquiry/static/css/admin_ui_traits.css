@@ -1,0 +1,17 @@
+.delete_trait_btn, #add_trait, #save_changes {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.trait_description_container, .trait_name_container {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.trait_description_input, .trait_name_input {
+    width: 30em;
+}

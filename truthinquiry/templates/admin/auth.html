@@ -22,7 +22,12 @@
                 <label for="password" class="password_label">Mot de passe&nbsp;:</label>
                 <input id="password" name="password" type="password" placeholder="Mot de passe" required="required" title="Saisissez votre mot de passe">
             </div>
-            <input type="submit" value="Connexion">
+            <button id="login_input_button" class="action_button short_color_transition" type="submit" title="Cliquez ici pour vous connecter à l'interface d'administration de Truth Inquiry">
+                <svg class="action_icon short_color_transition" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960">
+                    <path d="M483 959v-91h298V284H483v-92h298q36.125 0 63.562 27.206Q872 246.412 872 284v584q0 37.175-27.438 64.088Q817.125 959 781 959H483Zm-90-177-66-63 96-97H89v-91h332l-96-97 66-64 207 207-205 205Z"/>
+                </svg>
+                Connexion
+            </button>
         </form>
         {% if failed %}
         <p class="invalid_password">Mot de passe invalide&nbsp;!</p>

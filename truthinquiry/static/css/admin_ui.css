@@ -9,10 +9,12 @@
 }
 
 :root {
+    --admin-black-color: #000000;
     --admin-grey-color: #5A5656;
     --admin-red-color: #FF0000;
     --admin-white-color: #FFFFFF;
-    --adming-yellow-color: #FFC800;
+    --adming-yellow-color: #D6A851;
+    --alert-dialog-background-color: #000000DF;
     --body-margin: 0.375em;
     font-family: "Roboto Mono", sans-serif;
 }
@@ -25,6 +27,15 @@ a, body {
     color: var(--admin-white-color);
 }
 
+a:focus, a:hover {
+    background-color: var(--admin-white-color);
+    color: var(--admin-grey-color) !important;
+}
+
+a:focus > .action_icon, .action_button:focus > .action_icon, a:hover > .action_icon, .action_button:hover > .action_icon {
+    fill: var(--admin-grey-color);
+}
+
 a:visited {
     color: unset;
 }
@@ -33,9 +44,24 @@ body {
     margin: var(--body-margin);
 }
 
-button, input {
+button {
+    align-items: center;
+    border-radius: 1em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+button, input, select {
+    background-color: transparent;
+    border-color: var(--admin-white-color);
+    border-style: solid;
+    border-width: 0.125em;
+    color: var(--admin-white-color);
     font-family: "Roboto Mono", sans-serif;
     font-size: 1em;
+    margin: 1em;
+    padding: 0.25em;
 }
 
 header {
@@ -56,18 +82,72 @@ header a {
     text-decoration: none;
 }
 
-header a:hover {
-    background-color: var(--admin-white-color);
-    color: var(--admin-grey-color);
-}
-
 html {
     background-color: var(--admin-grey-color);
     margin: 0;
 }
 
+noscript dialog {
+    align-items: center;
+    background-color: var(--admin-grey-color);
+    border-color: var(--admin-white-color);
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    left: 50%;
+    overflow: auto;
+    padding: 2em;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
 svg {
     fill: var(--admin-white-color);
+}
+
+.action_button:focus, .action_button:hover {
+    background-color: var(--admin-white-color);
+    color: var(--admin-grey-color);
+}
+
+.action_icon {
+    height: 2em;
+    transition-property: fill !important;
+    width: 2em;
+}
+
+.alert_dialog_background {
+    background-color: var(--alert-dialog-background-color);
+    display: block;
+    height: 100vh;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 1;
+}
+
+.alert_dialog_bottom_link {
+    font-size: 1.125em;
+    padding: 0.25em;
+    text-decoration: underline;
+}
+
+.alert_dialog_msg {
+    font-size: 1.25em;
+}
+
+.alert_dialog_msg, .alert_dialog_title {
+    margin: 1em;
+}
+
+.alert_dialog_title {
+    font-size: 1.75em;
 }
 
 .page_category {
@@ -101,31 +181,4 @@ svg {
 .short_color_transition:hover {
     transition-duration: 0.25s;
     transition-timing-function: linear;
-}
-
-#places>section {
-    border: thin solid red;
-    padding: 5px;
-    margin-top: 20px;
-}
-
-#section>input{
-    width: 100%;
-}
-
-.questionTypeTag{
-    border: thin solid red;
-    margin-top: 20px;
-}
-.questionTypeTag input{
-    width: 100%;
-}
-
-.questionType{
-    border: thin solid red;
-    margin-top: 20px;
-}
-.question input{
-    width: 100%;
-    margin: 10px;
 }

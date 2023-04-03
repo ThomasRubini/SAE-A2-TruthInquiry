@@ -1,0 +1,16 @@
+.place {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.place_input {
+    flex-grow: 1;
+}
+
+#add_place, #save_changes {
+    margin-left: auto;
+    margin-right: auto;
+}
