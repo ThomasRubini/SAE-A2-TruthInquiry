@@ -4,12 +4,6 @@ ___
 <p align="center"> A Simple deduction game based on facial reactions </p>
 
 ![build status](https://github.com/ThomasRubini/SAE-A2-TruthInquiry/actions/workflows/tests.yml/badge.svg)
-
-## Screenshots
-![title](./images/title.png)
-![interrogation](./images/Interogation.png)
-![debrief](./images/debrief.png)
-
 ___
 ## How to run
 
@@ -19,7 +13,7 @@ Then to install the depedencies run ```pip install -r requirement.txt```.
 
 If you want to contribute you may install the dev dependecies as well : ```pip install -r dev-requirement.txt```
 
-You will need to create the .env file from the .env.dist and fill the parameters. Do take note that this website was conceived to run on a mariadb sql database, however this can be easly changed in the data_access.py file. In order to fill the remote database with the data availible in this repo you will need to run the remote.py script : ```python3 truthinquiry/logic/data_persistance/remote.py ```
+You will need to create the .env file from the .env.dist and fill the parameters. Do take note that this website was conceived to run on a mariadb sql database, however this can be easly changed in the data_access.py file. In order to fill the remote database with the data availible in this repo you will need to run the bulk_import.py script : ```python3 bulk_import.py datasets/bulk_data.yml```
 
 To launch the web server you will need to fill the .env file with the database connection and to fill the flask_secret within it then you can use 
 
