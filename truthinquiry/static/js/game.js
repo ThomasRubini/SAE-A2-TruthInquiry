@@ -51,28 +51,26 @@ function unsetQuestionButtonsListeners() {
 
 function setChatBoxButtonsListeners() {
     document.getElementById("close_chat_button")
-        .addEventListener("click", closeForm);
+        .addEventListener("click", closeChatBox);
     document.getElementById("open_chat_button")
-        .addEventListener("click", openForm);
+        .addEventListener("click", openChatBox);
     document.getElementById("chat_button_send")
         .addEventListener("click", sendChatMessage);
-        
 }
 
-
 /**
- * Shows the chat box
+ * Show the chat box.
  */
-function openForm() {
+function openChatBox() {
     document.getElementById("chatbox").style.display = "block";
-  }
+}
   
 /**
- * Hides the chat box
+ * Hide the chat box.
  */
-  function closeForm() {
+function closeChatBox() {
     document.getElementById("chatbox").style.display = "none";
-  }
+}
 
 
 /**
@@ -281,10 +279,9 @@ function renderAnswerSelectionPanel() {
 
         button.appendChild(document.createTextNode("Couplable"));
 
-        button.addEventListener("click", (event) => {
+        button.addEventListener("click", event => {
             disableCulpritButtons(culpritChoices, suspect);
-            if (gameData["solo"] === true) event.target.textContent = "envoie des réponses..."; 
-            else event.target.textContent = "attente des autres joueurs...";
+            event.target.textContent = gameData["solo"] === true ? "Envoi des réponses\u00A0..." : "En attente des autres joueurs\u00A0...";
             sendAnswers();
         });
 
@@ -399,7 +396,6 @@ function initSock() {
         console.log("Connected to the server!");
     });
 
-    //TODO Send and receive userprogress when they have sent their responses
     socket.on("gameprogress", username => {
         console.log(username);
     });
@@ -412,7 +408,6 @@ function initSock() {
     });
     
     socket.on("gamefinished", finalResults => {
-        console.log(finalResults);
         hideFirstClassElement("emotion_and_culprit_choices");
         const revealScoreElement = document.createElement("h2");
         revealScoreElement.classList.add("reveal_score");
@@ -462,6 +457,7 @@ function initSock() {
                 suspect.classList.add("summary_suspect");
 
                 const img = document.createElement("img");
+                img.classList.add("suspect_picture");
                 img.setAttribute("alt", "Image d'un suspect");
                 img.src = NPC_FINAL_REACTION_PATH + finalResults["npcs"][npcid]["uuid"];
                 suspect.appendChild(img);

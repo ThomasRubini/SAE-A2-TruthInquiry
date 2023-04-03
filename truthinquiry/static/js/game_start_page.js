@@ -118,7 +118,7 @@ function createMultiPlayerRoom(event) {
     }
 
     hideInvalidInputErrorMessage();
-    event.target.textContent = "Chargement...";
+    event.target.textContent = "Chargement\u00A0...";
     startGame();
 }
 
@@ -131,120 +131,53 @@ function joinMultiPlayerRoom(event) {
     }
 
     hideInvalidInputErrorMessage();
-    event.target.textContent = "Chargement...";
-    joinGame();
+    event.target.textContent = "Chargement\u00A0...";
+    joinGame(event);
 }
 
 /**
- * Set the current theme for the game.
+ * Launch a single player game.
  *
  * <p>
- * The theme preference is read from the local storage.
- * </p>
- *
- * <p>
- * If accessing to the local storage is not allow, an error message which prevents playing the game
- * and requesting user to enable localStorage is shown, and the error is logged in the console.
+ * It sends the api request to
+ * create a game then it immediately starts the game by using the startGame API endpoint.
  * </p>
  */
-function setCurrentTheme() {
-    const htmlElement = document.getElementsByTagName("html")[0];
-
-    try {
-        const currentTheme = localStorage.getItem("pref_theme");
-
-        if (currentTheme == "light") {
-            htmlElement.classList.remove("dark");
-            htmlElement.classList.add("light");
-        } else {
-            // Use dark theme by default
-            htmlElement.classList.remove("light");
-            htmlElement.classList.add("dark");
-        }
-
-        const btn = document.getElementsByClassName("theme_switcher")[0];
-        btn.addEventListener("pointerup", changeTheme);
-    } catch (e) {
-        console.error("Unable to set theme from localStorage", e);
-        htmlElement.classList.add("dark");
-    }
-}
-
-/**
- * Change the theme from the current theme to its opposite.
- *
- * <p>
- * If the current theme is "dark", it will become "light" and vice versa.
- * </p>
- *
- * <p>
- * The new theme is saved in the localStorage, if the browser allows this action; otherwise, an
- * error message is shown in the console.
- * </p>
- */
-function changeTheme() {
-    const currentTheme = localStorage.getItem("pref_theme");
-
-    const htmlElement = document.getElementsByTagName("html")[0];
-    let newTheme;
-    if (currentTheme == "light") {
-        htmlElement.classList.remove("light");
-        htmlElement.classList.add("dark");
-        newTheme = "dark";
-    } else {
-        htmlElement.classList.remove("dark");
-        htmlElement.classList.add("light");
-        newTheme = "light";
-    }
-
-    try {
-        localStorage.setItem("pref_theme", newTheme);
-    } catch (e) {
-        console.error("Unable to save theme change to localStorage", e);
-    }
-}
-
-/**
- * This function launches a single player game. It sends the api request to
- * create a game then it immediately start the game by sendind the startGame api
- */
-async function startSoloGame(event){
-
+async function startSoloGame(event) {
     if (!areInputsValid(false)) {
         return;
     }
-    event.target.textContent = "Chargement...";
+    event.target.textContent = "Chargement\u00A0...";
     hideInvalidInputErrorMessage();
     username = document.getElementById("game_username").value;
     let data = {}
     data["username"] = username;
     data["solo"] = true;
     await makeAPIRequest("createGame",data);
-    start = makeAPIRequest("startGame");
-    start.then(()=>{
+    makeAPIRequest("startGame").then(() => {
         window.location.href = "/solo";
-    })
+    }, () => {
+        startHistoryGameButton.target.textContent = "Jouer";
+    });
 }
 
 /**
  * This function creates a multiplayer game by sending the createGame api call
  * then, if no error occured, redirects to the lobby page.
  */
-async function startGame(){
+async function startGame() {
     username = document.getElementById("game_username").value;
     let data = {}
     data["username"] = username;
-    response = makeAPIRequest("createGame",data);
+    response = makeAPIRequest("createGame", data);
     response.then((value) => {
         if (value["error"] != 0){
             alert(value["msg"]);
-        }
-        else{
+        } else {
             gameid = value["game_id"]
             window.location.href = "/lobby/" + gameid;
         }
-      });
-
+    });
 }
 
 /**
@@ -252,23 +185,17 @@ async function startGame(){
  * join an already existing game, to do so it calls the joinGame endpoint
  * with the aftermentioned username and room code as parameter. 
  */
-async function joinGame(){
+async function joinGame(event) {
     username = document.getElementById("game_username").value;
     gameid = document.getElementById("game_room_code").value;
-    console.log(username);
-    data = {}
+    const data = {};
     data["username"] = username;
     data["game_id"] = gameid;
-    response = makeAPIRequest("joinGame",data);
-    response.then((value)=>{
-        console.log(value);
-        if (value["error"] != 0){
-            //alert(value["msg"]);
-        }
-        else{
-            window.location.href = "/lobby/" + gameid;
-        }
-    })
+    makeAPIRequest("joinGame", data).then(() => {
+        window.location.href = "/lobby/" + gameid;
+    }, () => {
+        event.target.textContent = "Jouer";
+    });
 }
 // Set event listeners
 
