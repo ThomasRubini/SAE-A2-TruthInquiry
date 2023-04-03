@@ -279,10 +279,9 @@ function renderAnswerSelectionPanel() {
 
         button.appendChild(document.createTextNode("Couplable"));
 
-        button.addEventListener("click", (event) => {
+        button.addEventListener("click", event => {
             disableCulpritButtons(culpritChoices, suspect);
-            if (gameData["solo"] === true) event.target.textContent = "envoie des réponses..."; 
-            else event.target.textContent = "attente des autres joueurs...";
+            event.target.textContent = gameData["solo"] === true ? "Envoi des réponses\u00A0..." : "En attente des autres joueurs\u00A0...";
             sendAnswers();
         });
 
@@ -397,7 +396,6 @@ function initSock() {
         console.log("Connected to the server!");
     });
 
-    //TODO Send and receive userprogress when they have sent their responses
     socket.on("gameprogress", username => {
         console.log(username);
     });
@@ -410,7 +408,6 @@ function initSock() {
     });
     
     socket.on("gamefinished", finalResults => {
-        console.log(finalResults);
         hideFirstClassElement("emotion_and_culprit_choices");
         const revealScoreElement = document.createElement("h2");
         revealScoreElement.classList.add("reveal_score");

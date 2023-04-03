@@ -188,19 +188,11 @@ async function startGame() {
 async function joinGame(event) {
     username = document.getElementById("game_username").value;
     gameid = document.getElementById("game_room_code").value;
-    console.log(username);
-    data = {}
+    const data = {};
     data["username"] = username;
     data["game_id"] = gameid;
-    response = makeAPIRequest("joinGame",data);
-    response.then((value)=>{
-        console.log(value);
-        if (value["error"] != 0){
-            //alert(value["msg"]);
-        }
-        else{
-            window.location.href = "/lobby/" + gameid;
-        }
+    makeAPIRequest("joinGame", data).then(() => {
+        window.location.href = "/lobby/" + gameid;
     }, () => {
         event.target.textContent = "Jouer";
     });
