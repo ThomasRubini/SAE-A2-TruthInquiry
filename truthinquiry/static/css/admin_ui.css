@@ -13,7 +13,8 @@
     --admin-grey-color: #5A5656;
     --admin-red-color: #FF0000;
     --admin-white-color: #FFFFFF;
-    --adming-yellow-color: #FFC800;
+    --adming-yellow-color: #D6A851;
+    --alert-dialog-background-color: #000000DF;
     --body-margin: 0.375em;
     font-family: "Roboto Mono", sans-serif;
 }
@@ -24,6 +25,15 @@ a {
 
 a, body {
     color: var(--admin-white-color);
+}
+
+a:focus, a:hover {
+    background-color: var(--admin-white-color);
+    color: var(--admin-grey-color) !important;
+}
+
+a:focus > .action_icon, .action_button:focus > .action_icon, a:hover > .action_icon, .action_button:hover > .action_icon {
+    fill: var(--admin-grey-color);
 }
 
 a:visited {
@@ -72,18 +82,28 @@ header a {
     text-decoration: none;
 }
 
-a:focus, a:hover {
-    background-color: var(--admin-white-color);
-    color: var(--admin-grey-color);
-}
-
-a:focus > .action_icon, .action_button:focus > .action_icon, a:hover > .action_icon, .action_button:hover > .action_icon {
-    fill: var(--admin-grey-color);
-}
-
 html {
     background-color: var(--admin-grey-color);
     margin: 0;
+}
+
+noscript dialog {
+    align-items: center;
+    background-color: var(--admin-grey-color);
+    border-color: var(--admin-white-color);
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    left: 50%;
+    overflow: auto;
+    padding: 2em;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
 }
 
 svg {
@@ -99,6 +119,29 @@ svg {
     height: 2em;
     transition-property: fill !important;
     width: 2em;
+}
+
+.alert_dialog_background {
+    background-color: var(--alert-dialog-background-color);
+    display: block;
+    height: 100vh;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 1;
+}
+
+.alert_dialog_msg {
+    font-size: 1.25em;
+}
+
+.alert_dialog_msg, .alert_dialog_title {
+    margin: 1em;
+}
+
+.alert_dialog_title {
+    font-size: 1.75em;
 }
 
 .page_category {
@@ -132,14 +175,4 @@ svg {
 .short_color_transition:hover {
     transition-duration: 0.25s;
     transition-timing-function: linear;
-}
-
-#places>section {
-    border: thin solid red;
-    padding: 5px;
-    margin-top: 20px;
-}
-
-#section>input{
-    width: 100%;
 }
