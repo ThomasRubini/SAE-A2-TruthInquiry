@@ -132,6 +132,12 @@ svg {
     z-index: 1;
 }
 
+.alert_dialog_bottom_link {
+    font-size: 1.125em;
+    padding: 0.25em;
+    text-decoration: underline;
+}
+
 .alert_dialog_msg {
     font-size: 1.25em;
 }
