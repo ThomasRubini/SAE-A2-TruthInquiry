@@ -1,4 +1,5 @@
-const LOBBY_IMAGE_PATH = "/static/images/cuisine.jpg"
+const LOBBY_IMAGE_PATH = "/static/images/cuisine.jpg";
+
 // Display functions
 
 /*
@@ -81,9 +82,11 @@ function displayInvalidNickNameErrorMessage(errorMessage) {
 /**
  * Start a game in the history mode.
  */
-function startHistoryGame(event) {
-    event.target.textContent = "Chargement...";
-    makeAPIRequest("startGame");
+function startHistoryGame(startHistoryGameButton) {
+    startHistoryGameButton.target.textContent = "Chargement\u00A0...";
+    makeAPIRequest("startGame").then(null, () => {
+        startHistoryGameButton.target.textContent = "Jouer";
+    });
 }
 
 /**
@@ -98,20 +101,20 @@ function startChallengeGame() {
     alert("Ce mode de jeu n'est malheureusement pas disponible.");
 }
 
-function getMembers(){
-    let data = {};
+function getMembers() {
+    const data = {};
     data['game_id'] = getRoomCode();
-    const response = makeAPIRequest("getGameMembers",data);
+
+    const response = makeAPIRequest("getGameMembers", data);
     response.then(value => {
-        let divs = document.getElementsByClassName("player_names");
-        for (let playerList of divs) {
+        for (const playerList of document.getElementsByClassName("player_names")) {
             value["members"].forEach(username => {
-                console.log(username);
                 playerList.appendChild(document.createTextNode(username + "\n"));
             });
         }
     });
 }
+
 // Join room functions
 
 /**
@@ -357,14 +360,15 @@ function initSock() {
     })
 
     socket.on("gamestart", async () => {
-        if (await hasJoinedRoom()) window.location.href = "/multi";
+        if (await hasJoinedRoom()) {
+            window.location.href = "/multi";
+        }
     })
 
     socket.on("playersjoin", username => {
-        console.log(username);
-        Array.from(document.getElementsByClassName("player_names")).forEach(playerList =>{
+        for (const playerList of document.getElementsByClassName("player_names")) {
             playerList.textContent += username + "\n";
-        })
+        }
     });
 }
 
@@ -385,8 +389,8 @@ function initSock() {
  * </p>
  */
 async function initLobby() {
-    setGameBackground(LOBBY_IMAGE_PATH)
-    getMembers()
+    setGameBackground(LOBBY_IMAGE_PATH);
+    getMembers();
     initSock();
     if (await hasJoinedRoom()) {
         displayRoomView();

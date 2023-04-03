@@ -1,4 +1,8 @@
 /* Common properties */
+* {
+    box-sizing: border-box;
+}
+
 html {
     background-color: var(--game-black);
     color: var(--game-white);
@@ -8,11 +12,11 @@ html {
     text-transform: uppercase;
 }
 
-.action_button, .scores, .summary {
+.action_button, .chat_btn, .scores, .summary, #open_chat_button {
     font-family: "Titan One", sans-serif;
 }
 
-.anwser_title, .emotion_and_culprit_choices_title, .introduction_text, .introduction_title, .interrogation_title, .results_title,.introduction_right ,.reveal_culprit_title, .score_title, .summary_title {
+.anwser_title, .emotion_and_culprit_choices_title, .introduction_text, .introduction_title, .interrogation_title, .results_title, .introduction_right, .reveal_culprit_title, .score_title, .summary_title, #chat_popup_title {
     font-family: "Ironick", serif;
 }
 
@@ -57,7 +61,7 @@ html {
     text-align: center;
 }
 
-.explain_suspect_emotion_title, .interrogation_title, .introduction_title, .results_title, .reveal_culprit_title, .score_title, .suspect_answer {
+.explain_suspect_emotion_title, .interrogation_title, .introduction_title, .results_title, .reveal_culprit_title, .score_title, .suspect_answer, #open_chat_button {
     font-weight: bold;
 }
 
@@ -93,6 +97,10 @@ html {
     background-color: transparent;
 }
 
+.message, #chat_message_box {
+    font-family: "Roboto Mono", sans-serif;
+}
+
 .question_answer, .questions_list, .questions_and_image, .reveal_culprit, .suspect_picture[alt], .scores, .summary_suspect, .suspects, .suspects_list {
     align-content: center;
 }
@@ -110,33 +118,37 @@ html {
 }
 
 .suspect_picture {
-    border: var(--game-dark-gold) solid 5px;
+    border-color: var(--game-dark-gold);
     border-radius: 1em;
+    border-style: solid;
+    border-width: 0.125em;
     height: 15em;
-    width: 15em;
     transition: all 0.5s ease;
-    
+    width: 15em;
 }
-.npc_answer{
+
+.npc_answer {
     flex-direction: column;
     width: 40em;
 }
-.image_interrogation{
+
+.image_interrogation {
     height: 25em;
     width: 25em;
 }
 
-.question_answer{
-border: var(--game-dark-gold) solid;
-border-radius: 1em;
-height: 6em;
-background-color: #000000d0;
+.question_answer {
+    background-color: #000000d0;
+    border-color: var(--game-dark-gold);
+    border-style: solid;
+    border-radius: 1em;
+    height: 6em;
 }
 
 .suspect > .suspect_picture:hover {
+    background-color: var(--filter-background-color);
     filter: grayscale(0);
     transition: all 0.5s ease;
-    background-color: #000000d0;
 }
 
 .suspect_picture[alt] {
@@ -169,26 +181,32 @@ background-color: #000000d0;
 }
 
 #emotion_and_culprit_choices_next_btn, #interrogation_next_btn, #interrogation_suspect_previous_btn, #return_to_home_btn {
-    position: fixed;
     left: calc(100% - 6em);
+    position: fixed;
     top: 1em;
 }
 
 /* Introduction */
 .introduction {
-    padding: 1em;
+    align-content: center;
+    align-items: center;
     display: flex;
     flex-direction: row;
-}
-.introduction_left{
+    flex-wrap: wrap;
+    justify-content: center;
+    justify-items: center;
     padding: 1em;
-    max-width: 50vw;
 }
-.introduction_right{
+
+.introduction_left, .introduction_right {
+    padding: 1em;
+    width: 48vw; /* 50vw - padding * 2 */
+}
+
+.introduction_right {
     font-size: 2em;
-    padding: 1em;
-    max-width: 50vw;
 }
+
 .introduction_text {
     font-size: 3em;
     margin-bottom: 1em;
@@ -200,15 +218,14 @@ background-color: #000000d0;
     text-align: left;
 }
 
-.inspector_picture{
-    border: var(--game-dark-gold) solid 5px;
+.inspector_picture {
+    background-color: var(--filter-background-color);
+    border: var(--game-dark-gold) solid 0.125em;
     border-radius: 1em;
-    max-width: 45vw;
-    background-color: #000000d0;
-    position: fixed;
+    width: 100%;
 }
 
-.username{
+.username {
     font-size: 3em;
     margin-bottom: 1em;
     margin-top: 1em;
@@ -220,6 +237,7 @@ background-color: #000000d0;
     color: var(--game-black);
     text-transform: none;
 }
+
 .anwser_title {
     font-size: 2.5em;
     margin: 0.25em;
@@ -238,11 +256,8 @@ background-color: #000000d0;
     margin-top: 1em;
 }
 
-#interrogation_suspect_previous_btn {
-    margin-right: 1em;
-}
-.suspect_name{
-    font-family: "Park Lane";
+.suspect_name {
+    font-family: "Park Lane", serif;
     font-size: 2em;
     color: var(--game-dark-gold);
     border-radius: 0.25em;
@@ -250,6 +265,10 @@ background-color: #000000d0;
     border: var(--game-dark-gold) solid 1px;
     padding: 0.25em;
     background-color: #000000dd;
+}
+
+#interrogation_suspect_previous_btn {
+    margin-right: 1em;
 }
 
 /* Emotion and culprit choices */
@@ -260,13 +279,12 @@ background-color: #000000d0;
     width: 1em;
 }
 
-
 .culprit_btn_checked {
     background-color: var(--game-green);
 }
 
 .emotion_and_culprit_choices_title {
-    font-size: 2em;
+    font-size: 3em;
     margin: 0.5em;
 }
 
@@ -298,7 +316,6 @@ background-color: #000000d0;
     border-radius: 1em;
     background-color: #000000d0;
 }
-
 
 .explain_suspect_emotion_description {
     font-size: 1.25em;
@@ -349,86 +366,92 @@ background-color: #000000d0;
     border: transparent;
 }
 
-* {box-sizing: border-box;}
-
-/* chat */
-/* Button used to open the chat form - fixed at the bottom of the page */
-.open-button {
-  background-color: #000000dd;
-  color: var(--game-dark-gold);
-  padding: 16px 20px;
-  border: var(--game-dark-gold) solid;
-  border-radius: 1em;
-  cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
-  bottom: 23px;
-  right: 28px;
-  width: 280px;
-}
-
-/* The popup chat - hidden by default */
+/* Chat */
 .chat-popup {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  color: var(--game-dark-gold);
-  right: 15px;
-  z-index: 9;
-  border: solid black 1px;
-  border-radius: 1em;
+    bottom: 0.5em;
+    color: var(--game-dark-gold);
+    display: none;
+    position: fixed;
+    right: 0.5em;
+    z-index: 1;
 }
 
-/* Add styles to the form container */
 .form-container {
-  max-width: 300px;
-  padding: 10px;
-  border: solid var(--game-dark-gold);
-  border-radius: 1em;
-  background-color: black;
+    align-content: center;
+    align-items: center;
+    background-color: var(--game-black);
+    border-color: var(--game-dark-gold);
+    border-style: solid;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.25em;
+    width: calc(min(30em, 100vw) - 1em);
 }
 
-/* Full-width textarea */
-.form-container textarea {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #f1f1f1;
-  resize: none;
-  min-height: 5em;
+.chat_btn {
+    border-radius: 1em;
+    border-style: solid;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 1em;
+    opacity: 0.8;
+    padding: 0.25em;
+    width: 100%;
 }
 
-/* When the textarea gets focus, do something */
-#chat_message_box{
-  background-color: #505050;
-  outline: none;
-  margin: 10px;
-}
-.message{
-    list-style-type: none
-}
-/* Set a style for the submit/send button */
-.form-container .btn {
-  background-color: black;
-  color: #04AA6D;
-  padding: 16px 20px;
-  border: #04AA6D solid;
-  border-radius: 1em;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-}
-
-/* Add a red background color to the cancel button */
-.form-container .cancel {
-  background-color: black;
-  color: red;
-  border-color: red;
-}
-
-/* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover {
+.chat_btn:hover, .open-button:hover {
     opacity: 1;
+}
+
+.message {
+    font-size: 1em;
+    list-style-type: none;
+}
+
+#chat_button_send {
+    background-color: var(--game-green);
+    border-color: var(--game-green);
+}
+
+#close_chat_button {
+    background-color: var(--game-red);
+    border-color: var(--game-red);
+}
+
+#chat_message_box {
+    background-color: var(--game-grey);
+    border-style: solid;
+    border-width: 0.125em;
+    color: var(--game-white);
+    font-size: 1em;
+    outline: none;
+    margin: 1em;
+    width: 100%;
+}
+
+#chat_popup_title {
+    font-size: 2em;
+    margin: 0.25em;
+}
+
+#message_list {
+    padding: 0;
+}
+
+#open_chat_button {
+    background-color: var(--filter-background-color);
+    border: var(--game-dark-gold) solid;
+    border-radius: 1em;
+    bottom: 0.25em;
+    color: var(--game-dark-gold);
+    cursor: pointer;
+    font-size: 1.25em;
+    padding: 1em;
+    position: fixed;
+    opacity: 0.8;
+    right: 0.25em;
+    width: 5em;
 }

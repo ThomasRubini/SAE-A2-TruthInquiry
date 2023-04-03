@@ -3,6 +3,7 @@ html {
     background-color: var(--game-black);
     color: var(--game-white);
 }
+
 .current_background {
     background-position: center;
     background-size: cover;
@@ -178,13 +179,17 @@ html {
     border-radius: 0.75em;
     font-size: 1.25em;
     max-height: 12em;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 0.25em;
 }
 
 .players_title {
     align-content: center;
     font-size: 3em;
+    margin: 1em;
+}
+
+.unjoined_view_players_list {
     margin: 1em;
 }
 
@@ -199,7 +204,7 @@ html {
 }
 
 #join_game_button {
-    font-size: 1.25em;
+    font-size: 1.5em;
     margin: 1em;
 }
 

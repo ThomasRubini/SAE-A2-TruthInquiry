@@ -1,7 +1,6 @@
 /* Common properties */
 html {
     background-color: var(--game-grey);
-    color: var(--game-white);
     font-family: "Roboto Mono", "sans-serif";
 }
 

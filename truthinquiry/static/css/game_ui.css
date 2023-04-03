@@ -47,8 +47,8 @@
 :root {
     /* Colors */
     color-scheme: dark;
-    --alert-dialog-background-color: #000000DF;
-    --dark-theme-background-color: #0c0b0c;
+    --background-color: #141416;
+    --filter-background-color: #000000DF;
     --game-black: #000000;
     --game-blue: #7DDCFF;
     --game-green: #008000;
@@ -57,7 +57,6 @@
     --game-gold:  rgb(214,168,81);
     --game-dark-gold:  #B9935A;
     --game-white: #FFFFFF;
-    --light-theme-background-color: #B1EDE8;
     /* Sizes */
     --body-margin: 0.375em;
     --button-and-dialog-border-radius: 1em;
@@ -65,6 +64,8 @@
 }
   
 html {
+    background-color: var(--background-color);
+    color: var(--game-white);
     margin: 0;
 }
 
@@ -82,6 +83,7 @@ noscript .alert_dialog_background, noscript .alert_dialog_msg, noscript .alert_d
     border-radius: var(--button-and-dialog-border-radius);
     border-style: solid;
     border-width: 0.125em;
+    color: var(--game-white);
     cursor: pointer;
     overflow: hidden;
     padding-bottom: 0.5em;
@@ -94,15 +96,6 @@ noscript .alert_dialog_background, noscript .alert_dialog_msg, noscript .alert_d
 .alert_dialog, .footer_links {
     align-content: center;
     align-items: center;
-}
-
-/* Themes */
-.dark {
-    background-color: var(--dark-theme-background-color);
-}
-
-.light {
-    background-color: var(--light-theme-background-color);
 }
 
 /* Utility classes */
@@ -195,7 +188,7 @@ noscript .alert_dialog_background, noscript .alert_dialog_msg, noscript .alert_d
 }
 
 .alert_dialog_background {
-    background-color: var(--alert-dialog-background-color);
+    background-color: var(--filter-background-color);
     display: none;
     height: 100vh;
     left: 0;

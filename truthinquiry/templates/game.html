@@ -20,7 +20,7 @@
         <section class="introduction hidden">
             <div class="introduction_left">
                 <h1 class="introduction_title">Truth Inquiry</h1>
-                <p class="introduction_text">Vous incarnez le célèbre détective <span id="username"></span> et vous êtes missionné pour résoudre une nouvelle affaire.<br> Hier, dans la soirée, cinq personnes ont été invitées par le Comte de la région dans son manoir. Cependant, dans la matinée, le Comte s’est aperçu que son coffre avait été forcé.<br>Votre rôle est donc d’interroger les cinq suspects afin de comprendre leur état d’esprit et ainsi démasquer le coupable.<br>Cliquez sur la flèche pour découvrir les suspects et les interroger.</p>
+                <p class="introduction_text">Bienvenue dans Truth Inquiry, vous incarnez le célèbre détective <span id="username"></span> et êtes missionné(e) pour résoudre une nouvelle affaire.<br><br>Hier, dans la soirée, cinq personnes ont été invitées par le Comte de la région dans son manoir.<br><br>Cependant, dans la matinée, le Comte s’est aperçu que son coffre avait été forcé.<br><br>Votre rôle est donc d’interroger les cinq suspects afin de comprendre leur état d’esprit et ainsi démasquer le coupable.<br><br>Cliquez sur la flèche pour découvrir les suspects et les interroger.</p>
                 <button id="introduction_next_btn" class="next_btn" aria-label="Commencer" title="Cliquez ici pour commencer à jouer">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                         <path d="m23.15 36.95-17.3-11.1Q4.7 25.25 4.7 24t1.15-1.9L23.15 11q1.15-.7 2.35-.075 1.2.625 1.2 2.025v8.75h15.8q.95 0 1.625.675T44.8 24q0 .95-.675 1.6-.675.65-1.625.65H26.7V35q0 1.45-1.2 2.075-1.2.625-2.35-.125Z" />
@@ -28,7 +28,7 @@
                 </button>
             </div>
             <div class="introduction_right">
-                <img class="inspector_picture" src="/static/images/inspector.png" alt="Image de l'inspecteur">
+                <img class="inspector_picture" src="/static/images/inspector.png" alt="Image de l'inspecteur" title="Une image de l'inspecteur">
             </div>
         </section>
         <section class="interrogation hidden">
@@ -39,23 +39,19 @@
                 </svg>
             </button>
             <ul class="suspects" id="interrogation_suspects"></ul>
-            <Section>
-                <button id="open_chat_button" class="open-button">Chat</button>
-                <div class="chat-popup" id="chatbox">
-                    <div class="form-container">
-                      <h1>Chat</h1>
-                        <div class="messages_received_container">
-                            <ul id="message_list" class="messages">
-                            </ul>
-                        </div>
-                      <label for="msg"><b>Message</b></label>
-                      <input type="text" id="chat_message_box" placeholder="Type message.." name="msg" required></textarea>
-                  
-                      <button id="chat_button_send" class="btn">Send</button>
-                      <button id="close_chat_button" type="button" class="btn cancel">Close</button>
+            <button id="open_chat_button">Chat</button>
+            <div class="chat-popup" id="chatbox">
+                <div class="form-container">
+                    <h1 id="chat_popup_title">Chat</h1>
+                    <div class="messages_received_container">
+                        <ul id="message_list" class="messages">
+                        </ul>
                     </div>
-                  </div>
-            </Section>
+                    <input type="text" id="chat_message_box" placeholder="Saisissez un message" name="msg" required="">
+                    <button id="chat_button_send" class="chat_btn">Envoyer</button>
+                    <button id="close_chat_button" type="button" class="chat_btn">Fermer</button>
+                </div>
+            </div>
         </section>
         <section class="emotion_and_culprit_choices hidden">
             <h1 class="emotion_and_culprit_choices_title">Choix du coupable et émotion des suspects</h1>

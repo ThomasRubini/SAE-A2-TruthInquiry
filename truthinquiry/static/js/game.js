@@ -51,28 +51,26 @@ function unsetQuestionButtonsListeners() {
 
 function setChatBoxButtonsListeners() {
     document.getElementById("close_chat_button")
-        .addEventListener("click", closeForm);
+        .addEventListener("click", closeChatBox);
     document.getElementById("open_chat_button")
-        .addEventListener("click", openForm);
+        .addEventListener("click", openChatBox);
     document.getElementById("chat_button_send")
         .addEventListener("click", sendChatMessage);
-        
 }
 
-
 /**
- * Shows the chat box
+ * Show the chat box.
  */
-function openForm() {
+function openChatBox() {
     document.getElementById("chatbox").style.display = "block";
-  }
+}
   
 /**
- * Hides the chat box
+ * Hide the chat box.
  */
-  function closeForm() {
+function closeChatBox() {
     document.getElementById("chatbox").style.display = "none";
-  }
+}
 
 
 /**
@@ -462,6 +460,7 @@ function initSock() {
                 suspect.classList.add("summary_suspect");
 
                 const img = document.createElement("img");
+                img.classList.add("suspect_picture");
                 img.setAttribute("alt", "Image d'un suspect");
                 img.src = NPC_FINAL_REACTION_PATH + finalResults["npcs"][npcid]["uuid"];
                 suspect.appendChild(img);
